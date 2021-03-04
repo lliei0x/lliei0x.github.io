@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head hexo-theme='https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5'>
+  <meta name="generator" content="Hexo 5.4.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Git 实践 - 修改操作 - LEEI</title>
+
+  
+    <meta name="description" content="工作区和版本库 工作区： 就是你电脑文件夹能看到的目录，就如我创建的test文件夹就是一个工作区 123leeif@leeif MINGW64 &#x2F;e&#x2F;git&#x2F;test (master)$ lsgit.txt  index.html  README.md 版本库(Repository)： 工作区有一个隐藏的目录文件.git，这个虽然在工作区目录下，但不算在工作区，而是Git的版本库。 Git的版本库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git 实践 - 修改操作">
+<meta property="og:url" content="https://leeif.me/2017/git-experience-modify.html">
+<meta property="og:site_name" content="LEEI">
+<meta property="og:description" content="工作区和版本库 工作区： 就是你电脑文件夹能看到的目录，就如我创建的test文件夹就是一个工作区 123leeif@leeif MINGW64 &#x2F;e&#x2F;git&#x2F;test (master)$ lsgit.txt  index.html  README.md 版本库(Repository)： 工作区有一个隐藏的目录文件.git，这个虽然在工作区目录下，但不算在工作区，而是Git的版本库。 Git的版本库">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-09-11T12:36:25.000Z">
+<meta property="article:modified_time" content="2020-09-26T09:07:28.008Z">
+<meta property="article:author" content="leei">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary">
+  
+  
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="LEEI" type="application/atom+xml">
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200927222029.ico">
+  
+</head>
+
+<body theme='light'>
+  
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left'>
+    
+<div class='wrap'>
+  
+<header class='header'>
+  <div class='logo-wrap'>
+  
+    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2020/09/26/zSRUylAqpoZ8462.png'/></a>
+  
+  
+    <a class='title' href='/'>LEEI</a>
+  
+</div>
+
+  <nav class="menu"><a class="nav-item active" href="/">文章</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/more/">更多</a></nav>
+</header>
+
+  <div class='widgets'>
+    
+      
+        
+        
+
+  <div class='widget-wrap' id='toc'>
+    <div class='widget-header dis-select'>
+      <span class='name'>
+        
+          本文目录
+        
+      </span>
+      <a class='cap-action' id='s-top' title='回到顶部' href='#start'>
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10505"><path d="M884.526 163.323H208.881c-30.516 0-55.25 24.934-55.25 55.685s24.734 55.685 55.25 55.685h675.645c30.515 0 55.255-24.93 55.255-55.685s-24.74-55.685-55.255-55.685zM568.253 336.87a56.765 56.765 0 0 0-4.06-3.701c-0.63-0.517-1.29-0.968-1.935-1.454-0.799-0.605-1.577-1.224-2.406-1.787-0.779-0.528-1.583-0.978-2.386-1.46-0.748-0.45-1.485-0.926-2.253-1.341-0.81-0.44-1.649-0.814-2.483-1.208-0.8-0.384-1.588-0.784-2.407-1.132-0.814-0.338-1.643-0.61-2.463-0.906-0.875-0.323-1.745-0.66-2.641-0.932-0.825-0.25-1.66-0.435-2.489-0.645-0.916-0.236-1.817-0.492-2.75-0.681-0.962-0.19-1.935-0.307-2.902-0.445-0.814-0.118-1.618-0.272-2.442-0.354a55.163 55.163 0 0 0-5.438-0.276h-0.015c-0.267 0-0.528 0.036-0.794 0.036a54.856 54.856 0 0 0-39.86 16.271l-279.413 281.61c-21.576 21.75-21.576 57.006 0 78.756a54.876 54.876 0 0 0 39.07 16.312 54.835 54.835 0 0 0 39.066-16.312l186.67-188.145V898.09c0 30.75 24.74 55.685 55.256 55.685s55.255-24.934 55.255-55.685v-387.42L769.526 697.22a54.871 54.871 0 0 0 39.065 16.312 54.835 54.835 0 0 0 39.066-16.312c21.576-21.75 21.576-57.006 0-78.756L568.253 336.87z" p-id="10506"></path></svg>
+      </a>
+    </div>
+    <div class='widget-body post'>
+      
+        <div class='doc-tree active'>
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E5%8C%BA%E5%92%8C%E7%89%88%E6%9C%AC%E5%BA%93"><span class="toc-text">工作区和版本库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E4%BF%AE%E6%94%B9"><span class="toc-text">管理修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%92%A4%E9%94%80%E4%BF%AE%E6%94%B9"><span class="toc-text">撤销修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%96%87%E4%BB%B6"><span class="toc-text">删除文件</span></a></li></ol>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    
+      
+        
+        <div class='widget-wrap' id='recent'>
+  <div class='widget-header dis-select'>
+    <span class='name'>最近更新</span>
+    
+      <a class='cap-action' id='rss' title='Subscribe' href='/atom.xml'>
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8938"><path d="M800.966 947.251c0-404.522-320.872-732.448-716.69-732.448V62.785c477.972 0 865.44 395.987 865.44 884.466h-148.75z m-162.273 0h-148.74c0-228.98-181.628-414.598-405.678-414.598v-152.01c306.205 0 554.418 253.68 554.418 566.608z m-446.24-221.12c59.748 0 108.189 49.503 108.189 110.557 0 61.063-48.44 110.563-108.188 110.563-59.747 0-108.18-49.5-108.18-110.563 0-61.054 48.433-110.556 108.18-110.556z" p-id="8939"></path></svg>
+      </a>
+    
+  </div>
+  <div class='widget-body'>
+    
+    
+      <div class='post-title'>
+        <a href="/2020/kubernetes-operator.html">
+          
+            「转」 Kubernetes 控制器的进化之旅
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-install-config.html">
+          
+            OpenLDAP 快速落地实践-部署配置
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-high-ranking.html">
+          
+            OpenLDAP 快速落地实践-进阶
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-getting-started.html">
+          
+            OpenLDAP 快速落地实践-基本介绍
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2019/deploy-airflow.html">
+          
+            搭建 Airflow 任务调度环境
+          
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+      
+    
+  </div>
+  <footer class="footer"><div class="social-wrap"><a class="social" href="/atom.xml" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/25678f144c438.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/25678f144c438.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></footer>
+</div>
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+
+  <div class='breadcrumb-navigation'>
+  
+    
+    <div id='breadcrumb'>
+      <a class='cap breadcrumb' href='/'>主页</a>
+      <span class="sep"></span>
+      <a class='cap breadcrumb' href='/'>文章</a>
+      
+        <span class="sep"></span>
+        <a class="cap breadcrumb-link" href="/categories/git/">git</a>
+      
+    </div>
+    <div id='post-meta'>
+      发布于&nbsp;<time datetime='2017-09-11T12:36:25.000Z'>2017-09-11</time>
+    </div>
+  
+  </div>
+
+
+<article class='content md post reveal'>
+<h1 class="article-title"><span>Git 实践 - 修改操作</span></h1>
+<h2 id="工作区和版本库"><a href="#工作区和版本库" class="headerlink" title="工作区和版本库"></a>工作区和版本库</h2><ul>
+<li><p><strong>工作区：</strong></p>
+<p>就是你电脑文件夹能看到的目录，就如我创建的test文件夹就是一个工作区</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">leeif@leeif MINGW64 /e/git/test (master)</span><br><span class="line">$ ls</span><br><span class="line">git.txt  index.html  README.md</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>版本库(Repository)：</strong></p>
+<p>工作区有一个隐藏的目录文件<code>.git</code>，这个虽然在工作区目录下，但不算在工作区，而是<code>Git</code>的版本库。</p>
+<p><code>Git</code>的版本库里存了很多东西，其中最重要的就是称为stage（或者叫index）的暂存区，还有Git为我们自动创建的第一个分支<code>master</code>，以及指向<code>master</code>的一个指针叫<code>HEAD</code>。</p>
+<img src = "http://orj2jcr7i.bkt.clouddn.com/%E5%B7%A5%E4%BD%9C%E5%8C%BA%E5%92%8C%E7%89%88%E6%9C%AC%E5%BA%93.png" alt = "flex-axis"> </li>
+</ul>
+<p>  ​</p>
+<p>上一篇讲了我们把文件往Git版本库里添加的时候，是分两步执行的：</p>
+<ol>
+<li>用<code>git add</code>把文件添加进去，实际上就是把文件修改添加到暂存区；</li>
+<li>用<code>git commit</code>提交更改，实际上就是把暂存区的所有内容提交到当前分支。</li>
+</ol>
+<p>因为我们创建Git版本库时，Git自动为我们创建了唯一一个<code>master</code>分支，所以，现在，<code>git commit</code>就是往<code>master</code>分支上提交更改。</p>
+<p>你可以简单理解为，需要提交的文件修改通通放到暂存区，然后，一次性提交暂存区的所有修改。</p>
+<p><strong>ok，我们实践一下：</strong></p>
+<span id="more"></span>
+
+<ul>
+<li><p>首先新建一个文件<code>test.txt</code>，然后对<code>git.exe</code>进行修改，</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ git diff git.txt</span><br><span class="line"><span class="attribute">diff</span> --git a/git.txt b/git.txt</span><br><span class="line">index 97fe984..a537f08 <span class="number">100644</span></span><br><span class="line">--- a/git.txt</span><br><span class="line">+++ b/git.txt</span><br><span class="line">@@ -<span class="number">2</span>,<span class="number">4</span> +<span class="number">2</span>,<span class="number">6</span> @@ Git is a version control system.</span><br><span class="line"> Git is free software.</span><br><span class="line"></span><br><span class="line"> Git is a distributed version control system.</span><br><span class="line">-Git is free software.</span><br><span class="line">\ No newline at end of file</span><br><span class="line">+Git is free software.</span><br><span class="line">+</span><br><span class="line">+add test add test</span><br><span class="line">\ No newline at end of file</span><br></pre></td></tr></table></figure>
+
+<p>​</p>
+</li>
+<li><p>然后我们用<code>git status</code>查看一下状态：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">Your branch is ahead <span class="keyword">of</span> <span class="string">&#x27;origin/master&#x27;</span> by <span class="number">3</span> commits.</span><br><span class="line">  (use <span class="string">&quot;git push&quot;</span> to publish your local commits)</span><br><span class="line"></span><br><span class="line">Changes not staged <span class="keyword">for</span> commit:</span><br><span class="line">  (use <span class="string">&quot;git add &lt;file&gt;...&quot;</span> to update what will be committed)</span><br><span class="line">  (use <span class="string">&quot;git checkout -- &lt;file&gt;...&quot;</span> to discard changes <span class="keyword">in</span> working directory)</span><br><span class="line"></span><br><span class="line">        modified:   git.txt</span><br><span class="line"></span><br><span class="line">Untracked files:</span><br><span class="line">  (use <span class="string">&quot;git add &lt;file&gt;...&quot;</span> to include <span class="keyword">in</span> what will be committed)</span><br><span class="line"></span><br><span class="line">        test.txt</span><br></pre></td></tr></table></figure>
+
+<p>Git非常清楚地告诉我们，<code>git.txt</code>被修改了，而<code>test.txt</code>还从来没有被添加过，所以它的状态是<code>Untracked</code></p>
+</li>
+<li><p>现在，使用两次命令<code>git add</code>，把<code>git.txt</code>和<code>test.txt</code>都添加后，用<code>git status</code>再查看一下：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line"><span class="attribute">On</span> branch master</span><br><span class="line">Your branch is ahead of <span class="string">&#x27;origin/master&#x27;</span> by <span class="number">3</span> commits.</span><br><span class="line">  (use <span class="string">&quot;git push&quot;</span> to publish your local commits)</span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use <span class="string">&quot;git reset HEAD &lt;file&gt;...&quot;</span> to unstage)</span><br><span class="line"></span><br><span class="line">        modified:   git.txt</span><br><span class="line">        new file:   test.txt</span><br></pre></td></tr></table></figure>
+
+<p>所以，暂存区的状态就变成这样了：</p>
+<img src = "http://orj2jcr7i.bkt.clouddn.com/git%20add.png" alt = "flex-axis"></li>
+<li><p><code>git add</code>命令实际上就是把要提交的所有修改放到暂存区（Stage），然后，执行<code>git commit</code>就可以一次性把暂存区的所有修改提交到分支。</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git commit -m &quot;updata&amp;test &quot;</span><br><span class="line">[master 0fbc057] updata&amp;test</span><br><span class="line"> 3 files changed, 5 insertions(+), 1 deletion(-)</span><br><span class="line"> <span class="attribute">create</span> mode <span class="number">100644</span> test.txt</span><br></pre></td></tr></table></figure>
+
+<p>在检查下状态，如果你没在对工作区文件进行修改的话，工作区返回的状态就是<code>clean</code></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line"><span class="attribute">On</span> branch master</span><br><span class="line">Your branch is ahead of <span class="string">&#x27;origin/master&#x27;</span> by <span class="number">4</span> commits.</span><br><span class="line">  (use <span class="string">&quot;git push&quot;</span> to publish your local commits)</span><br><span class="line">nothing to commit, working tree clean</span><br></pre></td></tr></table></figure>
+
+<p>现在版本库变成了这样，暂存区就没有任何内容了：</p>
+<img src = "http://orj2jcr7i.bkt.clouddn.com/git%20commit.png" alt = "flex-axis"></li>
+</ul>
+<div class="tip">
+
+<p><strong>小结：</strong><br>暂存区是Git非常重要的概念，弄明白了暂存区，就弄明白了Git的很多操作到底干了什么!</p>
+</div>
+
+<h2 id="管理修改"><a href="#管理修改" class="headerlink" title="管理修改"></a>管理修改</h2><p>为什么Git比其他版本控制系统设计得优秀，因为Git跟踪并管理的是修改，而非文件。</p>
+<p>每次修改，如果不<code>add</code>到暂存区，那就不会加入到<code>commit</code>中。</p>
+<p><strong>例如：</strong></p>
+<ul>
+<li><p>我们对<code>git.txt</code>进行两次修改，并在修改之间进行如下指令操作：</p>
+<p>第一次修改 -&gt; <code>git add</code> -&gt; 第二次修改 -&gt; <code>git commit</code>；</p>
+<p>没错，我们会发现第二次修改没有被提交。我们前面讲了，Git管理的是修改，当你用<code>git add</code>命令后，在工作区的第一次修改被放入暂存区，准备提交，但是，在工作区的第二次修改并没有放入暂存区，所以，<code>git commit</code>只负责把暂存区的修改提交了，也就是第一次的修改被提交了，第二次的修改不会被提交。</p>
+<p>​</p>
+</li>
+<li><p>那怎么提交第二次修改呢？你可以继续<code>git add</code>再<code>git commit</code>，也可以别着急提交第一次修改，先<code>git add</code>第二次修改，再<code>git commit</code>，就相当于把两次修改合并后一块提交了：</p>
+<p>第一次修改 -&gt; <code>git add</code> -&gt; 第二次修改 -&gt; <code>git add</code> -&gt; <code>git commit</code></p>
+<br /></li>
+</ul>
+<p>注：提交后，用<code>git diff HEAD -- readme.txt</code>命令可以查看工作区和版本库里面最新版本的区别</p>
+<h2 id="撤销修改"><a href="#撤销修改" class="headerlink" title="撤销修改"></a>撤销修改</h2><p>每个人都会犯错，但重点在于你能不能及时改正，Git当然也知道这一点，所以它给了我们撤销修改这个机会。</p>
+<ul>
+<li><p><strong>第一种情况，在没<code>git add</code>提交到暂存区时，撤销修改</strong></p>
+<p>我对<code>git.txt</code>增加了一条错误信息，使用<code>git diff</code>查看一下：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> $ git diff HEAD -- git.txt</span><br><span class="line"><span class="attribute">diff</span> --git a/git.txt b/git.txt</span><br><span class="line">index a537f08..246dfe2 <span class="number">100644</span></span><br><span class="line">--- a/git.txt</span><br><span class="line">+++ b/git.txt</span><br><span class="line">@@ -<span class="number">4</span>,<span class="number">4</span> +<span class="number">4</span>,<span class="number">6</span> @@ Git is free software.</span><br><span class="line"> Git is a distributed version control system.</span><br><span class="line"> Git is free software.</span><br><span class="line"> add test add test</span><br><span class="line"></span><br><span class="line">+</span><br><span class="line">+Add an <span class="literal">error</span> message</span><br><span class="line">\ No newline at end of file</span><br></pre></td></tr></table></figure>
+
+<p>我们再用<code>git status</code>查看一下状态：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line"><span class="attribute">On</span> branch master</span><br><span class="line">Your branch is ahead of <span class="string">&#x27;origin/master&#x27;</span> by <span class="number">4</span> commits.</span><br><span class="line">  (use <span class="string">&quot;git push&quot;</span> to publish your local commits)</span><br><span class="line">Changes not staged for commit:</span><br><span class="line">  (use <span class="string">&quot;git add &lt;file&gt;...&quot;</span> to update what will be committed)</span><br><span class="line">  (use <span class="string">&quot;git checkout -- &lt;file&gt;...&quot;</span> to discard changes in working directory)</span><br><span class="line"></span><br><span class="line">        modified:   git.txt</span><br><span class="line"></span><br><span class="line"><span class="literal">no</span> changes added to commit (use <span class="string">&quot;git add&quot;</span> and/or <span class="string">&quot;git commit -a&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>可以发现，Git会告诉你，<code>git checkout -- file</code>可以丢弃工作区的修改</p>
+<p>ok， 我们试一下，执行：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -- git.txt</span><br></pre></td></tr></table></figure>
+
+<p>然后，查看文件<code>git.txt</code>:</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ cat git.txt</span><br><span class="line"><span class="attribute">Git</span> is a version control system.</span><br><span class="line">Git is free software.</span><br><span class="line"></span><br><span class="line">Git is a distributed version control system.</span><br><span class="line">Git is free software.</span><br><span class="line"></span><br><span class="line">add test add test</span><br></pre></td></tr></table></figure>
+
+<p>嗯，最后一行<code>Add an error message</code>果然撤销了</p>
+<p>​</p>
+</li>
+<li><p><strong>第二种情况，你把修改文件提交到了暂存区，但在<code>git commit</code>之前</strong></p>
+<p>我们给<code>git.txt</code>添加<code>Add a second error message</code>，并执行<code>git add</code>提交到暂存区，用<code>git staus</code>参看以下状态：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ $ git status</span><br><span class="line">  (use &quot;git push&quot; to publish your local commits)</span><br><span class="line"><span class="attribute">Changes</span> to be committed:</span><br><span class="line">  (use <span class="string">&quot;git reset HEAD &lt;file&gt;...&quot;</span> to unstage)</span><br><span class="line"></span><br><span class="line">        modified:   git.txt</span><br><span class="line">bash: $: command not found</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，Git同样告诉我们，用命令<code>git reset HEAD file</code>可以把暂存区的修改撤销掉（unstage），重新放回工作区：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git reset HEAD git.txt</span><br><span class="line"><span class="attribute">Unstaged</span> changes after reset:</span><br><span class="line">M       git.txt</span><br></pre></td></tr></table></figure>
+
+<p><code>git reset</code>命令既可以回退版本，也可以把暂存区的修改回退到工作区。当我们用<code>HEAD</code>时，表示最新的版本。</p>
+<p>现在，我们可以执行<code>git status</code>查看状态发现，暂存区是干净的，而工作区有修改，其实，现在就回到了我们上面<code>第一种情况</code>了，执行<code>git checkout -- git.txt</code>后，查看状态，发现工作区也干净了，也就达到撤销修改的目的了。</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ cat git.txt</span><br><span class="line"><span class="attribute">Git</span> is a version control system.</span><br><span class="line">Git is free software.</span><br><span class="line"></span><br><span class="line">Git is a distributed version control system.</span><br><span class="line">Git is free software.</span><br><span class="line"></span><br><span class="line">add test add test</span><br></pre></td></tr></table></figure></li>
+</ul>
+<div class = "tip">
+
+<p><strong>小结:</strong></p>
+<ul>
+<li>场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令git checkout – file。</li>
+<li>场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，第一步用命令git reset HEAD file，就回到了场景1，第二步按场景1操作。</li>
+<li>场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交，参考上一篇，不过前提是没有推送到远程库。</li>
+</ul>
+</div>
+
+<h2 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h2><p>在Git中，删除也是一个修改操作，我们实验一下，之前添加一个新文件test.txt到Git并且进行了<code>git commit</code>提交操作，可以看下<code>log</code>：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git log --pretty=oneline</span><br><span class="line">0fbc057e11b4ba59f3700a79d760e5af927a6a65 updata&amp;test  //添加text.txt文件</span><br><span class="line">9152d920e48515d79a32824efcbe14b3665a3e6d add distributed</span><br><span class="line"><span class="attribute">f78f60960e2d59bd6fdc1a069e840c6d1f1c2566</span> add txt</span><br><span class="line">01ce8dd6733f7f78e7611ef72f2a092417de0bca updata homepage</span><br><span class="line">4db229de25fb4d0c325c98df9263b2c3d4d4607f add homepage</span><br><span class="line">6010c7e80796b40d89e1135bc2c86ac217274015 initial commit</span><br></pre></td></tr></table></figure>
+
+<p>一般情况下，我们通常直接在文件管理器中把没用的文件删了，或者用<code>rm</code>命令删了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ rm test.txt</span><br><span class="line"></span><br><span class="line"># 查看目录 已经没了test,txt文件</span><br><span class="line">$ ls</span><br><span class="line">git.txt  index.html  README.md</span><br></pre></td></tr></table></figure>
+
+<p>习惯性查看下状态：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">Your branch is ahead of &#x27;origin/master&#x27; by 4 commits.</span><br><span class="line">  (use &quot;git push&quot; to publish your local commits)</span><br><span class="line">Changes not staged for commit:</span><br><span class="line">  (use &quot;git add/rm &lt;file&gt;...&quot; to update what will be committed)</span><br><span class="line">  (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)</span><br><span class="line"></span><br><span class="line">        deleted:    test.txt</span><br><span class="line"></span><br><span class="line">no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>发现Git已经知道我们进行了删除操作。</p>
+<p><strong>现在会出现两种情况：</strong></p>
+<ul>
+<li><p>一种情况就是执行<code>rm</code>命令后，发现文件删除错误了，但好在版本库里还有，所以可以很轻松的把误删的文件恢复到最新版本：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout -- test.txt</span><br></pre></td></tr></table></figure>
+
+<p><code>git checkout</code>其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”。</p>
+<p>​</p>
+</li>
+</ul>
+<ul>
+<li><p>另一种情况确定进行删除操作，并需要从版本库中删除该文件。因此，需要使用<code>git rm</code>命令，并执行<code>git commit</code>提交操作：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git rm test.txt</span><br><span class="line"><span class="attribute">rm</span> <span class="string">&#x27;test.txt&#x27;</span></span><br><span class="line"></span><br><span class="line">$ git commit -m <span class="string">&quot;deleted test&quot;</span></span><br><span class="line">[master a15cd98] deleted test</span><br><span class="line"> <span class="number">1</span> file changed, <span class="number">0</span> insertions(+), <span class="number">0</span> deletions(-)</span><br><span class="line"> delete mode <span class="number">100644</span> test.txt</span><br></pre></td></tr></table></figure>
+
+<p>现在，文件就从版本库中也删除了，就此消失不见~~~</p>
+</li>
+</ul>
+<div class = "tip">
+
+<p>命令git rm用于删除一个文件。如果一个文件已经被提交到版本库，那么你永远不用担心误删，但是要小心，你只能恢复文件到最新版本，你会丢失最近一次提交后你修改的内容。</p>
+</div>
+
+
+<div class="article-footer"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2017/git-experience-modify.html" /></div><div class="social-wrap"><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2017/git-experience-modify.html&title=Git 实践 - 修改操作 - LEEI&summary=工作区和版本库
+工作区：
+就是你电脑文件夹能看到的目录，就如我创建的test文件夹就是一个工作区
+123leeif@leeif MINGW64 /e/git/test (master)$ lsgit.txt  index.html  ..."><img src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item email" href="mailto:?subject=Git 实践 - 修改操作 - LEEI&amp;body=https://leeif.me/2017/git-experience-modify.html"><img src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></div></section></div>
+
+</article>
+
+<div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title unread"><a href="/2017/git-experience-version-control.html">Git 实践 - 版本库控制</a></div><div class="post-title read"><a href="/2017/make-latex-resume.html">更早一篇：LaTeX + Sublime 制作一份优雅的简历</a></div></section></div>
+
+<div class='related-wrap' id='related-posts'>
+    <div class="related_posts">
+    <section class='header'>
+      <div class='title cap theme'>您可能感兴趣的文章</div>
+    </section>
+    <section class='body'>
+    <div class="related-posts"><a class="item" href="\2017\git-experience-version-control.html" title="Git 实践 - 版本库控制" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">Git 实践 - 版本库控制</span><span class="excerpt">创建版本库把文件添加到版本库：
+
+通过git init命令把这个目录变成Git可以管理的仓库12$ git initInitialized empty Git repository in E:/git/test/.git/
+用命令gi...</span></a><a class="item" href="\2018\gitlab-github-submit.html" title="Gitlab or Github 提交规范和建议" rel="bookmark "><div class="img"><img src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2018/12/tag.png" class="lazyload" data-srcset="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2018/12/tag.png" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">Gitlab or Github 提交规范和建议</span></a><a class="item" href="\2019\git-flow-work-process.html" title="git-flow 的工作流程" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">git-flow 的工作流程</span></a></div></section></div></div>
+
+
+
+  <div class='related-wrap md' id="comments">
+    <div class='cmt-title cap theme'>
+      快来参与讨论吧
+    </div>
+    <div class='cmt-body utterances'>
+      
+
+<svg class="loading" style="vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="utterances" repo="leeifme/comments" issue-term="pathname" theme="github-light"></div>
+
+    </div>
+  </div>
+
+
+
+      <footer class='page-footer'>
+        
+<div><hr><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<p>本站由 <a href="https://leeif.me/">@leei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5">Stellar</a> 作为主题。</p>
+</div>
+
+      </footer>
+      <div class='float-panel mobile-only' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" viewBox="0 0 1228 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2849"><path d="M0 0m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2850"></path><path d="M0 389.560798m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2851"></path><path d="M0 779.121596m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.390199l-973.901995 0q-97.390199 0-97.390199-97.390199l0 0q0-97.390199 97.390199-97.390199Z" p-id="2852"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {};
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
+    issuesjs: '/js/issues.js',
+  };
+
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","onlypost":false,"loadingImg":null,"blurIn":true});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper/swiper-bundle.min.css","js":"https://unpkg.com/swiper/swiper-bundle.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.7/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":50,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+  <script>
+  function utterances(){
+    if(!document.getElementById("utterances"))return;
+    setTimeout(function() {
+      var checkUtterances = setInterval(function () {
+        var el = document.getElementById("utterances");
+        if (!el) return
+        clearInterval(checkUtterances)
+        try {
+          el.innerHTML="";
+        } catch (error) {}
+        var script = document.createElement('script');
+        script.src = 'https://utteranc.es/client.js';
+        const keys = ['repo', 'issue-term', 'issue-number', 'theme', 'label', 'crossorigin'];
+        keys.forEach((key, i) => {
+          if (el.attributes[key] && el.attributes[key].value) {
+            script.setAttribute(key, el.attributes[key].value);
+          }
+        });
+        el.appendChild(script);
+       }, 200)
+    });
+  }
+  utterances();
+</script>
+
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head hexo-theme='https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5'>
+  <meta name="generator" content="Hexo 5.4.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>「转」 Kubernetes 控制器的进化之旅 - LEEI</title>
+
+  
+    <meta name="description" content="我是一堆 Kubernetes 控制器。 你可能会疑惑为什么是一堆，因为我不是一个人，我只是众多控制器中的一员，你也可以把我看成是众多控制器的集合。我的职责就是监控集群内资源的实际状态，一旦发现其与期望的状态不相符，就采取行动使其符合期望状态。 想当初，Kubernetes 老大哥创造我时，只是打算让我用控制循环简单维护下资源的状态。但我后来的发展，远远超出了他的想象。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="「转」 Kubernetes 控制器的进化之旅">
+<meta property="og:url" content="https://leeif.me/2020/kubernetes-operator.html">
+<meta property="og:site_name" content="LEEI">
+<meta property="og:description" content="我是一堆 Kubernetes 控制器。 你可能会疑惑为什么是一堆，因为我不是一个人，我只是众多控制器中的一员，你也可以把我看成是众多控制器的集合。我的职责就是监控集群内资源的实际状态，一旦发现其与期望的状态不相符，就采取行动使其符合期望状态。 想当初，Kubernetes 老大哥创造我时，只是打算让我用控制循环简单维护下资源的状态。但我后来的发展，远远超出了他的想象。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://hugo-picture.oss-cn-beijing.aliyuncs.com/images/20200223122350.png">
+<meta property="article:published_time" content="2020-07-25T07:15:15.000Z">
+<meta property="article:modified_time" content="2021-03-04T12:25:24.122Z">
+<meta property="article:author" content="leei">
+<meta property="article:tag" content="kubernetes">
+<meta property="article:tag" content="operator">
+<meta property="article:tag" content="oam">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://hugo-picture.oss-cn-beijing.aliyuncs.com/images/20200223122350.png">
+  
+  
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="LEEI" type="application/atom+xml">
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200927222029.ico">
+  
+</head>
+
+<body theme='light'>
+  
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left'>
+    
+<div class='wrap'>
+  
+<header class='header'>
+  <div class='logo-wrap'>
+  
+    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2020/09/26/zSRUylAqpoZ8462.png'/></a>
+  
+  
+    <a class='title' href='/'>LEEI</a>
+  
+</div>
+
+  <nav class="menu"><a class="nav-item active" href="/">文章</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/more/">更多</a></nav>
+</header>
+
+  <div class='widgets'>
+    
+      
+        
+        
+
+  <div class='widget-wrap' id='toc'>
+    <div class='widget-header dis-select'>
+      <span class='name'>
+        
+          本文目录
+        
+      </span>
+      <a class='cap-action' id='s-top' title='回到顶部' href='#start'>
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10505"><path d="M884.526 163.323H208.881c-30.516 0-55.25 24.934-55.25 55.685s24.734 55.685 55.25 55.685h675.645c30.515 0 55.255-24.93 55.255-55.685s-24.74-55.685-55.255-55.685zM568.253 336.87a56.765 56.765 0 0 0-4.06-3.701c-0.63-0.517-1.29-0.968-1.935-1.454-0.799-0.605-1.577-1.224-2.406-1.787-0.779-0.528-1.583-0.978-2.386-1.46-0.748-0.45-1.485-0.926-2.253-1.341-0.81-0.44-1.649-0.814-2.483-1.208-0.8-0.384-1.588-0.784-2.407-1.132-0.814-0.338-1.643-0.61-2.463-0.906-0.875-0.323-1.745-0.66-2.641-0.932-0.825-0.25-1.66-0.435-2.489-0.645-0.916-0.236-1.817-0.492-2.75-0.681-0.962-0.19-1.935-0.307-2.902-0.445-0.814-0.118-1.618-0.272-2.442-0.354a55.163 55.163 0 0 0-5.438-0.276h-0.015c-0.267 0-0.528 0.036-0.794 0.036a54.856 54.856 0 0 0-39.86 16.271l-279.413 281.61c-21.576 21.75-21.576 57.006 0 78.756a54.876 54.876 0 0 0 39.07 16.312 54.835 54.835 0 0 0 39.066-16.312l186.67-188.145V898.09c0 30.75 24.74 55.685 55.256 55.685s55.255-24.934 55.255-55.685v-387.42L769.526 697.22a54.871 54.871 0 0 0 39.065 16.312 54.835 54.835 0 0 0 39.066-16.312c21.576-21.75 21.576-57.006 0-78.756L568.253 336.87z" p-id="10506"></path></svg>
+      </a>
+    </div>
+    <div class='widget-body post'>
+      
+        <div class='doc-tree active'>
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%8E%A7%E5%88%B6%E5%BE%AA%E7%8E%AF"><span class="toc-text">1. 控制循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Informer"><span class="toc-text">2. Informer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-SharedInformer"><span class="toc-text">3. SharedInformer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-CRD"><span class="toc-text">4. CRD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-text">5. 自定义控制器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Operator"><span class="toc-text">6. Operator</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-OAM"><span class="toc-text">7. OAM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E7%AB%A0%E8%BD%AC%E8%87%AA"><span class="toc-text">文章转自</span></a></li></ol>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    
+      
+        
+        <div class='widget-wrap' id='recent'>
+  <div class='widget-header dis-select'>
+    <span class='name'>最近更新</span>
+    
+      <a class='cap-action' id='rss' title='Subscribe' href='/atom.xml'>
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8938"><path d="M800.966 947.251c0-404.522-320.872-732.448-716.69-732.448V62.785c477.972 0 865.44 395.987 865.44 884.466h-148.75z m-162.273 0h-148.74c0-228.98-181.628-414.598-405.678-414.598v-152.01c306.205 0 554.418 253.68 554.418 566.608z m-446.24-221.12c59.748 0 108.189 49.503 108.189 110.557 0 61.063-48.44 110.563-108.188 110.563-59.747 0-108.18-49.5-108.18-110.563 0-61.054 48.433-110.556 108.18-110.556z" p-id="8939"></path></svg>
+      </a>
+    
+  </div>
+  <div class='widget-body'>
+    
+    
+      <div class='post-title'>
+        <a href="/2020/kubernetes-operator.html">
+          
+            「转」 Kubernetes 控制器的进化之旅
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-install-config.html">
+          
+            OpenLDAP 快速落地实践-部署配置
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-high-ranking.html">
+          
+            OpenLDAP 快速落地实践-进阶
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-getting-started.html">
+          
+            OpenLDAP 快速落地实践-基本介绍
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2019/deploy-airflow.html">
+          
+            搭建 Airflow 任务调度环境
+          
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+      
+    
+  </div>
+  <footer class="footer"><div class="social-wrap"><a class="social" href="/atom.xml" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/25678f144c438.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/25678f144c438.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></footer>
+</div>
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+
+  <div class='breadcrumb-navigation'>
+  
+    
+    <div id='breadcrumb' style="color:#DA0F47">
+      <a class='cap breadcrumb' href='/'>主页</a>
+      <span class="sep"></span>
+      <a class='cap breadcrumb' href='/'>文章</a>
+      
+        <span class="sep"></span>
+        <a class="cap breadcrumb-link" href="/categories/Cloud-Navite/">Cloud Navite</a> <span class="sep"></span> <a class="cap breadcrumb-link" href="/categories/Cloud-Navite/Kubernetes/">Kubernetes</a>
+      
+    </div>
+    <div id='post-meta'>
+      发布于&nbsp;<time datetime='2020-07-25T07:15:15.000Z'>2020-07-25</time>
+    </div>
+  
+  </div>
+
+
+<article class='content md post reveal'>
+<h1 class="article-title"><span>「转」 Kubernetes 控制器的进化之旅</span></h1>
+<blockquote>
+<p>我是一堆 Kubernetes 控制器。</p>
+<p>你可能会疑惑为什么是一堆，因为我不是一个人，我只是众多控制器中的一员，你也可以把我看成是众多控制器的集合。我的职责就是监控集群内资源的实际状态，一旦发现其与期望的状态不相符，就采取行动使其符合期望状态。</p>
+<p>想当初，Kubernetes 老大哥创造我时，只是打算让我用<strong>控制循环</strong>简单维护下资源的状态。但我后来的发展，远远超出了他的想象。</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="1-控制循环"><a href="#1-控制循环" class="headerlink" title="1. 控制循环"></a>1. 控制循环</h2><p>所谓控制循环就是一个用来调节系统状态的周期性操作，在 Kubernetes 中也叫<strong>调谐循环</strong>（Reconcile Loop）。我的手下控制着很多种不同类型的资源，比如 Pod，Deployment，Service 等等。就拿 <code>Deployment</code> 来说吧，我的控制循环主要分为三步：</p>
+<ol>
+<li>从 <code>API Server</code> 中获取到所有属于该 Deployment 的 Pod，然后统计一下它们的数量，即它们的实际状态。</li>
+<li>检查 Deployment 的 <code>Replicas</code> 字段，看看期望状态是多少个 Pod。</li>
+<li>将这两个状态做比较，如果期望状态的 Pod 数量比实际状态多，就创建新 Pod，多几个就创建几个新的；如果期望状态的 Pod 数量比实际状态少，就删除旧 Pod，少几个就删除几个旧的。</li>
+</ol>
+<p>然而好景不长，我收到了 Kubernetes 掌门人（看大门的） <code>API Server</code> 的抱怨：“你访问我的次数太频繁了，非常消耗我的资源，我连上厕所的时间都没有了！”</p>
+<p>我仔细一想，当前的控制循环模式确实有这个缺陷 —— 访问 <code>API Server</code> 的次数太频繁了，容易被老大反感。</p>
+<p>所以我决定，找一个小弟。</p>
+<h2 id="2-Informer"><a href="#2-Informer" class="headerlink" title="2. Informer"></a>2. Informer</h2><p>这次我招的小弟叫 <code>Informer</code>，它分担一部分我的任务，具体的做法是这样的：由 <code>Informer</code> 代替我去访问 API Server，而我不管是查状态还是对资源进行伸缩都和 Informer 进行交接。而且 Informer 不需要每次都去访问 API Server，它只要在初始化的时候通过 <code>LIST API</code> 获取所有资源的最新状态，然后再通过 <code>WATCH API</code> 去监听这些资源状态的变化，整个过程被称作 <code>ListAndWatch</code>。</p>
+<p>而 Informer 也不傻，它也有一个助手叫 <code>Reflector</code>，上面所说的 <code>ListAndWatch</code> 事实上是由 Reflector 一手操办的。</p>
+<p>这一次，<code>API Server</code> 的压力大大减轻了，因为 Reflector 大部分时间都在 <code>WATCH</code>，并没有通过 LIST 获取所有状态，这使 <code>API Server</code> 的压力大大减少。我想这次掌门人应该不会再批评我了吧。</p>
+<p>然而没过几天，掌门人又找我谈话了：“你的手下每次来 WATCH 我，都要 WATCH 所有兄弟的状态，依然很消耗我的资源啊！我就纳闷了，你一次搞这么多兄弟，你虎啊？”</p>
+<p>我一想有道理啊，没必要每次都 WATCH 所有兄弟的状态，于是告诉 Informer：“以后再去 API Server 那里 WATCH 状态的时候，只查 WATCH 特定资源的状态，不要一股脑儿全 WATCH。“</p>
+<p>Informer 再把这个决策告诉 Reflector，事情就这么愉快地决定了。</p>
+<p>本以为这次我会得到掌门人的夸奖，可没过几天安稳日子，它又来找我诉苦了：“兄弟，虽然你减轻了我的精神压力，但我的财力有限啊，如果每个控制器都招一个小弟，那我得多发多少人的工资啊，你想想办法。”</p>
+<h2 id="3-SharedInformer"><a href="#3-SharedInformer" class="headerlink" title="3. SharedInformer"></a>3. SharedInformer</h2><p>经过和其他控制器的讨论，我们决定这么做：所有控制器联合起来作为一个整体来分配 <code>Informer</code>，针对每个（受多个控制器管理的）资源招一个 Informer 小弟，我们称之为 <code>SharedInformer</code>。你们可以理解为共享 Informer，因为有很多资源是受多个控制器管理的，比如 Pod 同时受 <code>Deployment</code> 和 <code>StatefulSet</code> 管理。这样当多个控制器同时想查 Pod 的状态时，只需要访问一个 Informer 就行了。</p>
+<p>但这又引来了新的问题，<code>SharedInformer</code> 无法同时给多个控制器提供信息，这就需要每个控制器自己排队和重试。</p>
+<p>为了配合控制器更好地实现排队和重试，<code>SharedInformer</code> 搞了一个 <code>Delta FIFO Queue</code>（增量先进先出队列），每当资源被修改时，它的助手 <code>Reflector</code> 就会收到事件通知，并将对应的事件放入 <code>Delta FIFO Queue</code> 中。与此同时，<code>SharedInformer</code> 会不断从 <code>Delta FIFO Queue</code> 中读取事件，然后更新本地缓存的状态。</p>
+<p>这还不行，<code>SharedInformer</code> 除了更新本地缓存之外，还要想办法将数据同步给各个控制器，为了解决这个问题，它又搞了个工作队列（Workqueue），一旦有资源被添加、修改或删除，就会将相应的事件加入到工作队列中。所有的控制器排队进行读取，一旦某个控制器发现这个事件与自己相关，就执行相应的操作。如果操作失败，就将该事件放回队列，等下次排到自己再试一次。如果操作成功，就将该事件从队列中删除。</p>
+<p>现在这个工作模式得到了大家的一致好评。虽然单个 <code>SharedInformer</code> 的工作量增加了，但 Informer 的数量大大减少了，老大可以把省下来的资金拿出一小部分给 <code>SharedInformer</code> 涨工资啊，这样大家都很开心。</p>
+<h2 id="4-CRD"><a href="#4-CRD" class="headerlink" title="4. CRD"></a>4. CRD</h2><p>全民 Kubernetes 时代到了。</p>
+<p>随着容器及其编排技术的普及，使用 Kubernetes 的用户大量增长，用户已经不满足 Kubernetes 自带的那些资源（Pod，Node，Service）了，大家都希望能根据具体的业务创建特定的资源，并且对这些资源的状态维护还要遵循上面所说的那一套控制循环机制。</p>
+<p>幸好最近掌门人做了一次升级，新增了一个插件叫 <code>CRD（Custom Resource Definition）</code>，创建一个全新的资源实例，只需要经过以下两步：</p>
+<ol>
+<li>创建一个 CRD 资源（没错，CRD 也是一种资源类型），其中定义” 自定义资源 “的 <strong>API 组</strong>、<strong>API 版本</strong>和<strong>资源类型</strong>。这样就会向 API Server 注册该资源类型的 API。</li>
+<li>指定上面定义的 API 组 和 API 版本，创建自定义资源。</li>
+</ol>
+<p>当然，中间还要加入一些代码让 Kubernetes 认识自定义资源的各种参数。</p>
+<p>到这一步就基本上完成了自定义资源的创建，但 Kubernetes 并不知道该资源所对应的业务逻辑，比如你的自定义资源是宿主机，那么对应的业务逻辑就是创建一台真正的宿主机出来。那么怎样实现它的业务逻辑呢？</p>
+<h2 id="5-自定义控制器"><a href="#5-自定义控制器" class="headerlink" title="5. 自定义控制器"></a>5. 自定义控制器</h2><p><code>Controller Manager</code> 见多识广，说：” 这里的每个控制器都是我的一部分，当初创造你们是因为你们都属于通用的控制器，大家都能用得上。而自定义资源需要根据具体的业务来实现，我们不可能知道每个用户的具体业务是啥，自己一拍脑袋想出来的自定义资源，用户也不一定用得上。我们可以让用户自己编写自定义控制器，你们把之前使用的控制循环和 Informer 这些编码模式总结一下，然后提供给用户，让他们按照同样的方法编写自己的控制器。“</p>
+<p>Deployment 控制器一惊，要把自己的秘密告诉别人？那别人把自己取代了咋办？赶忙问道：” 那将来我岂不是很危险，没有存在的余地了？“</p>
+<p><code>Controller Manager</code> 赶忙解释道：” 不用担心，虽然用户可以编写自定义控制器，但无论他们玩出什么花样，只要他们的业务跑在 Kubernetes 平台上，就免不了要跑容器，最后还是会来求你们帮忙的，你要知道，控制器是可以层层递进的，他们只不过是在你外面套了一层，最后还是要回到你这里，请求你帮忙控制 Pod。“</p>
+<p>这下大家都不慌了，决定就把自定义控制器这件事情交给用户自己去处理，将选择权留给用户。</p>
+<h2 id="6-Operator"><a href="#6-Operator" class="headerlink" title="6. Operator"></a>6. Operator</h2><p>用户自从获得了编写自定义控制器的权力之后，非常开心，有的用户（CoreOS）为了方便大家控制有状态应用，开发出了一种特定的控制器模型叫 <code>Operator</code>，并开始在社区内推广，得到了大家的一致好评。不可否认，<code>Operator</code> 这种模式是很聪明的，它把需要特定领域知识的应用单独写一个 Operator 控制器，将这种应用特定的操作知识编写到软件中，使其可以利用 Kubernetes 强大的抽象能力，达到正确运行和管理应用的目的。</p>
+<p>以 <code>ETCD Operator</code> 为例，假如你想手动扩展一个 ETCD 集群，一般的做法是：</p>
+<ol>
+<li>使用 ETCD 管理工具添加一个新成员。</li>
+<li>为这个成员所在的节点生成对应的启动参数，并启动它。</li>
+</ol>
+<p>而 ETCD Operator 将这些特定于 etcd 的操作手法编写到了它的控制循环中，你只需要通过修改自定义资源声明集群期望的成员数量，剩下的事情交给 Operator 就好了。</p>
+<p>本以为这是一个皆大欢喜的方案，但没过多久，就有开发 Operator 的小哥来抱怨了：” 我们有很多开发的小伙伴都是不懂运维那一套的，什么高可用、容灾根本不懂啊，现在让我们将运维的操作知识编写到软件中，臣妾做不到啊。。“</p>
+<p>这确实是个问题，这样一来就把开发和运维的工作都塞到了开发手里，既懂开发又懂运维的可不多啊，为了照顾大家，还得继续想办法把开发和运维的工作拆分开来。</p>
+<h2 id="7-OAM"><a href="#7-OAM" class="headerlink" title="7. OAM"></a>7. OAM</h2><p>这时候阿里和微软发力了，他们联合发布了一个开放应用模型，叫 <a target="_blank" rel="noopener" href="https://cloudblogs.microsoft.com/opensource/2019/10/16/announcing-open-application-model/">Open Application Model </a>（OAM）。这个模型就是为了解决上面提到的问题，将开发和运维的职责解耦，不同的角色履行不同的职责，并形成一个统一的规范，如下图所示：</p>
+<p><img src="https://hugo-picture.oss-cn-beijing.aliyuncs.com/images/20200223122350.png" class="lazyload" data-srcset="https://hugo-picture.oss-cn-beijing.aliyuncs.com/images/20200223122350.png" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" alt="img"></p>
+<p>这个规范告诉我们：</p>
+<ul>
+<li>开发人员负责描述组件的功能，如何配置组件，以及运行需要多少资源</li>
+<li>运维人员负责将相关组件组合成一个应用，并配置运行时参数和运维支撑能力，比如是否需要监控，是否需要弹性伸缩。</li>
+<li>基础设施工程师负责建立和维护应用的运行时环境（如底层系统）。</li>
+</ul>
+<p>其中每一个团队负责的事情都用对应的 CRD 来配置。</p>
+<p>这样一来，开发和运维人员的职责就被区分开来了，简化了应用的组合和运维。它将应用的配置和运维特征（如自动伸缩、流量监控）进行解耦，然后通过建模构成一个整体，避免了 Operator 这种模型带来的大量冗余。</p>
+<p>自从用上了这个模型之后，运维和开发小哥表示现在他们的关系很融洽，没事还能一起出去喝两杯。</p>
+<h2 id="文章转自"><a href="#文章转自" class="headerlink" title="文章转自"></a>文章转自</h2><div class="tag-plugin note"><div class="title"><strong>link</strong></div><div class="body"><p>green, <a target="_blank" rel="noopener" href="https://fuckcloudnative.io/posts/controllers-confession/">https://fuckcloudnative.io/posts/controllers-confession/</a></p></div></div>
+
+
+<div class="article-footer"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2020/kubernetes-operator.html" /></div><div class="social-wrap"><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2020/kubernetes-operator.html&title=「转」 Kubernetes 控制器的进化之旅 - LEEI&summary=
+我是一堆 Kubernetes 控制器。
+你可能会疑惑为什么是一堆，因为我不是一个人，我只是众多控制器中的一员，你也可以把我看成是众多控制器的集合。我的职责就是监控集群内资源的实际状态，一旦发现其与期望的状态不相符，就采取行动使其符..."><img src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item email" href="mailto:?subject=「转」 Kubernetes 控制器的进化之旅 - LEEI&amp;body=https://leeif.me/2020/kubernetes-operator.html"><img src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></div></section></div>
+
+</article>
+
+<div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title unread"><a href="/2020/openldap-high-ranking.html">OpenLDAP 快速落地实践-进阶</a></div><div class="post-title read"><a href="/2020/openldap-install-config.html">更早一篇：OpenLDAP 快速落地实践-部署配置</a></div></section></div>
+
+<div class='related-wrap' id='related-posts'></div>
+
+
+
+  <div class='related-wrap md' id="comments">
+    <div class='cmt-title cap theme'>
+      快来参与讨论吧
+    </div>
+    <div class='cmt-body utterances'>
+      
+
+<svg class="loading" style="vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="utterances" repo="leeifme/comments" issue-term="pathname" theme="github-light"></div>
+
+    </div>
+  </div>
+
+
+
+      <footer class='page-footer'>
+        
+<div><hr><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<p>本站由 <a href="https://leeif.me/">@leei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5">Stellar</a> 作为主题。</p>
+</div>
+
+      </footer>
+      <div class='float-panel mobile-only' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" viewBox="0 0 1228 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2849"><path d="M0 0m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2850"></path><path d="M0 389.560798m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2851"></path><path d="M0 779.121596m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.390199l-973.901995 0q-97.390199 0-97.390199-97.390199l0 0q0-97.390199 97.390199-97.390199Z" p-id="2852"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {};
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
+    issuesjs: '/js/issues.js',
+  };
+
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","onlypost":false,"loadingImg":null,"blurIn":true});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper/swiper-bundle.min.css","js":"https://unpkg.com/swiper/swiper-bundle.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.7/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":50,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+  <script>
+  function utterances(){
+    if(!document.getElementById("utterances"))return;
+    setTimeout(function() {
+      var checkUtterances = setInterval(function () {
+        var el = document.getElementById("utterances");
+        if (!el) return
+        clearInterval(checkUtterances)
+        try {
+          el.innerHTML="";
+        } catch (error) {}
+        var script = document.createElement('script');
+        script.src = 'https://utteranc.es/client.js';
+        const keys = ['repo', 'issue-term', 'issue-number', 'theme', 'label', 'crossorigin'];
+        keys.forEach((key, i) => {
+          if (el.attributes[key] && el.attributes[key].value) {
+            script.setAttribute(key, el.attributes[key].value);
+          }
+        });
+        el.appendChild(script);
+       }, 200)
+    });
+  }
+  utterances();
+</script>
+
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>

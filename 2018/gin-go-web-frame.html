@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head hexo-theme='https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5'>
+  <meta name="generator" content="Hexo 5.4.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>高性能的 Go Web 框架 - gin - LEEI</title>
+
+  
+    <meta name="description" content="Gin 的使用安装和更新首次安装，使用 go get命令获取即可。 1$ go get github.com&#x2F;gin-gonic&#x2F;gin  更新就是常规的 go get -u。 1$ go get -u github.com&#x2F;gin-gonic&#x2F;gin  快速运行在你的 main 包中，引入 gin 包并初始化。 123456789101112131415161718192021222324pac">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高性能的 Go Web 框架 - gin">
+<meta property="og:url" content="https://leeif.me/2018/gin-go-web-frame.html">
+<meta property="og:site_name" content="LEEI">
+<meta property="og:description" content="Gin 的使用安装和更新首次安装，使用 go get命令获取即可。 1$ go get github.com&#x2F;gin-gonic&#x2F;gin  更新就是常规的 go get -u。 1$ go get -u github.com&#x2F;gin-gonic&#x2F;gin  快速运行在你的 main 包中，引入 gin 包并初始化。 123456789101112131415161718192021222324pac">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-07-26T12:36:25.000Z">
+<meta property="article:modified_time" content="2020-09-26T09:05:07.832Z">
+<meta property="article:author" content="leei">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+  
+  
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="LEEI" type="application/atom+xml">
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200927222029.ico">
+  
+</head>
+
+<body theme='light'>
+  
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left'>
+    
+<div class='wrap'>
+  
+<header class='header'>
+  <div class='logo-wrap'>
+  
+    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2020/09/26/zSRUylAqpoZ8462.png'/></a>
+  
+  
+    <a class='title' href='/'>LEEI</a>
+  
+</div>
+
+  <nav class="menu"><a class="nav-item active" href="/">文章</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/more/">更多</a></nav>
+</header>
+
+  <div class='widgets'>
+    
+      
+        
+        
+
+  <div class='widget-wrap' id='toc'>
+    <div class='widget-header dis-select'>
+      <span class='name'>
+        
+          本文目录
+        
+      </span>
+      <a class='cap-action' id='s-top' title='回到顶部' href='#start'>
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10505"><path d="M884.526 163.323H208.881c-30.516 0-55.25 24.934-55.25 55.685s24.734 55.685 55.25 55.685h675.645c30.515 0 55.255-24.93 55.255-55.685s-24.74-55.685-55.255-55.685zM568.253 336.87a56.765 56.765 0 0 0-4.06-3.701c-0.63-0.517-1.29-0.968-1.935-1.454-0.799-0.605-1.577-1.224-2.406-1.787-0.779-0.528-1.583-0.978-2.386-1.46-0.748-0.45-1.485-0.926-2.253-1.341-0.81-0.44-1.649-0.814-2.483-1.208-0.8-0.384-1.588-0.784-2.407-1.132-0.814-0.338-1.643-0.61-2.463-0.906-0.875-0.323-1.745-0.66-2.641-0.932-0.825-0.25-1.66-0.435-2.489-0.645-0.916-0.236-1.817-0.492-2.75-0.681-0.962-0.19-1.935-0.307-2.902-0.445-0.814-0.118-1.618-0.272-2.442-0.354a55.163 55.163 0 0 0-5.438-0.276h-0.015c-0.267 0-0.528 0.036-0.794 0.036a54.856 54.856 0 0 0-39.86 16.271l-279.413 281.61c-21.576 21.75-21.576 57.006 0 78.756a54.876 54.876 0 0 0 39.07 16.312 54.835 54.835 0 0 0 39.066-16.312l186.67-188.145V898.09c0 30.75 24.74 55.685 55.256 55.685s55.255-24.934 55.255-55.685v-387.42L769.526 697.22a54.871 54.871 0 0 0 39.065 16.312 54.835 54.835 0 0 0 39.066-16.312c21.576-21.75 21.576-57.006 0-78.756L568.253 336.87z" p-id="10506"></path></svg>
+      </a>
+    </div>
+    <div class='widget-body post'>
+      
+        <div class='doc-tree active'>
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Gin-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">Gin 的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%92%8C%E6%9B%B4%E6%96%B0"><span class="toc-text">安装和更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E8%BF%90%E8%A1%8C"><span class="toc-text">快速运行</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1-Router"><span class="toc-text">路由 (Router)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Restful-Api"><span class="toc-text">Restful Api</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1%EF%BC%88%E5%8F%82%E6%95%B0%E8%B7%AF%E7%94%B1%EF%BC%89"><span class="toc-text">动态路由（参数路由）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E7%BB%84"><span class="toc-text">路由组</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6-Middleware"><span class="toc-text">中间件 (Middleware)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E4%B8%AA%E8%B7%AF%E7%94%B1%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="toc-text">单个路由中间件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6"><span class="toc-text">执行流程控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%AF%E7%94%B1%E7%BB%84%E4%BD%BF%E7%94%A8%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="toc-text">路由组使用中间件</span></a></li></ol></li></ol>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    
+      
+        
+        <div class='widget-wrap' id='recent'>
+  <div class='widget-header dis-select'>
+    <span class='name'>最近更新</span>
+    
+      <a class='cap-action' id='rss' title='Subscribe' href='/atom.xml'>
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8938"><path d="M800.966 947.251c0-404.522-320.872-732.448-716.69-732.448V62.785c477.972 0 865.44 395.987 865.44 884.466h-148.75z m-162.273 0h-148.74c0-228.98-181.628-414.598-405.678-414.598v-152.01c306.205 0 554.418 253.68 554.418 566.608z m-446.24-221.12c59.748 0 108.189 49.503 108.189 110.557 0 61.063-48.44 110.563-108.188 110.563-59.747 0-108.18-49.5-108.18-110.563 0-61.054 48.433-110.556 108.18-110.556z" p-id="8939"></path></svg>
+      </a>
+    
+  </div>
+  <div class='widget-body'>
+    
+    
+      <div class='post-title'>
+        <a href="/2020/kubernetes-operator.html">
+          
+            「转」 Kubernetes 控制器的进化之旅
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-install-config.html">
+          
+            OpenLDAP 快速落地实践-部署配置
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-high-ranking.html">
+          
+            OpenLDAP 快速落地实践-进阶
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-getting-started.html">
+          
+            OpenLDAP 快速落地实践-基本介绍
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2019/deploy-airflow.html">
+          
+            搭建 Airflow 任务调度环境
+          
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+      
+    
+  </div>
+  <footer class="footer"><div class="social-wrap"><a class="social" href="/atom.xml" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/25678f144c438.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/25678f144c438.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></footer>
+</div>
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+
+  <div class='breadcrumb-navigation'>
+  
+    
+    <div id='breadcrumb'>
+      <a class='cap breadcrumb' href='/'>主页</a>
+      <span class="sep"></span>
+      <a class='cap breadcrumb' href='/'>文章</a>
+      
+        <span class="sep"></span>
+        <a class="cap breadcrumb-link" href="/categories/collect/">collect</a>
+      
+    </div>
+    <div id='post-meta'>
+      发布于&nbsp;<time datetime='2018-07-26T12:36:25.000Z'>2018-07-26</time>
+    </div>
+  
+  </div>
+
+
+<article class='content md post reveal'>
+<h1 class="article-title"><span>高性能的 Go Web 框架 - gin</span></h1>
+<h2 id="Gin-的使用"><a href="#Gin-的使用" class="headerlink" title="Gin 的使用"></a>Gin 的使用</h2><h3 id="安装和更新"><a href="#安装和更新" class="headerlink" title="安装和更新"></a>安装和更新</h3><p>首次安装，使用 <code>go get</code>命令获取即可。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ go get github.com/gin-gonic/gin</span><br></pre></td></tr></table></figure>
+
+<p>更新就是常规的 <code>go get -u</code>。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ go get -u github.com/gin-gonic/gin</span><br></pre></td></tr></table></figure>
+
+<h3 id="快速运行"><a href="#快速运行" class="headerlink" title="快速运行"></a>快速运行</h3><p>在你的 main 包中，引入 gin 包并初始化。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">	<span class="string">&quot;net/http&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 初始化引擎</span></span><br><span class="line">	engine := gin.Default()</span><br><span class="line">	<span class="comment">// 注册一个路由和处理函数</span></span><br><span class="line">	engine.Any(<span class="string">&quot;/&quot;</span>, WebRoot)</span><br><span class="line">	<span class="comment">// 绑定端口，然后启动应用</span></span><br><span class="line">	engine.Run(<span class="string">&quot;:9205&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 根请求处理函数</span></span><br><span class="line"><span class="comment">* 所有本次请求相关的方法都在 context 中，完美</span></span><br><span class="line"><span class="comment">* 输出响应 hello, world</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">WebRoot</span><span class="params">(context *gin.Context)</span></span> &#123;</span><br><span class="line">	context.String(http.StatusOK, <span class="string">&quot;hello, world&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一个最简单的应用就写好了，来运行下试试:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ go run</span><br><span class="line">[GIN-debug] Listening and serving HTTP on :9205</span><br></pre></td></tr></table></figure>
+
+<p>访问 <a target="_blank" rel="noopener" href="http://127.0.0.1:9205/">http://127.0.0.1:9205</a> ，就可以得到响应 “hello, world” 。</p>
+<h2 id="路由-Router"><a href="#路由-Router" class="headerlink" title="路由 (Router)"></a>路由 (Router)</h2><h3 id="Restful-Api"><a href="#Restful-Api" class="headerlink" title="Restful Api"></a>Restful Api</h3><p>你可以注册路由方法有 GET, POST, PUT, PATCH, DELETE 和 OPTIONS.</p>
+<p>使用很简单，直接调用同名的方法即可。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 省略的代码 ...</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	router := gin.Default()</span><br><span class="line"></span><br><span class="line">	router.GET(<span class="string">&quot;/someGet&quot;</span>, getting)</span><br><span class="line">	router.POST(<span class="string">&quot;/somePost&quot;</span>, posting)</span><br><span class="line">	router.PUT(<span class="string">&quot;/somePut&quot;</span>, putting)</span><br><span class="line">	router.DELETE(<span class="string">&quot;/someDelete&quot;</span>, deleting)</span><br><span class="line">	router.PATCH(<span class="string">&quot;/somePatch&quot;</span>, patching)</span><br><span class="line">	router.HEAD(<span class="string">&quot;/someHead&quot;</span>, head)</span><br><span class="line">	router.OPTIONS(<span class="string">&quot;/someOptions&quot;</span>, options)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 默认绑定 :8080</span></span><br><span class="line">	router.Run()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 省略的代码 ...</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="动态路由（参数路由）"><a href="#动态路由（参数路由）" class="headerlink" title="动态路由（参数路由）"></a>动态路由（参数路由）</h3><p>有时候我们需要动态的路由，如 <code>/user/:id</code>，通过调用的 url 来传入不同的 id . 在 Gin 中很容易处理这种路由：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 省略的代码 ...</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	router := gin.Default()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 注册一个动态路由</span></span><br><span class="line">  	<span class="comment">// 可以匹配 /user/leeifme</span></span><br><span class="line">  	<span class="comment">// 不能匹配 /user 和 /user/</span></span><br><span class="line">	router.GET(<span class="string">&quot;/user/:name&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">		<span class="comment">// 使用 c.Param(key) 获取 url 参数</span></span><br><span class="line">		name := c.Param(<span class="string">&quot;name&quot;</span>)</span><br><span class="line">		c.String(http.StatusOK, <span class="string">&quot;Hello %s&quot;</span>, name)</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">  	<span class="comment">// 注册一个高级的动态路由</span></span><br><span class="line">	<span class="comment">// 该路由会匹配 /user/leeifme/ 和 /user/leeifme/send</span></span><br><span class="line">	<span class="comment">// 如果没有任何路由匹配到 /user/leeifme, 那么他就会重定向到 /user/leeifme/，从而被该方法匹配到</span></span><br><span class="line">	router.GET(<span class="string">&quot;/user/:name/*action&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">		name := c.Param(<span class="string">&quot;name&quot;</span>)</span><br><span class="line">		action := c.Param(<span class="string">&quot;action&quot;</span>)</span><br><span class="line">		message := name + <span class="string">&quot; is &quot;</span> + action</span><br><span class="line">		c.String(http.StatusOK, message)</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	router.Run(<span class="string">&quot;:8080&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 省略的代码 ...</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="路由组"><a href="#路由组" class="headerlink" title="路由组"></a>路由组</h3><p>一些情况下，我们会有统一前缀的 url 的需求，典型的如 Api 接口版本号 <code>/v1/something</code>。Gin 可以使用 Group 方法统一归类到路由组中：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 省略的代码 ...</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	router := gin.Default()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 定义一个组前缀</span></span><br><span class="line">  	<span class="comment">// /v1/login 就会匹配到这个组</span></span><br><span class="line">	v1 := router.Group(<span class="string">&quot;/v1&quot;</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		v1.POST(<span class="string">&quot;/login&quot;</span>, loginEndpoint)</span><br><span class="line">		v1.POST(<span class="string">&quot;/submit&quot;</span>, submitEndpoint)</span><br><span class="line">		v1.POST(<span class="string">&quot;/read&quot;</span>, readEndpoint)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 定义一个组前缀</span></span><br><span class="line">  	<span class="comment">// 不用花括号包起来也是可以的。上面那种只是看起来会统一一点。看你个人喜好</span></span><br><span class="line">	v2 := router.Group(<span class="string">&quot;/v2&quot;</span>)</span><br><span class="line">	v2.POST(<span class="string">&quot;/login&quot;</span>, loginEndpoint)</span><br><span class="line">	v2.POST(<span class="string">&quot;/submit&quot;</span>, submitEndpoint)</span><br><span class="line">	v2.POST(<span class="string">&quot;/read&quot;</span>, readEndpoint)</span><br><span class="line"></span><br><span class="line">	router.Run(<span class="string">&quot;:8080&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 省略的代码 ...</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="中间件-Middleware"><a href="#中间件-Middleware" class="headerlink" title="中间件 (Middleware)"></a>中间件 (Middleware)</h2><p>golang 的 net/http 设计的一大特点就是特别容易构建中间件。需要注意的是中间件只对注册过的路由函数起作用。对于分组路由，嵌套使用中间件，可以限定中间件的作用范围。中间件分为全局中间件，单个路由中间件和群组中间件。 </p>
+<p>现代化的 Web 编程，中间件已经是必不可少的了。我们可以通过中间件的方式，验证 Auth 和身份鉴别，集中处理返回的数据等等。Gin 提供了 Middleware 的功能，并与路由紧紧相连。</p>
+<h3 id="单个路由中间件"><a href="#单个路由中间件" class="headerlink" title="单个路由中间件"></a>单个路由中间件</h3><p>单个路由使用中间件，只需要在注册路由的时候指定要执行的中间件即可。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 省略的代码 ...</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	router := gin.Default()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 注册一个路由，使用了 middleware1，middleware2 两个中间件</span></span><br><span class="line">	router.GET(<span class="string">&quot;/someGet&quot;</span>, middleware1, middleware2, handler)</span><br><span class="line">  </span><br><span class="line">	<span class="comment">// 默认绑定 :8080</span></span><br><span class="line">	router.Run()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">handler</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	log.Println(<span class="string">&quot;exec handler&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 省略的代码 ...</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="执行流程控制"><a href="#执行流程控制" class="headerlink" title="执行流程控制"></a>执行流程控制</h3><p>用上面的实例代码，我们来看一下中间件是怎么执行的。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 省略的代码 ...</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">middleware1</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	log.Println(<span class="string">&quot;exec middleware1&quot;</span>)</span><br><span class="line">  </span><br><span class="line">	<span class="comment">//你可以写一些逻辑代码</span></span><br><span class="line">  </span><br><span class="line">	<span class="comment">// 执行该中间件之后的逻辑</span></span><br><span class="line">	c.Next()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 省略的代码 ...</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看出，中间件的写法和路由的 Handler 几乎是一样的，只是多调用 <code>c.Next()</code>。</p>
+<p>正是有个<code>c.Next()</code>，我们可以在中间件中控制调用逻辑的变化，看下面的 <code>middleware2</code> 代码。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 省略的代码 ...</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">middleware2</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	log.Println(<span class="string">&quot;arrive at middleware2&quot;</span>)</span><br><span class="line">	<span class="comment">// 执行该中间件之前，先跳到流程的下一个方法</span></span><br><span class="line">	c.Next()</span><br><span class="line">	<span class="comment">// 流程中的其他逻辑已经执行完了</span></span><br><span class="line">	log.Println(<span class="string">&quot;exec middleware2&quot;</span>)</span><br><span class="line">  </span><br><span class="line">	<span class="comment">//你可以写一些逻辑代码</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 省略的代码 ...</span></span><br></pre></td></tr></table></figure>
+
+<p>在 <code>middleware2</code>中，执行到 <code>c.Next()</code>时，Gin 会直接跳到流程的下一个方法中，等到这个方法执行完后，才会回来接着执行 <code>middleware2</code> 剩下的代码。</p>
+<p>所以请求上面注册的路由 url <code>/someGet</code> ，请求先到达<code>middleware1</code>，然后到达 <code>middleware2</code>，但此时 <code>middleware2</code>调用了 <code>c.Next()</code>，所以 <code>middleware2</code>的代码并没有执行，而是跳到了 <code>handler</code>，等 <code>handler</code>执行完成后，跳回到 <code>middleware2</code>，执行 <code>middleware2</code>剩下的代码。</p>
+<p>所以我们可以在控制台上看到以下日志输出:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">exec</span> middleware1</span><br><span class="line">arrive at middleware2</span><br><span class="line"><span class="built_in">exec</span> handler</span><br><span class="line"><span class="built_in">exec</span> middleware2</span><br></pre></td></tr></table></figure>
+
+<h3 id="路由组使用中间件"><a href="#路由组使用中间件" class="headerlink" title="路由组使用中间件"></a>路由组使用中间件</h3><p>路由组使用中间件和单个路由类似，只不过是要把中间件放到 <code>Group</code> 上.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 省略的代码 ...</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	router := gin.Default()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 定义一个组前缀, 并使用 middleware1 中间件</span></span><br><span class="line">  	<span class="comment">// 访问 /v2/login 就会执行 middleware1 函数</span></span><br><span class="line">	v2 := router.Group(<span class="string">&quot;/v2&quot;</span>, middleware1)</span><br><span class="line">	v2.POST(<span class="string">&quot;/login&quot;</span>, loginEndpoint)</span><br><span class="line">	v2.POST(<span class="string">&quot;/submit&quot;</span>, submitEndpoint)</span><br><span class="line">	v2.POST(<span class="string">&quot;/read&quot;</span>, readEndpoint)</span><br><span class="line"></span><br><span class="line">	router.Run(<span class="string">&quot;:8080&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 省略的代码 ...</span></span><br></pre></td></tr></table></figure>
+
+<div class="article-footer"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2018/gin-go-web-frame.html" /></div><div class="social-wrap"><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2018/gin-go-web-frame.html&title=高性能的 Go Web 框架 - gin - LEEI&summary=Gin 的使用安装和更新首次安装，使用 go get命令获取即可。
+1$ go get github.com/gin-gonic/gin
+
+更新就是常规的 go get -u。
+1$ go get -u github.com/gin-..."><img src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item email" href="mailto:?subject=高性能的 Go Web 框架 - gin - LEEI&amp;body=https://leeif.me/2018/gin-go-web-frame.html"><img src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></div></section></div>
+
+</article>
+
+<div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title unread"><a href="/2018/gin-swagger-build-document.html">gin-swagger 自动化构建 API 文档</a></div><div class="post-title read"><a href="/2018/docker-common-command%20.html">更早一篇：Docker 常用命令记录</a></div></section></div>
+
+<div class='related-wrap' id='related-posts'>
+    <div class="related_posts">
+    <section class='header'>
+      <div class='title cap theme'>您可能感兴趣的文章</div>
+    </section>
+    <section class='body'>
+    <div class="related-posts"><a class="item" href="\2017\mgo-connection-mongodb-experience.html" title="mgo 连接 MongoDB 数据库的使用实例" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">mgo 连接 MongoDB 数据库的使用实例</span></a><a class="item" href="\2018\gin-swagger-build-document.html" title="gin-swagger 自动化构建 API 文档" rel="bookmark "><div class="img"><img src="http://orj2jcr7i.bkt.clouddn.com/blog/180727/2im5i3b45e.png?imageslim" class="lazyload" data-srcset="http://orj2jcr7i.bkt.clouddn.com/blog/180727/2im5i3b45e.png?imageslim" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">gin-swagger 自动化构建 API 文档</span></a><a class="item" href="\2018\redis-for-mysql-cache.html" title="初学 Redis 作缓存层" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">初学 Redis 作缓存层</span></a><a class="item" href="\2019\go-channel-select.html" title="Select -- 无阻塞读写 channel" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">Select -- 无阻塞读写 channel</span></a><a class="item" href="\2017\raspberry-pi-getting-started.html" title="Raspberry Pi — 新手入门操作" rel="bookmark "><div class="img"><img src="https://img-blog.csdn.net/20170629170451112" class="lazyload" data-srcset="https://img-blog.csdn.net/20170629170451112" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">Raspberry Pi — 新手入门操作</span></a></div></section></div></div>
+
+
+
+  <div class='related-wrap md' id="comments">
+    <div class='cmt-title cap theme'>
+      快来参与讨论吧
+    </div>
+    <div class='cmt-body utterances'>
+      
+
+<svg class="loading" style="vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="utterances" repo="leeifme/comments" issue-term="pathname" theme="github-light"></div>
+
+    </div>
+  </div>
+
+
+
+      <footer class='page-footer'>
+        
+<div><hr><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<p>本站由 <a href="https://leeif.me/">@leei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5">Stellar</a> 作为主题。</p>
+</div>
+
+      </footer>
+      <div class='float-panel mobile-only' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" viewBox="0 0 1228 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2849"><path d="M0 0m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2850"></path><path d="M0 389.560798m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2851"></path><path d="M0 779.121596m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.390199l-973.901995 0q-97.390199 0-97.390199-97.390199l0 0q0-97.390199 97.390199-97.390199Z" p-id="2852"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {};
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
+    issuesjs: '/js/issues.js',
+  };
+
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","onlypost":false,"loadingImg":null,"blurIn":true});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper/swiper-bundle.min.css","js":"https://unpkg.com/swiper/swiper-bundle.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.7/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":50,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+  <script>
+  function utterances(){
+    if(!document.getElementById("utterances"))return;
+    setTimeout(function() {
+      var checkUtterances = setInterval(function () {
+        var el = document.getElementById("utterances");
+        if (!el) return
+        clearInterval(checkUtterances)
+        try {
+          el.innerHTML="";
+        } catch (error) {}
+        var script = document.createElement('script');
+        script.src = 'https://utteranc.es/client.js';
+        const keys = ['repo', 'issue-term', 'issue-number', 'theme', 'label', 'crossorigin'];
+        keys.forEach((key, i) => {
+          if (el.attributes[key] && el.attributes[key].value) {
+            script.setAttribute(key, el.attributes[key].value);
+          }
+        });
+        el.appendChild(script);
+       }, 200)
+    });
+  }
+  utterances();
+</script>
+
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>

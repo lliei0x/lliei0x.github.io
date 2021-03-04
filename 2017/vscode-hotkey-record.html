@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head hexo-theme='https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5'>
+  <meta name="generator" content="Hexo 5.4.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>VS Code 常用快捷键整理 - LEEI</title>
+
+  
+    <meta name="description" content="按 Press 功能 Function    Ctrl + Shift + P，F1 显示命令面板 Show Command Palette   Ctrl + P 快速打开 Quick Open   Ctrl + Shift + N 新窗口 &#x2F; 实例 New window&#x2F;instance   Ctrl + Shift + W 关闭窗口 &#x2F; 实例 Close window&#x2F;instance">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VS Code 常用快捷键整理">
+<meta property="og:url" content="https://leeif.me/2017/vscode-hotkey-record.html">
+<meta property="og:site_name" content="LEEI">
+<meta property="og:description" content="按 Press 功能 Function    Ctrl + Shift + P，F1 显示命令面板 Show Command Palette   Ctrl + P 快速打开 Quick Open   Ctrl + Shift + N 新窗口 &#x2F; 实例 New window&#x2F;instance   Ctrl + Shift + W 关闭窗口 &#x2F; 实例 Close window&#x2F;instance">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-12-01T12:36:25.000Z">
+<meta property="article:modified_time" content="2020-09-26T09:06:46.505Z">
+<meta property="article:author" content="leei">
+<meta property="article:tag" content="百宝箱">
+<meta name="twitter:card" content="summary">
+  
+  
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="LEEI" type="application/atom+xml">
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200927222029.ico">
+  
+</head>
+
+<body theme='light'>
+  
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left'>
+    
+<div class='wrap'>
+  
+<header class='header'>
+  <div class='logo-wrap'>
+  
+    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2020/09/26/zSRUylAqpoZ8462.png'/></a>
+  
+  
+    <a class='title' href='/'>LEEI</a>
+  
+</div>
+
+  <nav class="menu"><a class="nav-item active" href="/">文章</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/more/">更多</a></nav>
+</header>
+
+  <div class='widgets'>
+    
+      
+        
+        
+
+  <div class='widget-wrap' id='toc'>
+    <div class='widget-header dis-select'>
+      <span class='name'>
+        
+          本文目录
+        
+      </span>
+      <a class='cap-action' id='s-top' title='回到顶部' href='#start'>
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10505"><path d="M884.526 163.323H208.881c-30.516 0-55.25 24.934-55.25 55.685s24.734 55.685 55.25 55.685h675.645c30.515 0 55.255-24.93 55.255-55.685s-24.74-55.685-55.255-55.685zM568.253 336.87a56.765 56.765 0 0 0-4.06-3.701c-0.63-0.517-1.29-0.968-1.935-1.454-0.799-0.605-1.577-1.224-2.406-1.787-0.779-0.528-1.583-0.978-2.386-1.46-0.748-0.45-1.485-0.926-2.253-1.341-0.81-0.44-1.649-0.814-2.483-1.208-0.8-0.384-1.588-0.784-2.407-1.132-0.814-0.338-1.643-0.61-2.463-0.906-0.875-0.323-1.745-0.66-2.641-0.932-0.825-0.25-1.66-0.435-2.489-0.645-0.916-0.236-1.817-0.492-2.75-0.681-0.962-0.19-1.935-0.307-2.902-0.445-0.814-0.118-1.618-0.272-2.442-0.354a55.163 55.163 0 0 0-5.438-0.276h-0.015c-0.267 0-0.528 0.036-0.794 0.036a54.856 54.856 0 0 0-39.86 16.271l-279.413 281.61c-21.576 21.75-21.576 57.006 0 78.756a54.876 54.876 0 0 0 39.07 16.312 54.835 54.835 0 0 0 39.066-16.312l186.67-188.145V898.09c0 30.75 24.74 55.685 55.256 55.685s55.255-24.934 55.255-55.685v-387.42L769.526 697.22a54.871 54.871 0 0 0 39.065 16.312 54.835 54.835 0 0 0 39.066-16.312c21.576-21.75 21.576-57.006 0-78.756L568.253 336.87z" p-id="10506"></path></svg>
+      </a>
+    </div>
+    <div class='widget-body post'>
+      
+        <div class='doc-tree active'>
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%BC%96%E8%BE%91-Basic-editing"><span class="toc-text">基础编辑 Basic editing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%BC%E8%88%AA-Navigation"><span class="toc-text">导航 Navigation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2%E5%92%8C%E6%9B%BF%E6%8D%A2-Search-and-replace"><span class="toc-text">搜索和替换 Search and replace</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E5%85%89%E6%A0%87%E5%92%8C%E9%80%89%E6%8B%A9-Multi-cursor-and-selection"><span class="toc-text">多光标和选择 Multi-cursor and selection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%B0%E5%AF%8C%E7%9A%84%E8%AF%AD%E8%A8%80%E7%BC%96%E8%BE%91-Rich-languages-editing"><span class="toc-text">丰富的语言编辑 Rich languages editing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%BE%91%E5%99%A8%E7%AE%A1%E7%90%86-Editor-management"><span class="toc-text">编辑器管理 Editor management</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86-File-management"><span class="toc-text">文件管理 File management</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%98%BE%E7%A4%BA-Display"><span class="toc-text">显示 Display</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E8%AF%95-Debug"><span class="toc-text">调试 Debug</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9B%86%E6%88%90%E7%BB%88%E7%AB%AF-Integrated-terminal"><span class="toc-text">集成终端 Integrated terminal</span></a></li></ol>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    
+      
+        
+        <div class='widget-wrap' id='recent'>
+  <div class='widget-header dis-select'>
+    <span class='name'>最近更新</span>
+    
+      <a class='cap-action' id='rss' title='Subscribe' href='/atom.xml'>
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8938"><path d="M800.966 947.251c0-404.522-320.872-732.448-716.69-732.448V62.785c477.972 0 865.44 395.987 865.44 884.466h-148.75z m-162.273 0h-148.74c0-228.98-181.628-414.598-405.678-414.598v-152.01c306.205 0 554.418 253.68 554.418 566.608z m-446.24-221.12c59.748 0 108.189 49.503 108.189 110.557 0 61.063-48.44 110.563-108.188 110.563-59.747 0-108.18-49.5-108.18-110.563 0-61.054 48.433-110.556 108.18-110.556z" p-id="8939"></path></svg>
+      </a>
+    
+  </div>
+  <div class='widget-body'>
+    
+    
+      <div class='post-title'>
+        <a href="/2020/kubernetes-operator.html">
+          
+            「转」 Kubernetes 控制器的进化之旅
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-install-config.html">
+          
+            OpenLDAP 快速落地实践-部署配置
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-high-ranking.html">
+          
+            OpenLDAP 快速落地实践-进阶
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-getting-started.html">
+          
+            OpenLDAP 快速落地实践-基本介绍
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2019/deploy-airflow.html">
+          
+            搭建 Airflow 任务调度环境
+          
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+      
+    
+  </div>
+  <footer class="footer"><div class="social-wrap"><a class="social" href="/atom.xml" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/25678f144c438.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/25678f144c438.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></footer>
+</div>
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+
+  <div class='breadcrumb-navigation'>
+  
+    
+    <div id='breadcrumb'>
+      <a class='cap breadcrumb' href='/'>主页</a>
+      <span class="sep"></span>
+      <a class='cap breadcrumb' href='/'>文章</a>
+      
+        <span class="sep"></span>
+        <a class="cap breadcrumb-link" href="/categories/collect/">collect</a>
+      
+    </div>
+    <div id='post-meta'>
+      发布于&nbsp;<time datetime='2017-12-01T12:36:25.000Z'>2017-12-01</time>
+    </div>
+  
+  </div>
+
+
+<article class='content md post reveal'>
+<h1 class="article-title"><span>VS Code 常用快捷键整理</span></h1>
+<table>
+<thead>
+<tr>
+<th>按 Press</th>
+<th>功能 Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ctrl + Shift + P，F1</td>
+<td>显示命令面板 Show Command Palette</td>
+</tr>
+<tr>
+<td>Ctrl + P</td>
+<td>快速打开 Quick Open</td>
+</tr>
+<tr>
+<td>Ctrl + Shift + N</td>
+<td>新窗口 / 实例 New window/instance</td>
+</tr>
+<tr>
+<td>Ctrl + Shift + W</td>
+<td>关闭窗口 / 实例 Close window/instance</td>
+</tr>
+</tbody></table>
+<h2 id="基础编辑-Basic-editing"><a href="#基础编辑-Basic-editing" class="headerlink" title="基础编辑 Basic editing"></a>基础编辑 Basic editing</h2><table>
+<thead>
+<tr>
+<th>按 Press</th>
+<th>功能 Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ctrl+X</td>
+<td>剪切行（空选定） Cut line (empty selection)</td>
+</tr>
+<tr>
+<td>Ctrl+C</td>
+<td>复制行（空选定）Copy line (empty selection)</td>
+</tr>
+<tr>
+<td>Alt+ ↑ / ↓</td>
+<td>向上 / 向下移动行 Move line up/down</td>
+</tr>
+<tr>
+<td>Shift+Alt + ↓ / ↑</td>
+<td>向上 / 向下复制行 Copy line up/down</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+K</td>
+<td>删除行 Delete line</td>
+</tr>
+<tr>
+<td>Ctrl+Enter</td>
+<td>在下面插入行 Insert line below</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+Enter</td>
+<td>在上面插入行 Insert line above</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+\</td>
+<td>跳到匹配的括号 Jump to matching bracket</td>
+</tr>
+<tr>
+<td>Ctrl+] / [</td>
+<td>缩进 / 缩进行 Indent/outdent line</td>
+</tr>
+<tr>
+<td>Home</td>
+<td>转到行首 Go to beginning of line</td>
+</tr>
+<tr>
+<td>End</td>
+<td>转到行尾 Go to end of line</td>
+</tr>
+<tr>
+<td>Ctrl+Home</td>
+<td>转到文件开头 Go to beginning of file</td>
+</tr>
+<tr>
+<td>Ctrl+End</td>
+<td>转到文件末尾 Go to end of file</td>
+</tr>
+<tr>
+<td>Ctrl+↑ / ↓</td>
+<td>向上 / 向下滚动行 Scroll line up/down</td>
+</tr>
+<tr>
+<td>Alt+PgUp / PgDown</td>
+<td>向上 / 向下滚动页面 Scroll page up/down</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+[</td>
+<td>折叠（折叠）区域 Fold (collapse) region</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+]</td>
+<td>展开（未折叠）区域 Unfold (uncollapse) region</td>
+</tr>
+<tr>
+<td>Ctrl+K Ctrl+[</td>
+<td>折叠（未折叠）所有子区域 Fold (collapse) all subregions</td>
+</tr>
+<tr>
+<td>Ctrl+K Ctrl+]</td>
+<td>展开（未折叠）所有子区域 Unfold (uncollapse) all subregions</td>
+</tr>
+<tr>
+<td>Ctrl+K Ctrl+0</td>
+<td>折叠（折叠）所有区域 Fold (collapse) all regions</td>
+</tr>
+<tr>
+<td>Ctrl+K Ctrl+J</td>
+<td>展开（未折叠）所有区域 Unfold (uncollapse) all regions</td>
+</tr>
+<tr>
+<td>Ctrl+K Ctrl+C</td>
+<td>添加行注释 Add line comment</td>
+</tr>
+<tr>
+<td>Ctrl+K Ctrl+U</td>
+<td>删除行注释 Remove line comment</td>
+</tr>
+<tr>
+<td>Ctrl+/</td>
+<td>切换行注释 Toggle line comment</td>
+</tr>
+<tr>
+<td>Shift+Alt+A</td>
+<td>切换块注释 Toggle block comment</td>
+</tr>
+<tr>
+<td>Alt+Z</td>
+<td>切换换行 Toggle word wrap</td>
+</tr>
+</tbody></table>
+<h2 id="导航-Navigation"><a href="#导航-Navigation" class="headerlink" title="导航 Navigation"></a>导航 Navigation</h2><table>
+<thead>
+<tr>
+<th>按 Press</th>
+<th>功能 Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ctrl + T</td>
+<td>显示所有符号 Show all Symbols</td>
+</tr>
+<tr>
+<td>Ctrl + G</td>
+<td>转到行… Go to Line…</td>
+</tr>
+<tr>
+<td>Ctrl + P</td>
+<td>转到文件… Go to File…</td>
+</tr>
+<tr>
+<td>Ctrl + Shift + O</td>
+<td>转到符号… Go to Symbol…</td>
+</tr>
+<tr>
+<td>Ctrl + Shift + M</td>
+<td>显示问题面板 Show Problems panel</td>
+</tr>
+<tr>
+<td>F8</td>
+<td>转到下一个错误或警告 Go to next error or warning</td>
+</tr>
+<tr>
+<td>Shift + F8</td>
+<td>转到上一个错误或警告 Go to previous error or warning</td>
+</tr>
+<tr>
+<td>Ctrl + Shift + Tab</td>
+<td>导航编辑器组历史记录 Navigate editor group history</td>
+</tr>
+<tr>
+<td>Alt + ←/→</td>
+<td>返回 / 前进 Go back / forward</td>
+</tr>
+<tr>
+<td>Ctrl + M</td>
+<td>切换选项卡移动焦点 Toggle Tab moves focus</td>
+</tr>
+</tbody></table>
+<h2 id="搜索和替换-Search-and-replace"><a href="#搜索和替换-Search-and-replace" class="headerlink" title="搜索和替换 Search and replace"></a>搜索和替换 Search and replace</h2><table>
+<thead>
+<tr>
+<th>按 Press</th>
+<th>功能 Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ctrl + F</td>
+<td>查找 Find</td>
+</tr>
+<tr>
+<td>Ctrl + H</td>
+<td>替换 Replace</td>
+</tr>
+<tr>
+<td>F3 / Shift + F3</td>
+<td>查找下一个 / 上一个 Find next/previous</td>
+</tr>
+<tr>
+<td>Alt + Enter</td>
+<td>选择查找匹配的所有出现 Select all occurences of Find match</td>
+</tr>
+<tr>
+<td>Ctrl + D</td>
+<td>将选择添加到下一个查找匹配 Add selection to next Find match</td>
+</tr>
+<tr>
+<td>Ctrl + K Ctrl + D</td>
+<td>将最后一个选择移至下一个查找匹配项 Move last selection to next Find match</td>
+</tr>
+<tr>
+<td>Alt + C / R / W</td>
+<td>切换区分大小写 / 正则表达式 / 整个词 Toggle case-sensitive / regex / whole word</td>
+</tr>
+</tbody></table>
+<h2 id="多光标和选择-Multi-cursor-and-selection"><a href="#多光标和选择-Multi-cursor-and-selection" class="headerlink" title="多光标和选择 Multi-cursor and selection"></a>多光标和选择 Multi-cursor and selection</h2><table>
+<thead>
+<tr>
+<th>按 Press</th>
+<th>功能 Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Alt + 单击</td>
+<td>插入光标 Insert cursor</td>
+</tr>
+<tr>
+<td>Ctrl + Alt +↑/↓</td>
+<td>在上 / 下插入光标 Insert cursor above / below</td>
+</tr>
+<tr>
+<td>Ctrl + U</td>
+<td>撤消上一个光标操作 Undo last cursor operation</td>
+</tr>
+<tr>
+<td>Shift + Alt + I</td>
+<td>在选定的每一行的末尾插入光标 Insert cursor at end of each line selected</td>
+</tr>
+<tr>
+<td>Ctrl + I</td>
+<td>选择当前行 Select current line</td>
+</tr>
+<tr>
+<td>Ctrl + Shift + L</td>
+<td>选择当前选择的所有出现 Select all occurrences of current selection</td>
+</tr>
+<tr>
+<td>Ctrl + F2</td>
+<td>选择当前字的所有出现 Select all occurrences of current word</td>
+</tr>
+<tr>
+<td>Shift + Alt + →</td>
+<td>展开选择 Expand selection</td>
+</tr>
+<tr>
+<td>Shift + Alt + ←</td>
+<td>缩小选择 Shrink selection</td>
+</tr>
+<tr>
+<td>Shift + Alt + （拖动鼠标）</td>
+<td>列（框）选择 Column (box) selection</td>
+</tr>
+<tr>
+<td>Ctrl + Shift + Alt +（箭头键）</td>
+<td>列（框）选择 Column (box) selection</td>
+</tr>
+<tr>
+<td>Ctrl + Shift + Alt + PgUp / PgDown</td>
+<td>列（框）选择页上 / 下 Column (box) selection page up/down</td>
+</tr>
+</tbody></table>
+<h2 id="丰富的语言编辑-Rich-languages-editing"><a href="#丰富的语言编辑-Rich-languages-editing" class="headerlink" title="丰富的语言编辑 Rich languages editing"></a>丰富的语言编辑 Rich languages editing</h2><table>
+<thead>
+<tr>
+<th>按 Press</th>
+<th>功能 Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ctrl + 空格</td>
+<td>触发建议 Trigger suggestion</td>
+</tr>
+<tr>
+<td>Ctrl + Shift + Space</td>
+<td>触发器参数提示 Trigger parameter hints</td>
+</tr>
+<tr>
+<td>Tab</td>
+<td>Emmet 展开缩写 Emmet expand abbreviation</td>
+</tr>
+<tr>
+<td>Shift + Alt + F</td>
+<td>格式化文档 Format document</td>
+</tr>
+<tr>
+<td>Ctrl + K Ctrl + F</td>
+<td>格式选定区域 Format selection</td>
+</tr>
+<tr>
+<td>F12</td>
+<td>转到定义 Go to Definition</td>
+</tr>
+<tr>
+<td>Alt + F12</td>
+<td>Peek 定义 Peek Definition</td>
+</tr>
+<tr>
+<td>Ctrl + K F12</td>
+<td>打开定义到边 Open Definition to the side</td>
+</tr>
+<tr>
+<td>Ctrl + .</td>
+<td>快速解决 Quick Fix</td>
+</tr>
+<tr>
+<td>Shift + F12</td>
+<td>显示引用 Show References</td>
+</tr>
+<tr>
+<td>F2</td>
+<td>重命名符号 Rename Symbol</td>
+</tr>
+<tr>
+<td>Ctrl + Shift + . /，</td>
+<td>替换为下一个 / 上一个值 Replace with next/previous value</td>
+</tr>
+<tr>
+<td>Ctrl + K Ctrl + X</td>
+<td>修剪尾随空格 Trim trailing whitespace</td>
+</tr>
+<tr>
+<td>Ctrl + K M</td>
+<td>更改文件语言 Change file language</td>
+</tr>
+</tbody></table>
+<h2 id="编辑器管理-Editor-management"><a href="#编辑器管理-Editor-management" class="headerlink" title="编辑器管理 Editor management"></a>编辑器管理 Editor management</h2><table>
+<thead>
+<tr>
+<th>按 Press</th>
+<th>功能 Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ctrl+F4, Ctrl+W</td>
+<td>关闭编辑器 Close editor</td>
+</tr>
+<tr>
+<td>Ctrl+K F</td>
+<td>关闭文件夹 Close folder</td>
+</tr>
+<tr>
+<td>Ctrl+\</td>
+<td>拆分编辑器 Split editor</td>
+</tr>
+<tr>
+<td>Ctrl+ 1 / 2 / 3</td>
+<td>聚焦到第 1，第 2 或第 3 编辑器组 Focus into 1st, 2nd or 3rd editor group</td>
+</tr>
+<tr>
+<td>Ctrl+K Ctrl+ ←/→</td>
+<td>聚焦到上一个 / 下一个编辑器组 Focus into previous/next editor group</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+PgUp / PgDown</td>
+<td>向左 / 向右移动编辑器 Move editor left/right</td>
+</tr>
+<tr>
+<td>Ctrl+K ← / →</td>
+<td>移动活动编辑器组 Move active editor group</td>
+</tr>
+</tbody></table>
+<h2 id="文件管理-File-management"><a href="#文件管理-File-management" class="headerlink" title="文件管理 File management"></a>文件管理 File management</h2><table>
+<thead>
+<tr>
+<th>按 Press</th>
+<th>功能 Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ctrl+N</td>
+<td>新文件 New File</td>
+</tr>
+<tr>
+<td>Ctrl+O</td>
+<td>打开文件… Open File…</td>
+</tr>
+<tr>
+<td>Ctrl+S</td>
+<td>保存 Save</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+S</td>
+<td>另存为… Save As…</td>
+</tr>
+<tr>
+<td>Ctrl+K S</td>
+<td>全部保存 Save All</td>
+</tr>
+<tr>
+<td>Ctrl+F4</td>
+<td>关闭 Close</td>
+</tr>
+<tr>
+<td>Ctrl+K Ctrl+W</td>
+<td>关闭所有 Close All</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+T</td>
+<td>重新打开关闭的编辑器 Reopen closed editor</td>
+</tr>
+<tr>
+<td>Ctrl+K</td>
+<td>输入保持打开 Enter Keep Open</td>
+</tr>
+<tr>
+<td>Ctrl+Tab</td>
+<td>打开下一个 Open next</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+Tab</td>
+<td>打开上一个 Open previous</td>
+</tr>
+<tr>
+<td>Ctrl+K P</td>
+<td>复制活动文件的路径 Copy path of active file</td>
+</tr>
+<tr>
+<td>Ctrl+K R</td>
+<td>显示资源管理器中的活动文件 Reveal active file in Explorer</td>
+</tr>
+<tr>
+<td>Ctrl+K O</td>
+<td>显示新窗口 / 实例中的活动文件 Show active file in new window/instance</td>
+</tr>
+</tbody></table>
+<h2 id="显示-Display"><a href="#显示-Display" class="headerlink" title="显示 Display"></a>显示 Display</h2><table>
+<thead>
+<tr>
+<th>按 Press</th>
+<th>功能 Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>F11</td>
+<td>切换全屏 Toggle full screen</td>
+</tr>
+<tr>
+<td>Shift+Alt+1</td>
+<td>切换编辑器布局 Toggle editor layout</td>
+</tr>
+<tr>
+<td>Ctrl+ = / -</td>
+<td>放大 / 缩小 Zoom in/out</td>
+</tr>
+<tr>
+<td>Ctrl+B</td>
+<td>切换侧栏可见性 Toggle Sidebar visibility</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+E</td>
+<td>显示浏览器 / 切换焦点 Show Explorer / Toggle focus</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+F</td>
+<td>显示搜索 Show Search</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+G</td>
+<td>显示 Git Show Git</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+D</td>
+<td>显示调试 Show Debug</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+X</td>
+<td>显示扩展 Show Extensions</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+H</td>
+<td>替换文件 Replace in files</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+J</td>
+<td>切换搜索详细信息 Toggle Search details</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+C</td>
+<td>打开新命令提示符 / 终端 Open new command prompt/terminal</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+U</td>
+<td>显示输出面板 Show Output panel</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+V</td>
+<td>切换 Markdown 预览 Toggle Markdown preview</td>
+</tr>
+<tr>
+<td>Ctrl+K V</td>
+<td>从旁边打开 Markdown 预览 Open Markdown preview to the side</td>
+</tr>
+</tbody></table>
+<h2 id="调试-Debug"><a href="#调试-Debug" class="headerlink" title="调试 Debug"></a>调试 Debug</h2><table>
+<thead>
+<tr>
+<th>按 Press</th>
+<th>功能 Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>F9</td>
+<td>切换断点 Toggle breakpoint</td>
+</tr>
+<tr>
+<td>F5</td>
+<td>开始 / 继续 Start/Continue</td>
+</tr>
+<tr>
+<td>Shift+F5</td>
+<td>停止 Stop</td>
+</tr>
+<tr>
+<td>F11 / Shift+F11</td>
+<td>下一步 / 上一步 Step into/out</td>
+</tr>
+<tr>
+<td>F10</td>
+<td>跳过 Step over</td>
+</tr>
+<tr>
+<td>Ctrl+K Ctrl+I</td>
+<td>显示悬停 Show hover</td>
+</tr>
+</tbody></table>
+<h2 id="集成终端-Integrated-terminal"><a href="#集成终端-Integrated-terminal" class="headerlink" title="集成终端 Integrated terminal"></a>集成终端 Integrated terminal</h2><table>
+<thead>
+<tr>
+<th>按 Press</th>
+<th>功能 Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ctrl+`</td>
+<td>显示集成终端 Show integrated terminal</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+`</td>
+<td>创建新终端 Create new terminal</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+C</td>
+<td>复制选定 Copy selection</td>
+</tr>
+<tr>
+<td>Ctrl+Shift+V</td>
+<td>粘贴到活动端子 Paste into active terminal</td>
+</tr>
+<tr>
+<td>Ctrl+↑ / ↓</td>
+<td>向上 / 向下滚动 Scroll up/down</td>
+</tr>
+<tr>
+<td>Shift+PgUp / PgDown</td>
+<td>向上 / 向下滚动页面 Scroll page up/down</td>
+</tr>
+<tr>
+<td>Ctrl+Home / End</td>
+<td>滚动到顶部 / 底部 Scroll to top/bottom</td>
+</tr>
+</tbody></table>
+
+
+<div class="article-footer"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2017/vscode-hotkey-record.html" /></div><div class="social-wrap"><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2017/vscode-hotkey-record.html&title=VS Code 常用快捷键整理 - LEEI&summary=
+
+
+按 Press
+功能 Function
+
+
+
+Ctrl + Shift + P，F1
+显示命令面板 Show Command Palette
+
+
+Ctrl + P
+快速打开 Quick Open
+
+
+Ctrl + Shift +..."><img src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item email" href="mailto:?subject=VS Code 常用快捷键整理 - LEEI&amp;body=https://leeif.me/2017/vscode-hotkey-record.html"><img src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></div></section></div>
+
+</article>
+
+<div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title unread"><a href="/2017/mgo-connection-mongodb-experience.html">mgo 连接 MongoDB 数据库的使用实例</a></div><div class="post-title read"><a href="/2017/nongdb-beginner.html">更早一篇：MongoDB 入门操作</a></div></section></div>
+
+<div class='related-wrap' id='related-posts'>
+    <div class="related_posts">
+    <section class='header'>
+      <div class='title cap theme'>您可能感兴趣的文章</div>
+    </section>
+    <section class='body'>
+    <div class="related-posts"><a class="item" href="\2017\make-latex-resume.html" title="LaTeX + Sublime 制作一份优雅的简历" rel="bookmark "><div class="img"><img src="http://orj2jcr7i.bkt.clouddn.com/leeifme/blog/techcausl.png" class="lazyload" data-srcset="http://orj2jcr7i.bkt.clouddn.com/leeifme/blog/techcausl.png" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">LaTeX + Sublime 制作一份优雅的简历</span><span class="excerpt">
+前言阿一古，终究是抓到了学期末的尾巴，
+时间越近心越慌，到了大三最后，周围拥有革命友谊的同志们，也各自选择了不知道适不适合自己的道路，
+又到了人生分叉路上，不知是不是只有我在路口惶恐不安
+
+简历错误的打开方式使用 PDF 以外的格式...</span></a><a class="item" href="\2018\babun-windows-tool.html" title="Windows 利器 - babun" rel="bookmark "><div class="img"><img src="https://raw.githubusercontent.com/zsh-users/zsh-syntax-highlighting/master/images/preview.png" class="lazyload" data-srcset="https://raw.githubusercontent.com/zsh-users/zsh-syntax-highlighting/master/images/preview.png" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">Windows 利器 - babun</span></a><a class="item" href="\2018\sftp-sync-project.html" title="vscode + sftp 开发环境同步差异文件" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">vscode + sftp 开发环境同步差异文件</span></a><a class="item" href="\2018\vim-common-hotkey.html" title="你和大佬之间就差一个 vim" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">你和大佬之间就差一个 vim</span></a><a class="item" href="\2017\raspberry-pi-getting-started.html" title="Raspberry Pi — 新手入门操作" rel="bookmark "><div class="img"><img src="https://img-blog.csdn.net/20170629170451112" class="lazyload" data-srcset="https://img-blog.csdn.net/20170629170451112" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">Raspberry Pi — 新手入门操作</span></a></div></section></div></div>
+
+
+
+  <div class='related-wrap md' id="comments">
+    <div class='cmt-title cap theme'>
+      快来参与讨论吧
+    </div>
+    <div class='cmt-body utterances'>
+      
+
+<svg class="loading" style="vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="utterances" repo="leeifme/comments" issue-term="pathname" theme="github-light"></div>
+
+    </div>
+  </div>
+
+
+
+      <footer class='page-footer'>
+        
+<div><hr><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<p>本站由 <a href="https://leeif.me/">@leei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5">Stellar</a> 作为主题。</p>
+</div>
+
+      </footer>
+      <div class='float-panel mobile-only' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" viewBox="0 0 1228 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2849"><path d="M0 0m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2850"></path><path d="M0 389.560798m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2851"></path><path d="M0 779.121596m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.390199l-973.901995 0q-97.390199 0-97.390199-97.390199l0 0q0-97.390199 97.390199-97.390199Z" p-id="2852"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {};
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
+    issuesjs: '/js/issues.js',
+  };
+
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","onlypost":false,"loadingImg":null,"blurIn":true});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper/swiper-bundle.min.css","js":"https://unpkg.com/swiper/swiper-bundle.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.7/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":50,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+  <script>
+  function utterances(){
+    if(!document.getElementById("utterances"))return;
+    setTimeout(function() {
+      var checkUtterances = setInterval(function () {
+        var el = document.getElementById("utterances");
+        if (!el) return
+        clearInterval(checkUtterances)
+        try {
+          el.innerHTML="";
+        } catch (error) {}
+        var script = document.createElement('script');
+        script.src = 'https://utteranc.es/client.js';
+        const keys = ['repo', 'issue-term', 'issue-number', 'theme', 'label', 'crossorigin'];
+        keys.forEach((key, i) => {
+          if (el.attributes[key] && el.attributes[key].value) {
+            script.setAttribute(key, el.attributes[key].value);
+          }
+        });
+        el.appendChild(script);
+       }, 200)
+    });
+  }
+  utterances();
+</script>
+
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>

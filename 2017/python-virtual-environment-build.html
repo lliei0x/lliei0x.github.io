@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head hexo-theme='https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5'>
+  <meta name="generator" content="Hexo 5.4.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Python 虚拟坏境的搭建和配置 - LEEI</title>
+
+  
+    <meta name="description" content="Python易用，但用好却不易，其中比较头疼的就是包管理和Python不同版本的问题，特别是当你使用Windows的时候。为了解决这些问题，有不少发行版的Python，比如WinPython、Anaconda等，这些发行版将python和许多常用的package打包，方便pythoners直接使用，此外，还有virtualenv、pyenv等工具管理虚拟环境。  这篇文章主要就是记录了不使用发行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 虚拟坏境的搭建和配置">
+<meta property="og:url" content="https://leeif.me/2017/python-virtual-environment-build.html">
+<meta property="og:site_name" content="LEEI">
+<meta property="og:description" content="Python易用，但用好却不易，其中比较头疼的就是包管理和Python不同版本的问题，特别是当你使用Windows的时候。为了解决这些问题，有不少发行版的Python，比如WinPython、Anaconda等，这些发行版将python和许多常用的package打包，方便pythoners直接使用，此外，还有virtualenv、pyenv等工具管理虚拟环境。  这篇文章主要就是记录了不使用发行">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-09-23T09:12:00.000Z">
+<meta property="article:modified_time" content="2020-09-26T09:06:55.176Z">
+<meta property="article:author" content="leei">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+  
+  
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="LEEI" type="application/atom+xml">
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200927222029.ico">
+  
+</head>
+
+<body theme='light'>
+  
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left'>
+    
+<div class='wrap'>
+  
+<header class='header'>
+  <div class='logo-wrap'>
+  
+    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2020/09/26/zSRUylAqpoZ8462.png'/></a>
+  
+  
+    <a class='title' href='/'>LEEI</a>
+  
+</div>
+
+  <nav class="menu"><a class="nav-item active" href="/">文章</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/more/">更多</a></nav>
+</header>
+
+  <div class='widgets'>
+    
+      
+        
+        
+
+  <div class='widget-wrap' id='toc'>
+    <div class='widget-header dis-select'>
+      <span class='name'>
+        
+          本文目录
+        
+      </span>
+      <a class='cap-action' id='s-top' title='回到顶部' href='#start'>
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10505"><path d="M884.526 163.323H208.881c-30.516 0-55.25 24.934-55.25 55.685s24.734 55.685 55.25 55.685h675.645c30.515 0 55.255-24.93 55.255-55.685s-24.74-55.685-55.255-55.685zM568.253 336.87a56.765 56.765 0 0 0-4.06-3.701c-0.63-0.517-1.29-0.968-1.935-1.454-0.799-0.605-1.577-1.224-2.406-1.787-0.779-0.528-1.583-0.978-2.386-1.46-0.748-0.45-1.485-0.926-2.253-1.341-0.81-0.44-1.649-0.814-2.483-1.208-0.8-0.384-1.588-0.784-2.407-1.132-0.814-0.338-1.643-0.61-2.463-0.906-0.875-0.323-1.745-0.66-2.641-0.932-0.825-0.25-1.66-0.435-2.489-0.645-0.916-0.236-1.817-0.492-2.75-0.681-0.962-0.19-1.935-0.307-2.902-0.445-0.814-0.118-1.618-0.272-2.442-0.354a55.163 55.163 0 0 0-5.438-0.276h-0.015c-0.267 0-0.528 0.036-0.794 0.036a54.856 54.856 0 0 0-39.86 16.271l-279.413 281.61c-21.576 21.75-21.576 57.006 0 78.756a54.876 54.876 0 0 0 39.07 16.312 54.835 54.835 0 0 0 39.066-16.312l186.67-188.145V898.09c0 30.75 24.74 55.685 55.256 55.685s55.255-24.934 55.255-55.685v-387.42L769.526 697.22a54.871 54.871 0 0 0 39.065 16.312 54.835 54.835 0 0 0 39.066-16.312c21.576-21.75 21.576-57.006 0-78.756L568.253 336.87z" p-id="10506"></path></svg>
+      </a>
+    </div>
+    <div class='widget-body post'>
+      
+        <div class='doc-tree active'>
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Python%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E7%9A%84%E6%90%AD%E5%BB%BA%E5%92%8C%E9%85%8D%E7%BD%AE"><span class="toc-text">Python虚拟环境的搭建和配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E4%BD%BF%E7%94%A8%E5%8F%91%E8%A1%8C%E7%89%88"><span class="toc-text">不使用发行版</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Anaconda%E5%8F%91%E8%A1%8C%E7%89%88"><span class="toc-text">使用Anaconda发行版</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Anaconda-%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-text">Anaconda 的安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conda-%E7%9A%84%E7%8E%AF%E5%A2%83%E7%AE%A1%E7%90%86"><span class="toc-text">Conda 的环境管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conda-%E7%9A%84%E5%8C%85%E7%AE%A1%E7%90%86"><span class="toc-text">Conda 的包管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E5%9B%BD%E5%86%85%E9%95%9C%E5%83%8F"><span class="toc-text">设置国内镜像</span></a></li></ol>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    
+      
+        
+        <div class='widget-wrap' id='recent'>
+  <div class='widget-header dis-select'>
+    <span class='name'>最近更新</span>
+    
+      <a class='cap-action' id='rss' title='Subscribe' href='/atom.xml'>
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8938"><path d="M800.966 947.251c0-404.522-320.872-732.448-716.69-732.448V62.785c477.972 0 865.44 395.987 865.44 884.466h-148.75z m-162.273 0h-148.74c0-228.98-181.628-414.598-405.678-414.598v-152.01c306.205 0 554.418 253.68 554.418 566.608z m-446.24-221.12c59.748 0 108.189 49.503 108.189 110.557 0 61.063-48.44 110.563-108.188 110.563-59.747 0-108.18-49.5-108.18-110.563 0-61.054 48.433-110.556 108.18-110.556z" p-id="8939"></path></svg>
+      </a>
+    
+  </div>
+  <div class='widget-body'>
+    
+    
+      <div class='post-title'>
+        <a href="/2020/kubernetes-operator.html">
+          
+            「转」 Kubernetes 控制器的进化之旅
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-install-config.html">
+          
+            OpenLDAP 快速落地实践-部署配置
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-high-ranking.html">
+          
+            OpenLDAP 快速落地实践-进阶
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-getting-started.html">
+          
+            OpenLDAP 快速落地实践-基本介绍
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2019/deploy-airflow.html">
+          
+            搭建 Airflow 任务调度环境
+          
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+      
+    
+  </div>
+  <footer class="footer"><div class="social-wrap"><a class="social" href="/atom.xml" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/25678f144c438.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/25678f144c438.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></footer>
+</div>
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+
+  <div class='breadcrumb-navigation'>
+  
+    
+    <div id='breadcrumb'>
+      <a class='cap breadcrumb' href='/'>主页</a>
+      <span class="sep"></span>
+      <a class='cap breadcrumb' href='/'>文章</a>
+      
+        <span class="sep"></span>
+        <a class="cap breadcrumb-link" href="/categories/notes/">notes</a>
+      
+    </div>
+    <div id='post-meta'>
+      发布于&nbsp;<time datetime='2017-09-23T09:12:00.000Z'>2017-09-23</time>
+    </div>
+  
+  </div>
+
+
+<article class='content md post reveal'>
+<h1 class="article-title"><span>Python 虚拟坏境的搭建和配置</span></h1>
+<blockquote>
+<p>Python易用，但用好却不易，其中比较头疼的就是包管理和Python不同版本的问题，特别是当你使用Windows的时候。为了解决这些问题，有不少发行版的<a href="">Python</a>，比如WinPython、Anaconda等，这些发行版将python和许多常用的package打包，方便pythoners直接使用，此外，还有virtualenv、pyenv等工具管理虚拟环境。</p>
+</blockquote>
+<p>这篇文章主要就是记录了不使用发行版，和最终使用发行版Anaconda，因为其强大而方便的包管理与环境管理的功能。</p>
+<h2 id="Python虚拟环境的搭建和配置"><a href="#Python虚拟环境的搭建和配置" class="headerlink" title="Python虚拟环境的搭建和配置"></a>Python虚拟环境的搭建和配置</h2><p><strong>系统环境：</strong></p>
+<ul>
+<li>Win10</li>
+<li>Python 3.6.0</li>
+<li>Anaconda3</li>
+</ul>
+<h2 id="不使用发行版"><a href="#不使用发行版" class="headerlink" title="不使用发行版"></a>不使用发行版</h2><p><strong>借助<code>virtualenvwrapper</code>工具实现虚拟环境</strong></p>
+<p>首先，安装：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">pip</span> install virtualenvwrapper</span><br></pre></td></tr></table></figure>
+
+<p><strong>注：</strong> 可以使用豆瓣源<code>https://pypi.douban.com/simple/</code></p>
+<p>但是不幸的是，在我的系统上报错了</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Collecting</span> virtualenvwrapper</span><br><span class="line">  Using cached virtualenvwrapper-<span class="number">4</span>.<span class="number">7</span>.<span class="number">2</span>.tar.gz</span><br><span class="line">    Complete output from command python setup.py egg_info:</span><br><span class="line">    Traceback (most recent call <span class="literal">last</span>):</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\urllib\request.py&quot;</span>, line <span class="number">1318</span>, in do_open</span><br><span class="line">        encode_chunked=req.has_header(<span class="string">&#x27;Transfer-encoding&#x27;</span>))</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\http\client.py&quot;</span>, line <span class="number">1239</span>, in request</span><br><span class="line">        self._send_request(method, url, body, headers, encode_chunked)</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\http\client.py&quot;</span>, line <span class="number">1285</span>, in _send_request</span><br><span class="line">        self.endheaders(body, encode_chunked=encode_chunked)</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\http\client.py&quot;</span>, line <span class="number">1234</span>, in endheaders</span><br><span class="line">        self._send_output(message_body, encode_chunked=encode_chunked)</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\http\client.py&quot;</span>, line <span class="number">1026</span>, in _send_output</span><br><span class="line">        self.send(msg)</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\http\client.py&quot;</span>, line <span class="number">964</span>, in send</span><br><span class="line">        self.connect()</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\http\client.py&quot;</span>, line <span class="number">1400</span>, in connect</span><br><span class="line">        server_hostname=server_hostname)</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\ssl.py&quot;</span>, line <span class="number">401</span>, in wrap_socket</span><br><span class="line">        _context=self, _session=session)</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\ssl.py&quot;</span>, line <span class="number">808</span>, in __init__</span><br><span class="line">        self.do_handshake()</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\ssl.py&quot;</span>, line <span class="number">1061</span>, in do_handshake</span><br><span class="line">        self._sslobj.do_handshake()</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\ssl.py&quot;</span>, line <span class="number">683</span>, in do_handshake</span><br><span class="line">        self._sslobj.do_handshake()</span><br><span class="line">    socket.timeout: _ssl.c:<span class="number">733</span>: The handshake operation timed out</span><br><span class="line"></span><br><span class="line">    During handling of the above exception, another exception occurred:</span><br><span class="line"></span><br><span class="line">    Traceback (most recent call <span class="literal">last</span>):</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\site-packages\setuptools-27.2.0-py3.6.egg\setuptools\package_index.py&quot;</span>, line <span class="number">746</span>, in open_url</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\site-packages\setuptools-27.2.0-py3.6.egg\setuptools\package_index.py&quot;</span>, line <span class="number">947</span>, in _socket_timeout</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\site-packages\setuptools-27.2.0-py3.6.egg\setuptools\package_index.py&quot;</span>, line <span class="number">1065</span>, in open_with_auth</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\urllib\request.py&quot;</span>, line <span class="number">223</span>, in urlopen</span><br><span class="line">        return opener.open(url, data, timeout)</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\urllib\request.py&quot;</span>, line <span class="number">526</span>, in open</span><br><span class="line">        response = self._open(req, data)</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\urllib\request.py&quot;</span>, line <span class="number">544</span>, in _open</span><br><span class="line">        <span class="string">&#x27;_open&#x27;</span>, req)</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\urllib\request.py&quot;</span>, line <span class="number">504</span>, in _call_chain</span><br><span class="line">        result = func(*args)</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\urllib\request.py&quot;</span>, line <span class="number">1361</span>, in https_open</span><br><span class="line">        context=self._context, check_hostname=self._check_hostname)</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\urllib\request.py&quot;</span>, line <span class="number">1320</span>, in do_open</span><br><span class="line">        raise URLError(err)</span><br><span class="line">    urllib.<span class="literal">error</span>.URLError: &lt;urlopen <span class="literal">error</span> _ssl.c:<span class="number">733</span>: The handshake operation timed out&gt;</span><br><span class="line"></span><br><span class="line">    During handling of the above exception, another exception occurred:</span><br><span class="line"></span><br><span class="line">    Traceback (most recent call <span class="literal">last</span>):</span><br><span class="line">      File <span class="string">&quot;&lt;string&gt;&quot;</span>, line <span class="number">1</span>, in &lt;module&gt;</span><br><span class="line">      File <span class="string">&quot;C:\Users\leeif\AppData\Local\Temp\pip-build-somfu2_x\virtualenvwrapper\setup.py&quot;</span>, line <span class="number">7</span>, in &lt;module&gt;</span><br><span class="line">        pbr=True,</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\distutils\core.py&quot;</span>, line <span class="number">108</span>, in setup</span><br><span class="line">        _setup_distribution = dist = klass(attrs)</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\site-packages\setuptools-27.2.0-py3.6.egg\setuptools\dist.py&quot;</span>, line <span class="number">315</span>, in __init__</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\site-packages\setuptools-27.2.0-py3.6.egg\setuptools\dist.py&quot;</span>, line <span class="number">361</span>, in fetch_build_eggs</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\site-packages\setuptools-27.2.0-py3.6.egg\pkg_resources\__init__.py&quot;</span>, line <span class="number">851</span>, in resolve</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\site-packages\setuptools-27.2.0-py3.6.egg\pkg_resources\__init__.py&quot;</span>, line <span class="number">1123</span>, in best_match</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\site-packages\setuptools-27.2.0-py3.6.egg\pkg_resources\__init__.py&quot;</span>, line <span class="number">1135</span>, in obtain</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\site-packages\setuptools-27.2.0-py3.6.egg\setuptools\dist.py&quot;</span>, line <span class="number">428</span>, in fetch_build_egg</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\site-packages\setuptools-27.2.0-py3.6.egg\setuptools\command\easy_install.py&quot;</span>, line <span class="number">652</span>, in easy_install</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\site-packages\setuptools-27.2.0-py3.6.egg\setuptools\package_index.py&quot;</span>, line <span class="number">635</span>, in fetch_distribution</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\site-packages\setuptools-27.2.0-py3.6.egg\setuptools\package_index.py&quot;</span>, line <span class="number">616</span>, in find</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\site-packages\setuptools-27.2.0-py3.6.egg\setuptools\package_index.py&quot;</span>, line <span class="number">559</span>, in download</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\site-packages\setuptools-27.2.0-py3.6.egg\setuptools\package_index.py&quot;</span>, line <span class="number">804</span>, in _download_url</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\site-packages\setuptools-27.2.0-py3.6.egg\setuptools\package_index.py&quot;</span>, line <span class="number">810</span>, in _attempt_download</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\site-packages\setuptools-27.2.0-py3.6.egg\setuptools\package_index.py&quot;</span>, line <span class="number">709</span>, in _download_to</span><br><span class="line">      File <span class="string">&quot;D:\python\Anaconda3\lib\site-packages\setuptools-27.2.0-py3.6.egg\setuptools\package_index.py&quot;</span>, line <span class="number">760</span>, in open_url</span><br><span class="line">    distutils.errors.DistutilsError: Download <span class="literal">error</span> for https://pypi.python.org/packages/d5/d6/f2bf137d71e4f213b575faa9eb426a8775732432edb67588a8ee836ecb80/pbr-3.1.1.tar.gz#md5=4e82c2e07af544c56a5b71c801525b00: _ssl.c:<span class="number">733</span>: The handshake operation timed out</span><br><span class="line"></span><br><span class="line">    ----------------------------------------</span><br><span class="line">Command <span class="string">&quot;python setup.py egg_info&quot;</span> failed with <span class="literal">error</span> code <span class="number">1</span> in .....\Local\Temp\pip-build-somfu2_x\virtualenvwrapper\</span><br></pre></td></tr></table></figure>
+
+<p><strong>解决办法：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https:&#x2F;&#x2F;pypi.douban.com&#x2F;simple&#x2F; pbr</span><br><span class="line"></span><br><span class="line">pip install -i https:&#x2F;&#x2F;pypi.douban.com&#x2F;simple&#x2F; stevedore</span><br><span class="line"></span><br><span class="line">pip install -i https:&#x2F;&#x2F;pypi.douban.com&#x2F;simple&#x2F; virtualenvwrapper</span><br></pre></td></tr></table></figure>
+
+<p>然后使用<code>mkvirutualenv --python=(python&#39;s path) name</code>新建虚拟坏境</p>
+<h2 id="使用Anaconda发行版"><a href="#使用Anaconda发行版" class="headerlink" title="使用Anaconda发行版"></a>使用Anaconda发行版</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.continuum.io/why-anaconda">Anaconda</a> 是一个用于科学计算的 Python 发行版，支持 Linux, Mac, Windows 系统，提供了包管理与环境管理的功能，可以很方便地解决多版本 python 并存、切换以及各种第三方包安装问题。Anaconda 利用工具 / 命令<code>conda</code>来进行 package 和 environment 的管理，并且已经包含了 Python 和相关的配套工具。</p>
+<p><code>conda</code>可以理解为一个工具，也是一个可执行命令，其核心功能是<strong>包管理</strong>与<strong>环境管理</strong>。包管理与 pip 的使用类似，环境管理则允许用户方便地安装不同版本的 python 并可以快速切换。Anaconda 则是一个打包的集合，里面预装好了 conda、某个版本的 python、众多 packages、科学计算工具等等，所以也称为 Python 的一种发行版。</p>
+</blockquote>
+<h2 id="Anaconda-的安装"><a href="#Anaconda-的安装" class="headerlink" title="Anaconda 的安装"></a>Anaconda 的安装</h2><p>Anaconda 的下载页参见<a target="_blank" rel="noopener" href="https://www.continuum.io/downloads">官网下载</a>，Linux、Mac、Windows 均支持。</p>
+<p>安装时，会发现有两个不同版本的 Anaconda，分别对应 Python 2.7 和 Python 3.5，两个版本其实除了这点区别外其他都一样。后面我们会看到，安装哪个版本并不本质，因为通过环境管理，我们可以很方便地切换运行时的 Python 版本。（由于我常用的 Python 是 2.7 和 3.4，因此倾向于直接安装 Python 2.7 对应的 Anaconda）</p>
+<p>下载后直接按照说明安装即可。这里想提醒一点：尽量按照 Anaconda 默认的行为安装——不使用 root 权限，仅为个人安装，安装目录设置在个人主目录下（Windows 就无所谓了）。这样的好处是，同一台机器上的不同用户完全可以安装、配置自己的 Anaconda，不会互相影响。</p>
+<p>对于 Mac、Linux 系统，Anaconda 安装好后，实际上就是在主目录下多了个文件夹（<code>~/anaconda</code>）而已，Windows 会写入注册表。安装时，安装程序会把 bin 目录加入 PATH（Linux/Mac 写入<code>~/.bashrc</code>，Windows 添加到系统变量 PATH），这些操作也完全可以自己完成。以 Linux/Mac 为例，安装完成后设置 PATH 的操作是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 将 anaconda 的 bin 目录加入 PATH，根据版本不同，也可能是~&#x2F;anaconda3&#x2F;bin</span><br><span class="line">echo &#39;export PATH&#x3D;&quot;~&#x2F;anaconda2&#x2F;bin:$PATH&quot;&#39; &gt;&gt; ~&#x2F;.bashrc</span><br><span class="line"># 更新 bashrc 以立即生效</span><br><span class="line">source ~&#x2F;.bashrc</span><br></pre></td></tr></table></figure>
+
+<p>配置好 PATH 后，可以通过<code>which conda</code>或<code>conda --version</code>命令检查是否正确。假如安装的是 Python 2.7 对应的版本，运行<code>python --version</code>或<code>python -V</code>可以得到 Python 2.7.12 :: Anaconda 4.1.1 (64-bit)，也说明该发行版默认的环境是 Python 2.7。</p>
+<h2 id="Conda-的环境管理"><a href="#Conda-的环境管理" class="headerlink" title="Conda 的环境管理"></a>Conda 的环境管理</h2><p>Conda 的环境管理功能允许我们同时安装若干不同版本的 Python，并能自由切换。对于上述安装过程，假设我们采用的是 Python 2.7 对应的安装包，那么 Python 2.7 就是默认的环境（默认名字是<code>root</code>，注意这个 root 不是超级管理员的意思）。</p>
+<p>假设我们需要安装 Python 3.4，此时，我们需要做的操作如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个名为 python34 的环境，指定 Python 版本是 3.4（不用管是 3.4.x，conda 会为我们自动寻找 3.4.x 中的最新版本）</span><br><span class="line">conda create --name python34 python&#x3D;3.4</span><br><span class="line"> </span><br><span class="line"># 安装好后，使用 activate 激活某个环境</span><br><span class="line">activate python34 # for Windows</span><br><span class="line">source activate python34 # for Linux &amp; Mac</span><br><span class="line"># 激活后，会发现 terminal 输入的地方多了 python34 的字样，实际上，此时系统做的事情就是把默认 2.7 环境从 PATH 中去除，再把 3.4 对应的命令加入 PATH</span><br><span class="line"> </span><br><span class="line"># 此时，再次输入</span><br><span class="line">python --version</span><br><span class="line"># 可以得到 &#96;Python 3.4.5 :: Anaconda 4.1.1 (64-bit)&#96;，即系统已经切换到了 3.4 的环境</span><br><span class="line"> </span><br><span class="line"># 如果想返回默认的 python 2.7 环境，运行</span><br><span class="line">deactivate python34 # for Windows</span><br><span class="line">source deactivate python34 # for Linux &amp; Mac</span><br><span class="line"> </span><br><span class="line"># 删除一个已有的环境</span><br><span class="line">conda remove --name python34 --all</span><br></pre></td></tr></table></figure>
+
+<p>用户安装的不同 python 环境都会被放在目录<code>~/anaconda/envs</code>下，可以在命令中运行<code>conda info -e</code>查看已安装的环境，当前被激活的环境会显示有一个星号或者括号。</p>
+<p>说明：有些用户可能经常使用 python 3.4 环境，因此直接把<code>~/anaconda/envs/python34</code>下面的 bin 或者 Scripts 加入 PATH，去除 anaconda 对应的那个 bin 目录。这个办法，怎么说呢，也是可以的，但总觉得不是那么 elegant……</p>
+<p>如果直接按上面说的这么改 PATH，你会发现 conda 命令又找不到了（当然找不到啦，因为 conda 在<code>~/anaconda/bin</code>里呢），这时候怎么办呢？方法有二：1. 显式地给出 conda 的绝对地址 2. 在 python34 环境中也安装 conda 工具（推荐）。</p>
+<h2 id="Conda-的包管理"><a href="#Conda-的包管理" class="headerlink" title="Conda 的包管理"></a>Conda 的包管理</h2><p>Conda 的包管理就比较好理解了，这部分功能与<code>pip</code>类似。</p>
+<p>例如，如果需要安装 scipy：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 安装 scipy</span><br><span class="line">conda install scipy</span><br><span class="line"># conda 会从从远程搜索 scipy 的相关信息和依赖项目，对于 python 3.4，conda 会同时安装 numpy 和 mkl（运算加速的库）</span><br><span class="line"> </span><br><span class="line"># 查看已经安装的 packages</span><br><span class="line">conda list</span><br><span class="line"># 最新版的 conda 是从 site-packages 文件夹中搜索已经安装的包，不依赖于 pip，因此可以显示出通过各种方式安装的包</span><br></pre></td></tr></table></figure>
+
+<p>conda 的一些常用操作如下：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">conda</span> list</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 查看某个指定环境的已安装包</span></span><br><span class="line">conda list -n python34</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 查找 package 信息</span></span><br><span class="line">conda search numpy</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 安装 package</span></span><br><span class="line">conda install -n python34 numpy</span><br><span class="line"><span class="comment"># 如果不用 - n 指定环境名称，则被安装在当前活跃环境</span></span><br><span class="line"><span class="comment"># 也可以通过 - c 指定通过某个 channel 安装</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 更新 package</span></span><br><span class="line">conda update -n python34 numpy</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 删除 package</span></span><br><span class="line">conda remove -n python34 numpy</span><br></pre></td></tr></table></figure>
+
+<p>前面已经提到，conda 将 conda、python 等都视为 package，因此，完全可以使用 conda 来管理 conda 和 python 的版本，例如</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 更新 conda，保持 conda 最新</span></span><br><span class="line">conda update conda</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 更新 anaconda</span></span><br><span class="line">conda update anaconda</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 更新 python</span></span><br><span class="line">conda update python</span><br><span class="line"><span class="comment"># 假设当前环境是 python 3.4, conda 会将 python 升级为 3.4.x 系列的当前最新版本</span></span><br></pre></td></tr></table></figure>
+
+<p>补充：如果创建新的 python 环境，比如 3.4，运行<code>conda create -n python34 python=3.4</code>之后，conda 仅安装 python 3.4 相关的必须项，如 python, pip 等，如果希望该环境像默认环境那样，安装 anaconda 集合包，只需要：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在当前环境下安装 anaconda 包集合</span></span><br><span class="line">conda install anaconda</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 结合创建环境的命令，以上操作可以合并为</span></span><br><span class="line">conda create -n python34 python=<span class="number">3.4</span> anaconda</span><br><span class="line"><span class="comment"># 也可以不用全部安装，根据需求安装自己需要的 package 即可</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="设置国内镜像"><a href="#设置国内镜像" class="headerlink" title="设置国内镜像"></a>设置国内镜像</h2><p>如果需要安装很多 packages，你会发现 conda 下载的速度经常很慢，因为 Anaconda.org 的服务器在国外。所幸的是，清华 TUNA 镜像源有 Anaconda 仓库的镜像，我们将其加入 conda 的配置即可：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加 Anaconda 的 TUNA 镜像</span></span><br><span class="line">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/</span><br><span class="line"><span class="comment"># TUNA 的 help 中镜像地址加有引号，需要去掉</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 设置搜索时显示通道地址</span></span><br><span class="line">conda config --<span class="built_in">set</span> show_channel_urls yes</span><br></pre></td></tr></table></figure>
+
+<p>执行完上述命令后，会生成<code>~/.condarc</code>(Linux/Mac) 或<code>C:UsersUSER_NAME.condarc</code>文件，记录着我们对 conda 的配置，直接手动创建、编辑该文件是相同的效果。</p>
+<p><strong>ok,配置完成，Just Try！</strong></p>
+
+
+<div class="article-footer"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2017/python-virtual-environment-build.html" /></div><div class="social-wrap"><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2017/python-virtual-environment-build.html&title=Python 虚拟坏境的搭建和配置 - LEEI&summary=
+Python易用，但用好却不易，其中比较头疼的就是包管理和Python不同版本的问题，特别是当你使用Windows的时候。为了解决这些问题，有不少发行版的Python，比如WinPython、Anaconda等，这些发行版将pyth..."><img src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item email" href="mailto:?subject=Python 虚拟坏境的搭建和配置 - LEEI&amp;body=https://leeif.me/2017/python-virtual-environment-build.html"><img src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></div></section></div>
+
+</article>
+
+<div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title unread"><a href="/2017/raspberry-pi-getting-started.html">Raspberry Pi — 新手入门操作</a></div><div class="post-title read"><a href="/2017/common-sorting-algorithm.html">更早一篇：常见排序算法</a></div></section></div>
+
+<div class='related-wrap' id='related-posts'>
+    <div class="related_posts">
+    <section class='header'>
+      <div class='title cap theme'>您可能感兴趣的文章</div>
+    </section>
+    <section class='body'>
+    <div class="related-posts"><a class="item" href="\2018\python-regular-expression.html" title="Python 之正则表达式" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">Python 之正则表达式</span></a><a class="item" href="\2017\common-sorting-algorithm.html" title="常见排序算法" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">常见排序算法</span><span class="excerpt">时间复杂度为O(n2)  空间复杂度O(1)
+
+冒泡排序
+（在0N-1的序列上相邻两个元素比较大小，大的在后，小的在前，一趟下来，最大值放在位置N-1上，在0N-2的序列上….）
+
+选择排序
+（在0N-1的序列中选择最小值放在位置0上...</span></a></div></section></div></div>
+
+
+
+  <div class='related-wrap md' id="comments">
+    <div class='cmt-title cap theme'>
+      快来参与讨论吧
+    </div>
+    <div class='cmt-body utterances'>
+      
+
+<svg class="loading" style="vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="utterances" repo="leeifme/comments" issue-term="pathname" theme="github-light"></div>
+
+    </div>
+  </div>
+
+
+
+      <footer class='page-footer'>
+        
+<div><hr><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<p>本站由 <a href="https://leeif.me/">@leei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5">Stellar</a> 作为主题。</p>
+</div>
+
+      </footer>
+      <div class='float-panel mobile-only' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" viewBox="0 0 1228 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2849"><path d="M0 0m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2850"></path><path d="M0 389.560798m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2851"></path><path d="M0 779.121596m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.390199l-973.901995 0q-97.390199 0-97.390199-97.390199l0 0q0-97.390199 97.390199-97.390199Z" p-id="2852"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {};
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
+    issuesjs: '/js/issues.js',
+  };
+
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","onlypost":false,"loadingImg":null,"blurIn":true});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper/swiper-bundle.min.css","js":"https://unpkg.com/swiper/swiper-bundle.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.7/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":50,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+  <script>
+  function utterances(){
+    if(!document.getElementById("utterances"))return;
+    setTimeout(function() {
+      var checkUtterances = setInterval(function () {
+        var el = document.getElementById("utterances");
+        if (!el) return
+        clearInterval(checkUtterances)
+        try {
+          el.innerHTML="";
+        } catch (error) {}
+        var script = document.createElement('script');
+        script.src = 'https://utteranc.es/client.js';
+        const keys = ['repo', 'issue-term', 'issue-number', 'theme', 'label', 'crossorigin'];
+        keys.forEach((key, i) => {
+          if (el.attributes[key] && el.attributes[key].value) {
+            script.setAttribute(key, el.attributes[key].value);
+          }
+        });
+        el.appendChild(script);
+       }, 200)
+    });
+  }
+  utterances();
+</script>
+
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head hexo-theme='https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5'>
+  <meta name="generator" content="Hexo 5.4.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>MongoDB 入门操作 - LEEI</title>
+
+  
+    <meta name="description" content="前言：因为最近业务转型，公司后台服务器也需要调整之前的业务架构，现在也想从之前低版本，低可用的数据库迁移，最近在了解MongoDB,所以就记录一下📝   什么是 MongoDBMongoDB 是由 C++ 语言编写的，是一个基于分布式文件存储的开源数据库系统。在高负载的情况下，添加更多的节点，可以保证服务器性能。MongoDB 旨在为 WEB 应用提供可扩展的高性能数据存储解决方案。Mongo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB 入门操作">
+<meta property="og:url" content="https://leeif.me/2017/nongdb-beginner.html">
+<meta property="og:site_name" content="LEEI">
+<meta property="og:description" content="前言：因为最近业务转型，公司后台服务器也需要调整之前的业务架构，现在也想从之前低版本，低可用的数据库迁移，最近在了解MongoDB,所以就记录一下📝   什么是 MongoDBMongoDB 是由 C++ 语言编写的，是一个基于分布式文件存储的开源数据库系统。在高负载的情况下，添加更多的节点，可以保证服务器性能。MongoDB 旨在为 WEB 应用提供可扩展的高性能数据存储解决方案。Mongo">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-11-20T15:32:45.000Z">
+<meta property="article:modified_time" content="2020-09-26T09:06:58.346Z">
+<meta property="article:author" content="leei">
+<meta property="article:tag" content="MongoDB">
+<meta name="twitter:card" content="summary">
+  
+  
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="LEEI" type="application/atom+xml">
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200927222029.ico">
+  
+</head>
+
+<body theme='light'>
+  
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left'>
+    
+<div class='wrap'>
+  
+<header class='header'>
+  <div class='logo-wrap'>
+  
+    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2020/09/26/zSRUylAqpoZ8462.png'/></a>
+  
+  
+    <a class='title' href='/'>LEEI</a>
+  
+</div>
+
+  <nav class="menu"><a class="nav-item active" href="/">文章</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/more/">更多</a></nav>
+</header>
+
+  <div class='widgets'>
+    
+      
+        
+        
+
+  <div class='widget-wrap' id='toc'>
+    <div class='widget-header dis-select'>
+      <span class='name'>
+        
+          本文目录
+        
+      </span>
+      <a class='cap-action' id='s-top' title='回到顶部' href='#start'>
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10505"><path d="M884.526 163.323H208.881c-30.516 0-55.25 24.934-55.25 55.685s24.734 55.685 55.25 55.685h675.645c30.515 0 55.255-24.93 55.255-55.685s-24.74-55.685-55.255-55.685zM568.253 336.87a56.765 56.765 0 0 0-4.06-3.701c-0.63-0.517-1.29-0.968-1.935-1.454-0.799-0.605-1.577-1.224-2.406-1.787-0.779-0.528-1.583-0.978-2.386-1.46-0.748-0.45-1.485-0.926-2.253-1.341-0.81-0.44-1.649-0.814-2.483-1.208-0.8-0.384-1.588-0.784-2.407-1.132-0.814-0.338-1.643-0.61-2.463-0.906-0.875-0.323-1.745-0.66-2.641-0.932-0.825-0.25-1.66-0.435-2.489-0.645-0.916-0.236-1.817-0.492-2.75-0.681-0.962-0.19-1.935-0.307-2.902-0.445-0.814-0.118-1.618-0.272-2.442-0.354a55.163 55.163 0 0 0-5.438-0.276h-0.015c-0.267 0-0.528 0.036-0.794 0.036a54.856 54.856 0 0 0-39.86 16.271l-279.413 281.61c-21.576 21.75-21.576 57.006 0 78.756a54.876 54.876 0 0 0 39.07 16.312 54.835 54.835 0 0 0 39.066-16.312l186.67-188.145V898.09c0 30.75 24.74 55.685 55.256 55.685s55.255-24.934 55.255-55.685v-387.42L769.526 697.22a54.871 54.871 0 0 0 39.065 16.312 54.835 54.835 0 0 0 39.066-16.312c21.576-21.75 21.576-57.006 0-78.756L568.253 336.87z" p-id="10506"></path></svg>
+      </a>
+    </div>
+    <div class='widget-body post'>
+      
+        <div class='doc-tree active'>
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-MongoDB"><span class="toc-text">什么是 MongoDB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%89%B9%E7%82%B9"><span class="toc-text">主要特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E4%B8%8B%E8%BD%BD"><span class="toc-text">安装下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C"><span class="toc-text">运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-text">基本操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E8%AE%B0"><span class="toc-text">后记</span></a></li></ol>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    
+      
+        
+        <div class='widget-wrap' id='recent'>
+  <div class='widget-header dis-select'>
+    <span class='name'>最近更新</span>
+    
+      <a class='cap-action' id='rss' title='Subscribe' href='/atom.xml'>
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8938"><path d="M800.966 947.251c0-404.522-320.872-732.448-716.69-732.448V62.785c477.972 0 865.44 395.987 865.44 884.466h-148.75z m-162.273 0h-148.74c0-228.98-181.628-414.598-405.678-414.598v-152.01c306.205 0 554.418 253.68 554.418 566.608z m-446.24-221.12c59.748 0 108.189 49.503 108.189 110.557 0 61.063-48.44 110.563-108.188 110.563-59.747 0-108.18-49.5-108.18-110.563 0-61.054 48.433-110.556 108.18-110.556z" p-id="8939"></path></svg>
+      </a>
+    
+  </div>
+  <div class='widget-body'>
+    
+    
+      <div class='post-title'>
+        <a href="/2020/kubernetes-operator.html">
+          
+            「转」 Kubernetes 控制器的进化之旅
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-install-config.html">
+          
+            OpenLDAP 快速落地实践-部署配置
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-high-ranking.html">
+          
+            OpenLDAP 快速落地实践-进阶
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-getting-started.html">
+          
+            OpenLDAP 快速落地实践-基本介绍
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2019/deploy-airflow.html">
+          
+            搭建 Airflow 任务调度环境
+          
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+      
+    
+  </div>
+  <footer class="footer"><div class="social-wrap"><a class="social" href="/atom.xml" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/25678f144c438.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/25678f144c438.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></footer>
+</div>
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+
+  <div class='breadcrumb-navigation'>
+  
+    
+    <div id='breadcrumb'>
+      <a class='cap breadcrumb' href='/'>主页</a>
+      <span class="sep"></span>
+      <a class='cap breadcrumb' href='/'>文章</a>
+      
+        <span class="sep"></span>
+        <a class="cap breadcrumb-link" href="/categories/notes/">notes</a>
+      
+    </div>
+    <div id='post-meta'>
+      发布于&nbsp;<time datetime='2017-11-20T15:32:45.000Z'>2017-11-20</time>
+    </div>
+  
+  </div>
+
+
+<article class='content md post reveal'>
+<h1 class="article-title"><span>MongoDB 入门操作</span></h1>
+<blockquote>
+<p>前言：因为最近业务转型，公司后台服务器也需要调整之前的业务架构，现在也想从之前低版本，低可用的数据库迁移，最近在了解MongoDB,所以就记录一下📝 </p>
+</blockquote>
+<h2 id="什么是-MongoDB"><a href="#什么是-MongoDB" class="headerlink" title="什么是 MongoDB"></a>什么是 MongoDB</h2><p>MongoDB 是由 C++ 语言编写的，是一个基于分布式文件存储的开源数据库系统。在高负载的情况下，添加更多的节点，可以保证服务器性能。<br>MongoDB 旨在为 WEB 应用提供可扩展的高性能数据存储解决方案。<br>MongoDB 将数据存储为一个文档，数据结构由键值 (key=&gt;value) 对组成。MongoDB 文档类似于 JSON 对象。字段值可以包含其他文档，数组及文档数组。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  name: &quot;leeifme&quot;               <span class="operator">/</span><span class="operator">/</span>field:<span class="keyword">value</span></span><br><span class="line">  age: &quot;21&quot;                     <span class="operator">/</span><span class="operator">/</span>field:<span class="keyword">value</span></span><br><span class="line">  status: &quot;A&quot;                   <span class="operator">/</span><span class="operator">/</span>field:<span class="keyword">value</span></span><br><span class="line">  <span class="keyword">groups</span>: [&quot;news&quot; , &quot;sports&quot;]   <span class="operator">/</span><span class="operator">/</span>field:<span class="keyword">value</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="主要特点"><a href="#主要特点" class="headerlink" title="主要特点"></a>主要特点</h2><ul>
+<li><code>MongoDB</code> 的提供了一个面向文档存储，操作起来比较简单和容易</li>
+<li>你可以在 <code>MongoDB</code> 记录中设置任何属性的索引 (如：FirstName=”Sameer”,Address=”8 Gandhi Road”) 来实现更快的排序</li>
+<li>你可以通过本地或者网络创建数据镜像，这使得 <code>MongoDB</code> 有更强的扩展性</li>
+<li>如果负载的增加（需要更多的存储空间和更强的处理能力） ，它可以分布在计算机网络中的其他节点上这就是所谓的分片</li>
+<li><code>Mongo</code> 支持丰富的查询表达式。查询指令使用 JSON 形式的标记，可轻易查询文档中内嵌的对象及数组</li>
+<li><code>MongoDB</code> 使用 update() 命令可以实现替换完成的文档（数据）或者一些指定的数据字段</li>
+<li><code>MongoDB</code> 中的 <code>Map/reduce</code> 主要是用来对数据进行批量处理和聚合操作</li>
+<li><code>Map</code> 和 <code>Reduce</code>。Map 函数调用 emit(key,value) 遍历集合中所有的记录，将 key 与 value 传给 Reduce 函数进行处理</li>
+<li><code>Map</code> 函数和 <code>Reduce</code> 函数是使用 Javascript 编写的，并可以通过 db.runCommand 或 mapreduce 命令来执行 MapReduce 操作</li>
+<li><code>GridFS</code> 是 <code>MongoDB</code> 中的一个内置功能，可以用于存放大量小文件</li>
+<li><code>MongoDB</code> 允许在服务端执行脚本，可以用 Javascript 编写某个函数，直接在服务端执行，也可以把函数的定义存储在服务端，下次直接调用即可</li>
+<li><code>MongoDB</code> 支持各种编程语言: RUBY，PYTHON，JAVA，C++，PHP，C# 等多种语言</li>
+<li><code>MongoDB</code> 安装简单</li>
+</ul>
+<h2 id="安装下载"><a href="#安装下载" class="headerlink" title="安装下载"></a>安装下载</h2><blockquote>
+<p>官网下载 ——&gt; <a target="_blank" rel="noopener" href="https://www.mongodb.com/download-center#community">下载地址</a></p>
+</blockquote>
+<p>接下来我们使用 curl 命令来下载安装：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 进入 <span class="operator">/</span>usr<span class="operator">/</span><span class="keyword">local</span></span><br><span class="line">cd <span class="operator">/</span>usr<span class="operator">/</span><span class="keyword">local</span></span><br><span class="line"></span><br><span class="line"># 下载</span><br><span class="line">sudo curl <span class="operator">-</span>O https:<span class="operator">/</span><span class="operator">/</span>fastdl.mongodb.org<span class="operator">/</span>osx<span class="operator">/</span>mongodb<span class="operator">-</span>osx<span class="operator">-</span>x86_64<span class="number">-3.4</span><span class="number">.7</span>.tgz  <span class="operator">/</span><span class="operator">/</span>目前最新版本号<span class="number">3.4</span><span class="number">.7</span></span><br><span class="line"></span><br><span class="line"># 解压</span><br><span class="line">sudo tar <span class="operator">-</span>zxvf mongodb<span class="operator">-</span>osx<span class="operator">-</span>x86_64<span class="number">-3.4</span><span class="number">.7</span>.tgz</span><br><span class="line"></span><br><span class="line"># 重命名为 mongodb 目录</span><br><span class="line"></span><br><span class="line">sudo mv mongodb<span class="operator">-</span>osx<span class="operator">-</span>x86_64<span class="number">-3.4</span><span class="number">.7</span> mongodb</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>使用 brew 安装</p>
+</blockquote>
+<p>使用 OSX 的 brew 来安装 mongodb：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo brew install mongodb</span><br></pre></td></tr></table></figure>
+
+<p>如果要安装支持 TLS/SSL 命令如下：z’z</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo brew install mongodb <span class="comment">--with-openssl</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><ol>
+<li>先创建一个数据库存储目录 <code>/data/db</code>（_注意：如果你的数据库目录不是 <code>/data/db</code>，可以通过 <code>--dbpath</code> 来指定_）</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir <span class="operator">-</span>p <span class="operator">/</span>data<span class="operator">/</span>db</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>启动 mongodb，默认数据库目录即为 /data/db</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo mongod</span><br><span class="line"></span><br><span class="line"># 如果没有创建全局路径 PATH，需要进入以下目录</span><br><span class="line">cd <span class="operator">/</span>usr<span class="operator">/</span><span class="keyword">local</span><span class="operator">/</span>mongodb<span class="operator">/</span>bin</span><br><span class="line">sudo .<span class="operator">/</span>mongod</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>再打开一个终端进入执行以下命令</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd <span class="operator">/</span>usr<span class="operator">/</span><span class="keyword">local</span><span class="operator">/</span>mongodb<span class="operator">/</span>bin </span><br><span class="line">$ .<span class="operator">/</span>mongo</span><br></pre></td></tr></table></figure>
+
+<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>1.1 列出所有数据库</p>
+<blockquote>
+<p>show dbs<br>local  0.000GB<br>myblog 0.000GB</p>
+</blockquote>
+<p>1.2 使用某个数据库</p>
+<blockquote>
+<p>use myblog<br>switched to db myblog</p>
+</blockquote>
+<p>1.3 列出所有集合</p>
+<blockquote>
+<p>show collections<br>articles<br>replicationColletion<br>sessions<br>users<br>wangduanduan</p>
+</blockquote>
+<p>2 插入数据 insert(value)</p>
+<p>// 在已经存在的集合中插入数据</p>
+<blockquote>
+<p>db.users.insert({name:’hh’,age:23})<br>Inserted 1 record(s) in 43ms<br>// 在不存在的集合中插入数据,集合不存在则自动创建集合并插入<br>db.students.insert({name:’hh’,age:23})<br>Inserted 1 record(s) in 72ms</p>
+</blockquote>
+<p>3 查询 find(option)<br>3.1 查询集合里所有的文档</p>
+<blockquote>
+<p>db.users.find()<br>/* 1 <em>/<br>{<br>  “_id” : ObjectId(“583e908453be942d0c5419dc”),<br>  “login_name” : “wangduanduan”,<br>  “password” : “wrong age”<br>}<br>/</em> 2 <em>/<br>{<br>  “_id” : ObjectId(“583ed2a5cc9a937db049616d”),<br>  “login_name” : “hh”,<br>  “password” : “sdfsdf”<br>}<br>/</em> 3 <em>/<br>{<br>  “_id” : ObjectId(“583fb2e9b12f8b7a7aa37572”),<br>  “name” : “wangduanduan”,<br>  “age” : 34.0<br>}<br>/</em> 4 */<br>{<br>  “_id” : ObjectId(“583fb707b12f8b7a7aa37573”),<br>  “name” : “hh”,<br>  “age” : 23.0<br>}</p>
+</blockquote>
+<p>3.2 按条件查询文档</p>
+<blockquote>
+<p>db.users.find({name:’wangduanduan’})<br>/* 1 <em>/<br>{<br>  “_id” : ObjectId(“583fb2e9b12f8b7a7aa37572”),<br>  “name” : “wangduanduan”,<br>  “age” : 34.0<br>}<br>注意<br>// 这是错的，查不到结果<br>db.users.find({_id:’583fb2e9b12f8b7a7aa37572’})<br>Fetched 0 record(s) in 1ms<br>// 这是正确的<br>db.users.find({_id:ObjectId(‘583fb2e9b12f8b7a7aa37572’)})<br>/</em> 1 */<br>{<br>  “_id” : ObjectId(“583fb2e9b12f8b7a7aa37572”),<br>  “name” : “wangduanduan”,<br>  “age” : 34.0<br>}</p>
+</blockquote>
+<p>3.3 查询集合内文档的个数</p>
+<blockquote>
+<p>db.users.count()</p>
+</blockquote>
+<p>3.4 比较运算符<br>gt: 大于 gte: 大于等于<br>lt: 小于 lte: 小于等于<br>$ne: 不等于</p>
+<p>// 查询用户里年龄大于30岁的人， 其他条件以此类推</p>
+<blockquote>
+<p>db.user.find({age:{$gt:30}})</p>
+</blockquote>
+<p>/* 1 */<br>{<br>  “_id” : ObjectId(“583fb2e9b12f8b7a7aa37572”),<br>  “name” : “wangduanduan”,<br>  “age” : 34.0<br>}</p>
+<p>3.5 逻辑运算符<br>3.5.1 与</p>
+<p>// 查询名字是wangduanduan,age=34的用户</p>
+<blockquote>
+<p>db.users.find({name:’wangduanduan’,age:34})<br>/* 1 */<br>{<br>  “_id” : ObjectId(“583fb2e9b12f8b7a7aa37572”),<br>  “name” : “wangduanduan”,<br>  “age” : 34.0<br>}</p>
+</blockquote>
+<p>3.5.2 $in 或</p>
+<p>// 查询名字是wangduanduan,或hh的用户</p>
+<blockquote>
+<p>db.users.find({name:{$in:[‘wangduanduan’,’hh’]}})<br>/* 1 */<br>{<br>  “_id” : ObjectId(“583fb2e9b12f8b7a7aa37572”),<br>  “name” : “wangduanduan”,<br>  “age” : 34.0<br>}</p>
+</blockquote>
+<p>3.5.3 $nin 非</p>
+<p>// 查询名字不是wangduanduan或者hh的用户</p>
+<blockquote>
+<p>db.users.find({name:{$nin:[‘wangduanduan’,’hh’]}})<br>/* 1 <em>/<br>{<br>  “_id” : ObjectId(“583e908453be942d0c5419dc”),<br>  “login_name” : “wangduanduan”,<br>  “password” : “wrong age”<br>}<br>/</em> 2 */<br>{<br>  “_id” : ObjectId(“583ed2a5cc9a937db049616d”),<br>  “login_name” : “hh”,<br>  “password” : “sdfsdf”<br>}</p>
+</blockquote>
+<p>3.6 正则匹配</p>
+<p>// 查询名字是中含有duan的用户</p>
+<blockquote>
+<p>db.users.find({name:/duan/})<br>/* 1 <em>/<br>{<br>  “_id” : ObjectId(“583fb2e9b12f8b7a7aa37572”),<br>  “name” : “wangduanduan”,<br>  “age” : 34.0<br>}<br>/</em> 2 */<br>{<br>  “_id” : ObjectId(“583fc919b12f8b7a7aa37575”),<br>  “name” : “wangduanduan”,<br>  “age” : 45.0<br>}</p>
+</blockquote>
+<p>4 更新 update();<br>4.1 整体更新</p>
+<blockquote>
+<p>db.users.update({login_name:’wangduanduan’},{name:’heihei’,age:34})<br>Updated 1 existing record(s) in 116ms</p>
+</blockquote>
+<p>4.2 $set 局部更新</p>
+<p>// 只是将用户年龄设置成101</p>
+<blockquote>
+<p>db.users.update({name:’wangduanduan’},{$set:{age:101}})</p>
+</blockquote>
+<p>4.3 $inc</p>
+<p>// 将用户年龄增加1岁，如果文档没有age这个字段，则会增加这个字段</p>
+<blockquote>
+<p>db.users.update({name:’wangduanduan’},{$inc:{age:1}})</p>
+</blockquote>
+<p>4.3 upsert 操作</p>
+<p>// 如果查不到文档，则增加文档</p>
+<blockquote>
+<p>db.users.update({name:’nobody’},{$inc:{age:1}},true)<br>Updated 1 new record(s) in 3ms<br>/* 6 */<br>{<br>    “_id” : ObjectId(“583fd20f2cfa6a4817c4171c”),<br>    “name” : “nobody”,<br>    “age” : 1.0<br>}</p>
+</blockquote>
+<p>4.4 批量更新</p>
+<p>// upadate 的第四个参数设置成true的时候，就会批量更新</p>
+<blockquote>
+<p>db.users.update({name:’wangduanduan’},{$set:{age:1891}},false,true)</p>
+</blockquote>
+<p>5 删除</p>
+<p>// 删除某些文档<br>db.person.remove({“name”:”joe”})<br>// 删除整个集合<br>db.person.remove()</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>这只是初次的记录，之后应该会出几篇相关的学习记录或是实战分享，这个flag算是立下了，但是我的超强拖延症，不知道会不会折腾死🐶✌️</p>
+
+
+<div class="article-footer"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2017/nongdb-beginner.html" /></div><div class="social-wrap"><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2017/nongdb-beginner.html&title=MongoDB 入门操作 - LEEI&summary=
+前言：因为最近业务转型，公司后台服务器也需要调整之前的业务架构，现在也想从之前低版本，低可用的数据库迁移，最近在了解MongoDB,所以就记录一下📝 
+
+什么是 MongoDBMongoDB 是由 C++ 语言编写的，是一个基于分..."><img src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item email" href="mailto:?subject=MongoDB 入门操作 - LEEI&amp;body=https://leeif.me/2017/nongdb-beginner.html"><img src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></div></section></div>
+
+</article>
+
+<div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title unread"><a href="/2017/vscode-hotkey-record.html">VS Code 常用快捷键整理</a></div><div class="post-title read"><a href="/2017/raspberry-pi-getting-started.html">更早一篇：Raspberry Pi — 新手入门操作</a></div></section></div>
+
+<div class='related-wrap' id='related-posts'>
+    <div class="related_posts">
+    <section class='header'>
+      <div class='title cap theme'>您可能感兴趣的文章</div>
+    </section>
+    <section class='body'>
+    <div class="related-posts"><a class="item" href="\2017\mgo-connection-mongodb-experience.html" title="mgo 连接 MongoDB 数据库的使用实例" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">mgo 连接 MongoDB 数据库的使用实例</span></a><a class="item" href="\2017\common-sorting-algorithm.html" title="常见排序算法" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">常见排序算法</span><span class="excerpt">时间复杂度为O(n2)  空间复杂度O(1)
+
+冒泡排序
+（在0N-1的序列上相邻两个元素比较大小，大的在后，小的在前，一趟下来，最大值放在位置N-1上，在0N-2的序列上….）
+
+选择排序
+（在0N-1的序列中选择最小值放在位置0上...</span></a></div></section></div></div>
+
+
+
+  <div class='related-wrap md' id="comments">
+    <div class='cmt-title cap theme'>
+      快来参与讨论吧
+    </div>
+    <div class='cmt-body utterances'>
+      
+
+<svg class="loading" style="vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="utterances" repo="leeifme/comments" issue-term="pathname" theme="github-light"></div>
+
+    </div>
+  </div>
+
+
+
+      <footer class='page-footer'>
+        
+<div><hr><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<p>本站由 <a href="https://leeif.me/">@leei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5">Stellar</a> 作为主题。</p>
+</div>
+
+      </footer>
+      <div class='float-panel mobile-only' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" viewBox="0 0 1228 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2849"><path d="M0 0m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2850"></path><path d="M0 389.560798m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2851"></path><path d="M0 779.121596m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.390199l-973.901995 0q-97.390199 0-97.390199-97.390199l0 0q0-97.390199 97.390199-97.390199Z" p-id="2852"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {};
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
+    issuesjs: '/js/issues.js',
+  };
+
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","onlypost":false,"loadingImg":null,"blurIn":true});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper/swiper-bundle.min.css","js":"https://unpkg.com/swiper/swiper-bundle.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.7/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":50,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+  <script>
+  function utterances(){
+    if(!document.getElementById("utterances"))return;
+    setTimeout(function() {
+      var checkUtterances = setInterval(function () {
+        var el = document.getElementById("utterances");
+        if (!el) return
+        clearInterval(checkUtterances)
+        try {
+          el.innerHTML="";
+        } catch (error) {}
+        var script = document.createElement('script');
+        script.src = 'https://utteranc.es/client.js';
+        const keys = ['repo', 'issue-term', 'issue-number', 'theme', 'label', 'crossorigin'];
+        keys.forEach((key, i) => {
+          if (el.attributes[key] && el.attributes[key].value) {
+            script.setAttribute(key, el.attributes[key].value);
+          }
+        });
+        el.appendChild(script);
+       }, 200)
+    });
+  }
+  utterances();
+</script>
+
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>
