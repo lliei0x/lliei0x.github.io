@@ -20,13 +20,21 @@
   <title>初学 Redis 作缓存层 - LEEIF.ME</title>
 
   
-  <meta name="description" content="
-项目需求：数据库用的是MySQL，考虑用Redis/memcached做数据库的缓存层。在读DB前，先读缓存层，如果有直接返回，如果没有再读DB，然后写入缓存层并返回。
-
-思路：###缓存读取流程
-
-先到缓存中查数据                         
-缓存中不存在则到实际数据...">
+    <meta name="description" content="项目需求：数据库用的是MySQL，考虑用Redis&#x2F;memcached做数据库的缓存层。在读DB前，先读缓存层，如果有直接返回，如果没有再读DB，然后写入缓存层并返回。  思路：###缓存读取流程  先到缓存中查数据                          缓存中不存在则到实际数据源中取，取出来后放入缓存                      下次再来取同样信息时则可直接从缓存中获">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初学 Redis 作缓存层">
+<meta property="og:url" content="https://leeif.me/2018/redis-for-mysql-cache.html">
+<meta property="og:site_name" content="LEEIF.ME">
+<meta property="og:description" content="项目需求：数据库用的是MySQL，考虑用Redis&#x2F;memcached做数据库的缓存层。在读DB前，先读缓存层，如果有直接返回，如果没有再读DB，然后写入缓存层并返回。  思路：###缓存读取流程  先到缓存中查数据                          缓存中不存在则到实际数据源中取，取出来后放入缓存                      下次再来取同样信息时则可直接从缓存中获">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-05-15T15:32:45.000Z">
+<meta property="article:modified_time" content="2021-03-06T13:52:18.604Z">
+<meta property="article:author" content="iliei">
+<meta property="article:tag" content="Go">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+  
+  
 
   <!-- feed -->
   
@@ -55,7 +63,7 @@
 <header class='header'>
   <div class='logo-wrap'>
   
-    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2021/03/06/MiwVdn4qeRPLp5r.png'/></a>
+    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2021/03/06/5pKaHXUrhF7s89y.png'/></a>
   
   
     <a class='title' href='/'>LEEIF.ME</a>
@@ -219,27 +227,29 @@
 
 
 <div class="article-footer fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
-</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2018/redis-for-mysql-cache.html" /></div><div class="social-wrap"><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2018/redis-for-mysql-cache.html&title=初学 Redis 作缓存层 - LEEIF.ME&summary=
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2018/redis-for-mysql-cache.html" /></div><div class="social-wrap"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/b32ef3da1162a.svg"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2018/redis-for-mysql-cache.html&title=初学 Redis 作缓存层 - LEEIF.ME&summary=
 项目需求：数据库用的是MySQL，考虑用Redis/memcached做数据库的缓存层。在读DB前，先读缓存层，如果有直接返回，如果没有再读DB，然后写入缓存层并返回。
 
 思路：###缓存读取流程
 
-先到缓存中查数据        ..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=初学 Redis 作缓存层 - LEEIF.ME&amp;body=https://leeif.me/2018/redis-for-mysql-cache.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg"/></a></div></div></section></div>
+先到缓存中查数据        ..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=初学 Redis 作缓存层 - LEEIF.ME&amp;body=https://leeif.me/2018/redis-for-mysql-cache.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg"/></a></div><div class="qrcode" id="qrcode-wechat" style="display:none"><img no-lazy src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://leeif.me/2018/redis-for-mysql-cache.html"/ onerror="javascript:this.classList.add('error');this.src='https://7.dusays.com/2021/03/03/87519671e4837.svg';"></div></div></section></div>
 
 </article>
 
 <div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title h2"><a href="/2018/docker-common-command%20.html">Docker 常用命令记录</a></div><div class="post-title fs14"><a href="/2018/babun-windows-tool.html">更早一篇：Windows 利器 - babun</a></div></section></div>
 
 <div class='related-wrap' id='related-posts'>
-    <div class="related_posts">
     <section class='header'>
       <div class='title cap theme'>您可能感兴趣的文章</div>
     </section>
     <section class='body'>
-    <div class="related-posts"><a class="item" href="\2017\mgo-connection-mongodb-experience.html" title="mgo 连接 MongoDB 数据库的使用实例"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">mgo 连接 MongoDB 数据库的使用实例</span></a><a class="item" href="\2018\gin-go-web-frame.html" title="高性能的 Go Web 框架 - gin"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">高性能的 Go Web 框架 - gin</span></a><a class="item" href="\2018\gin-swagger-build-document.html" title="gin-swagger 自动化构建 API 文档"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="http://orj2jcr7i.bkt.clouddn.com/blog/180727/2im5i3b45e.png?imageslim" /></div><span class="title">gin-swagger 自动化构建 API 文档</span></a><a class="item" href="\2019\go-channel-select.html" title="Select -- 无阻塞读写 channel"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">Select -- 无阻塞读写 channel</span></a><a class="item" href="\2017\git-experience-version-control.html" title="Git 实践 - 版本库控制"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">Git 实践 - 版本库控制</span><span class="excerpt">创建版本库把文件添加到版本库：
+    <div class="related-posts"><a class="item" href="\2017\mgo-connection-mongodb-experience.html" title="mgo 连接 MongoDB 数据库的使用实例"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://i.loli.net/2021/03/06/wkZFMbjoS9Aem3Q.jpg" /></div><span class="title">mgo 连接 MongoDB 数据库的使用实例</span></a><a class="item" href="\2018\gin-go-web-frame.html" title="高性能的 Go Web 框架 - gin"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://i.loli.net/2021/03/06/wkZFMbjoS9Aem3Q.jpg" /></div><span class="title">高性能的 Go Web 框架 - gin</span></a><a class="item" href="\2018\gin-swagger-build-document.html" title="gin-swagger 自动化构建 API 文档"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="http://orj2jcr7i.bkt.clouddn.com/blog/180727/2im5i3b45e.png?imageslim" /></div><span class="title">gin-swagger 自动化构建 API 文档</span></a><a class="item" href="\2019\go-channel-select.html" title="Select -- 无阻塞读写 channel"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://i.loli.net/2021/03/06/wkZFMbjoS9Aem3Q.jpg" /></div><span class="title">Select -- 无阻塞读写 channel</span></a><a class="item" href="\2017\common-sorting-algorithm.html" title="常见排序算法"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://i.loli.net/2021/03/06/wkZFMbjoS9Aem3Q.jpg" /></div><span class="title">常见排序算法</span><span class="excerpt">时间复杂度为O(n2)  空间复杂度O(1)
 
-通过git init命令把这个目录变成Git可以管理的仓库12$ git initInitialized empty Git repository in E:/git/test/.git/
-用命令gi...</span></a></div></section></div></div>
+冒泡排序
+（在0N-1的序列上相邻两个元素比较大小，大的在后，小的在前，一趟下来，最大值放在位置N-1上，在0N-2的序列上….）
+
+选择排序
+（在0N-1的序列中选择最小值放在位置0上...</span></a></div></section></div>
 
 
 
@@ -295,13 +305,13 @@
 
   // optional plugins
   if ('true' == 'true') {
-    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur","onlypost":false,"loadingImg":null,"blurIn":true});
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
   }
   if ('true' == 'true') {
     stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper/swiper-bundle.min.css","js":"https://unpkg.com/swiper/swiper-bundle.min.js"});
   }
   if ('true' == 'true') {
-    stellar.plugins.scrollreveal = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.7/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":50,"scale":1});
+    stellar.plugins.scrollreveal = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.7/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
   }
   if ('true' == 'true') {
     stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});

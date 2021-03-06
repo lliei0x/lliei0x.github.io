@@ -20,12 +20,37 @@
   <title>Raspberry Pi — 新手入门操作 - LEEIF.ME</title>
 
   
-  <meta name="description" content="通过 SSH 访问树莓派
-SSH 的主要目的是用来取代传统的 telnet 和 R 系列命令远程登陆和远程执行命令的工具，实现对远程登陆和远程执行命令加密。同样通过 SSH 功能也能快速的打开树莓派得终端。
-
-###开启 SSH 服务
-
-树莓派系统一般都含有树莓派服务，因此不需要进行安装。在树...">
+    <meta name="description" content="通过 SSH 访问树莓派 SSH 的主要目的是用来取代传统的 telnet 和 R 系列命令远程登陆和远程执行命令的工具，实现对远程登陆和远程执行命令加密。同样通过 SSH 功能也能快速的打开树莓派得终端。  ###开启 SSH 服务  树莓派系统一般都含有树莓派服务，因此不需要进行安装。在树莓派系统中打开命令行窗口，输入：sudo raspi-config 进入配置界面，将选中条选择到 “9 A">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Raspberry Pi — 新手入门操作">
+<meta property="og:url" content="https://leeif.me/2017/raspberry-pi-getting-started.html">
+<meta property="og:site_name" content="LEEIF.ME">
+<meta property="og:description" content="通过 SSH 访问树莓派 SSH 的主要目的是用来取代传统的 telnet 和 R 系列命令远程登陆和远程执行命令的工具，实现对远程登陆和远程执行命令加密。同样通过 SSH 功能也能快速的打开树莓派得终端。  ###开启 SSH 服务  树莓派系统一般都含有树莓派服务，因此不需要进行安装。在树莓派系统中打开命令行窗口，输入：sudo raspi-config 进入配置界面，将选中条选择到 “9 A">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdn.net/20170629170451112">
+<meta property="og:image" content="https://img-blog.csdn.net/20170629170513134">
+<meta property="og:image" content="https://img-blog.csdn.net/20170629170533361">
+<meta property="og:image" content="https://img-blog.csdn.net/20170629172515159">
+<meta property="og:image" content="https://img-blog.csdn.net/20170629172524083">
+<meta property="og:image" content="https://img-blog.csdn.net/20170418111459523?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjk1MjgwNw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="https://img-blog.csdn.net/20170418111659510?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjk1MjgwNw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="https://img-blog.csdn.net/20170418111834352?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjk1MjgwNw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="https://img-blog.csdn.net/20170418110930894?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjk1MjgwNw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="https://img-blog.csdn.net/20170424092505680?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjk1MjgwNw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://www.waveshare.net/study/data/attachment/portal/201612/21/102451jxcjzwk695he85ew.png">
+<meta property="og:image" content="http://www.waveshare.net/study/data/attachment/portal/201612/21/102451l2rpl6986uuaqta3.png">
+<meta property="og:image" content="http://www.waveshare.net/study/data/attachment/portal/201612/21/102452hv8v71b7dudvhx1b.png">
+<meta property="og:image" content="http://www.waveshare.net/study/data/attachment/portal/201612/21/102453b9qo5zabps1v7bpp.png">
+<meta property="og:image" content="http://www.waveshare.net/study/data/attachment/portal/201612/21/102452pd9ja6jr4aapdi1v.png">
+<meta property="og:image" content="http://www.waveshare.net/study/data/attachment/portal/201612/21/102453s0tl0c1ltays1t0b.png">
+<meta property="article:published_time" content="2017-11-20T12:36:25.000Z">
+<meta property="article:modified_time" content="2021-03-06T13:45:40.507Z">
+<meta property="article:author" content="iliei">
+<meta property="article:tag" content="Raspberry Pi">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20170629170451112">
+  
+  
 
   <!-- feed -->
   
@@ -54,7 +79,7 @@ SSH 的主要目的是用来取代传统的 telnet 和 R 系列命令远程登�
 <header class='header'>
   <div class='logo-wrap'>
   
-    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2021/03/06/MiwVdn4qeRPLp5r.png'/></a>
+    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2021/03/06/5pKaHXUrhF7s89y.png'/></a>
   
   
     <a class='title' href='/'>LEEIF.ME</a>
@@ -298,22 +323,21 @@ SSH 的主要目的是用来取代传统的 telnet 和 R 系列命令远程登�
 
 
 <div class="article-footer fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
-</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2017/raspberry-pi-getting-started.html" /></div><div class="social-wrap"><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2017/raspberry-pi-getting-started.html&title=Raspberry Pi — 新手入门操作 - LEEIF.ME&summary=通过 SSH 访问树莓派
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2017/raspberry-pi-getting-started.html" /></div><div class="social-wrap"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/b32ef3da1162a.svg"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2017/raspberry-pi-getting-started.html&title=Raspberry Pi — 新手入门操作 - LEEIF.ME&summary=通过 SSH 访问树莓派
 SSH 的主要目的是用来取代传统的 telnet 和 R 系列命令远程登陆和远程执行命令的工具，实现对远程登陆和远程执行命令加密。同样通过 SSH 功能也能快速的打开树莓派得终端。
 
-###开启 SSH 服务..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=Raspberry Pi — 新手入门操作 - LEEIF.ME&amp;body=https://leeif.me/2017/raspberry-pi-getting-started.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg"/></a></div></div></section></div>
+###开启 SSH 服务..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=Raspberry Pi — 新手入门操作 - LEEIF.ME&amp;body=https://leeif.me/2017/raspberry-pi-getting-started.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg"/></a></div><div class="qrcode" id="qrcode-wechat" style="display:none"><img no-lazy src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://leeif.me/2017/raspberry-pi-getting-started.html"/ onerror="javascript:this.classList.add('error');this.src='https://7.dusays.com/2021/03/03/87519671e4837.svg';"></div></div></section></div>
 
 </article>
 
 <div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title h2"><a href="/2017/nongdb-beginner.html">MongoDB 入门操作</a></div><div class="post-title fs14"><a href="/2017/python-virtual-environment-build.html">更早一篇：Python 虚拟坏境的搭建和配置</a></div></section></div>
 
 <div class='related-wrap' id='related-posts'>
-    <div class="related_posts">
     <section class='header'>
       <div class='title cap theme'>您可能感兴趣的文章</div>
     </section>
     <section class='body'>
-    <div class="related-posts"><a class="item" href="\2017\python-virtual-environment-build.html" title="Python 虚拟坏境的搭建和配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">Python 虚拟坏境的搭建和配置</span></a></div></section></div></div>
+    <div class="related-posts"><a class="item" href="\2017\python-virtual-environment-build.html" title="Python 虚拟坏境的搭建和配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://i.loli.net/2021/03/06/wkZFMbjoS9Aem3Q.jpg" /></div><span class="title">Python 虚拟坏境的搭建和配置</span></a></div></section></div>
 
 
 
@@ -369,13 +393,13 @@ SSH 的主要目的是用来取代传统的 telnet 和 R 系列命令远程登�
 
   // optional plugins
   if ('true' == 'true') {
-    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur","onlypost":false,"loadingImg":null,"blurIn":true});
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
   }
   if ('true' == 'true') {
     stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper/swiper-bundle.min.css","js":"https://unpkg.com/swiper/swiper-bundle.min.js"});
   }
   if ('true' == 'true') {
-    stellar.plugins.scrollreveal = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.7/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":50,"scale":1});
+    stellar.plugins.scrollreveal = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.7/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
   }
   if ('true' == 'true') {
     stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});

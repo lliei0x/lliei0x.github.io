@@ -776,7 +776,7 @@ pre .coffeescript .title {
 }
 .md .article-footer .social-wrap {
   grid-gap: 0.5rem 1rem;
-  margin: 1rem 0;
+  margin: 0;
 }
 .md .article-footer .qrcode {
   margin: 2rem auto 1rem;
@@ -817,17 +817,6 @@ pre .coffeescript .title {
 }
 .bread-nav div#post-meta {
   margin-top: 2px;
-}
-.related-wrap#comments div.cmt-body {
-  min-height: 150px;
-  position: relative;
-}
-.related-wrap#comments div.cmt-body svg.loading {
-  top: 60px;
-}
-.related-wrap#comments a.avatar {
-  border-radius: 120px !important;
-  overflow: hidden !important;
 }
 .l_cover {
   height: 100vh;
@@ -987,22 +976,11 @@ nav.cap a:hover {
 .paginator-wrap a.paginator:hover img {
   filter: grayscale(0%);
 }
-.related-wrap#read-next .body .post-title {
-  margin: 0.5rem 0;
-  line-height: 1.2;
+.related-wrap {
+  padding: 2rem 1rem;
 }
-.related-wrap#read-next .body .post-title a {
-  color: inherit;
-}
-.related-wrap#read-next .body .post-title a:hover {
-  color: #ff5722;
-}
-.related-wrap#read-next .body .post-title.fs14 {
-  color: var(--text-p3);
-  font-weight: 500;
-}
-.related-wrap#read-next .body .post-title.h2 {
-  color: var(--text-p1);
+.related-wrap:empty {
+  display: none;
 }
 .related-wrap#related-posts .related-posts {
   width: 100%;
@@ -1097,11 +1075,29 @@ nav.cap a:hover {
 .related-wrap#related-posts .related-posts a+a {
   margin-left: 1rem;
 }
-.related-wrap {
-  padding: 2rem 1rem;
+.related-wrap#read-next .body .post-title {
+  margin: 0.5rem 0;
+  line-height: 1.2;
 }
-.related-wrap:empty {
-  display: none;
+.related-wrap#read-next .body .post-title a {
+  color: inherit;
+}
+.related-wrap#read-next .body .post-title a:hover {
+  color: #ff5722;
+}
+.related-wrap#read-next .body .post-title.fs14 {
+  color: var(--text-p3);
+  font-weight: 500;
+}
+.related-wrap#read-next .body .post-title.h2 {
+  color: var(--text-p1);
+}
+.related-wrap#comments div.cmt-body {
+  min-height: 150px;
+  position: relative;
+}
+.related-wrap#comments div.cmt-body svg.loading {
+  top: 60px;
 }
 .tag-plugin.about {
   background: var(--block);
@@ -2716,7 +2712,7 @@ article.md.error-page a#back {
 }
 .post-list .post-card.wiki article .preview {
   display: flex;
-  width: 120px;
+  width: 200px;
   margin: 1rem;
   align-items: center;
 }

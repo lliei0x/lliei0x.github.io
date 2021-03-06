@@ -20,7 +20,21 @@
   <title>搭建 Airflow 任务调度环境 - LEEIF.ME</title>
 
   
-  <meta name="description" content="前期准备关闭防火墙和 selinux1234systemctl stop firewalldsystemctl disable firewalldsetenforce 0 sed -i &#x27;s/^SELINUX=.*/SELINUX=disabled/g&#x27; /etc/seli...">
+    <meta name="description" content="前期准备关闭防火墙和 selinux1234systemctl stop firewalldsystemctl disable firewalldsetenforce 0 sed -i &amp;#x27;s&#x2F;^SELINUX&#x3D;.*&#x2F;SELINUX&#x3D;disabled&#x2F;g&amp;#x27; &#x2F;etc&#x2F;selinux&#x2F;config  部署 Python 3.X 依赖包安装   Python 安装会依赖一些环境，为了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建 Airflow 任务调度环境">
+<meta property="og:url" content="https://leeif.me/2019/deploy-airflow.html">
+<meta property="og:site_name" content="LEEIF.ME">
+<meta property="og:description" content="前期准备关闭防火墙和 selinux1234systemctl stop firewalldsystemctl disable firewalldsetenforce 0 sed -i &amp;#x27;s&#x2F;^SELINUX&#x3D;.*&#x2F;SELINUX&#x3D;disabled&#x2F;g&amp;#x27; &#x2F;etc&#x2F;selinux&#x2F;config  部署 Python 3.X 依赖包安装   Python 安装会依赖一些环境，为了">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-08-25T07:15:15.000Z">
+<meta property="article:modified_time" content="2021-03-06T13:54:14.968Z">
+<meta property="article:author" content="iliei">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Airflow">
+<meta name="twitter:card" content="summary">
+  
+  
 
   <!-- feed -->
   
@@ -49,7 +63,7 @@
 <header class='header'>
   <div class='logo-wrap'>
   
-    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2021/03/06/MiwVdn4qeRPLp5r.png'/></a>
+    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2021/03/06/5pKaHXUrhF7s89y.png'/></a>
   
   
     <a class='title' href='/'>LEEIF.ME</a>
@@ -351,19 +365,18 @@
 
 
 <div class="article-footer fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
-</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2019/deploy-airflow.html" /></div><div class="social-wrap"><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2019/deploy-airflow.html&title=搭建 Airflow 任务调度环境 - LEEIF.ME&summary=前期准备关闭防火墙和 selinux1234systemctl stop firewalldsystemctl disable firewalldsetenforce 0 sed -i &#x27;s/^SELINUX=.*/SELI..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=搭建 Airflow 任务调度环境 - LEEIF.ME&amp;body=https://leeif.me/2019/deploy-airflow.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg"/></a></div></div></section></div>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2019/deploy-airflow.html" /></div><div class="social-wrap"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/b32ef3da1162a.svg"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2019/deploy-airflow.html&title=搭建 Airflow 任务调度环境 - LEEIF.ME&summary=前期准备关闭防火墙和 selinux1234systemctl stop firewalldsystemctl disable firewalldsetenforce 0 sed -i &#x27;s/^SELINUX=.*/SELI..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=搭建 Airflow 任务调度环境 - LEEIF.ME&amp;body=https://leeif.me/2019/deploy-airflow.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg"/></a></div><div class="qrcode" id="qrcode-wechat" style="display:none"><img no-lazy src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://leeif.me/2019/deploy-airflow.html"/ onerror="javascript:this.classList.add('error');this.src='https://7.dusays.com/2021/03/03/87519671e4837.svg';"></div></div></section></div>
 
 </article>
 
 <div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title h2"><a href="/2019/module-design-doc.html">模块设计文档编写规范</a></div><div class="post-title fs14"><a href="/2019/gfs-consistency.html">更早一篇：GFS 一致性模型</a></div></section></div>
 
 <div class='related-wrap' id='related-posts'>
-    <div class="related_posts">
     <section class='header'>
       <div class='title cap theme'>您可能感兴趣的文章</div>
     </section>
     <section class='body'>
-    <div class="related-posts"><a class="item" href="\2017\python-virtual-environment-build.html" title="Python 虚拟坏境的搭建和配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">Python 虚拟坏境的搭建和配置</span></a><a class="item" href="\2018\python-regular-expression.html" title="Python 之正则表达式"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">Python 之正则表达式</span></a><a class="item" href="\2017\raspberry-pi-getting-started.html" title="Raspberry Pi — 新手入门操作"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://img-blog.csdn.net/20170629170451112" /></div><span class="title">Raspberry Pi — 新手入门操作</span></a></div></section></div></div>
+    <div class="related-posts"><a class="item" href="\2017\python-virtual-environment-build.html" title="Python 虚拟坏境的搭建和配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://i.loli.net/2021/03/06/wkZFMbjoS9Aem3Q.jpg" /></div><span class="title">Python 虚拟坏境的搭建和配置</span></a><a class="item" href="\2018\python-regular-expression.html" title="Python 之正则表达式"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://i.loli.net/2021/03/06/wkZFMbjoS9Aem3Q.jpg" /></div><span class="title">Python 之正则表达式</span></a><a class="item" href="\2017\raspberry-pi-getting-started.html" title="Raspberry Pi — 新手入门操作"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://img-blog.csdn.net/20170629170451112" /></div><span class="title">Raspberry Pi — 新手入门操作</span></a></div></section></div>
 
 
 
@@ -419,13 +432,13 @@
 
   // optional plugins
   if ('true' == 'true') {
-    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur","onlypost":false,"loadingImg":null,"blurIn":true});
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
   }
   if ('true' == 'true') {
     stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper/swiper-bundle.min.css","js":"https://unpkg.com/swiper/swiper-bundle.min.js"});
   }
   if ('true' == 'true') {
-    stellar.plugins.scrollreveal = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.7/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":50,"scale":1});
+    stellar.plugins.scrollreveal = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.7/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
   }
   if ('true' == 'true') {
     stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
