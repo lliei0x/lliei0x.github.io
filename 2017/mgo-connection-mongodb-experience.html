@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang='zh-CN'>
 
-<head hexo-theme='https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5'>
+<head>
   <meta name="generator" content="Hexo 5.4.0">
   <meta charset="utf-8">
   
@@ -17,28 +17,14 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>mgo 连接 MongoDB 数据库的使用实例 - LEEI</title>
+  <title>mgo 连接 MongoDB 数据库的使用实例 - LEEIF.ME</title>
 
   
-    <meta name="description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
-<meta property="og:type" content="article">
-<meta property="og:title" content="mgo 连接 MongoDB 数据库的使用实例">
-<meta property="og:url" content="https://leeif.me/2017/mgo-connection-mongodb-experience.html">
-<meta property="og:site_name" content="LEEI">
-<meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
-<meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2017-12-10T15:32:45.000Z">
-<meta property="article:modified_time" content="2020-09-26T09:07:02.134Z">
-<meta property="article:author" content="leei">
-<meta property="article:tag" content="MongoDB">
-<meta property="article:tag" content="Go">
-<meta name="twitter:card" content="summary">
-  
-  
+  <meta name="description" content="123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778...">
 
   <!-- feed -->
   
-    <link rel="alternate" href="/atom.xml" title="LEEI" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="LEEIF.ME" type="application/atom+xml">
   
 
   
@@ -48,7 +34,7 @@
   
 
   
-    <link rel="shortcut icon" type='image/x-icon' href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200927222029.ico">
+    <link rel="shortcut icon" type='image/x-icon' href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/favicon.svg">
   
 </head>
 
@@ -59,34 +45,33 @@
   <div class='l_body' id='start'>
     <aside class='l_left'>
     
-<div class='wrap'>
-  
+
 <header class='header'>
   <div class='logo-wrap'>
   
-    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2020/09/26/zSRUylAqpoZ8462.png'/></a>
+    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2021/03/06/MiwVdn4qeRPLp5r.png'/></a>
   
   
-    <a class='title' href='/'>LEEI</a>
+    <a class='title' href='/'>LEEIF.ME</a>
   
 </div>
 
-  <nav class="menu"><a class="nav-item active" href="/">文章</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/more/">更多</a></nav>
+  <nav class="menu dis-select"><a class="nav-item active" href="/">文章</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/about/">更多</a></nav>
 </header>
 
-  <div class='widgets'>
+<div class='widgets'>
+  
     
       
-        
-        
-
-
       
+
+
+    
+  
     
       
-        
-        <div class='widget-wrap' id='recent'>
-  <div class='widget-header dis-select'>
+      <div class='widget-wrap' id='recent'>
+  <div class='widget-header h4 dis-select'>
     <span class='name'>最近更新</span>
     
       <a class='cap-action' id='rss' title='Subscribe' href='/atom.xml'>
@@ -94,16 +79,8 @@
       </a>
     
   </div>
-  <div class='widget-body'>
+  <div class='widget-body fs14'>
     
-    
-      <div class='post-title'>
-        <a href="/2020/kubernetes-operator.html">
-          
-            「转」 Kubernetes 控制器的进化之旅
-          
-        </a>
-      </div>
     
       <div class='post-title'>
         <a href="/2020/openldap-install-config.html">
@@ -130,9 +107,17 @@
       </div>
     
       <div class='post-title'>
-        <a href="/2019/deploy-airflow.html">
+        <a href="/2020/kubernetes-operator.html">
           
-            搭建 Airflow 任务调度环境
+            「转」 Kubernetes 控制器的进化之旅
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2019/operator-sdk-use.html">
+          
+            Opeartor-SDK 简单上手
           
         </a>
       </div>
@@ -140,11 +125,10 @@
   </div>
 </div>
 
-      
     
-  </div>
-  <footer class="footer"><div class="social-wrap"><a class="social" href="/atom.xml" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/25678f144c438.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/25678f144c438.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></footer>
+  
 </div>
+<footer class="footer"><div class="social-wrap dis-select"><a class="social" href="/atom.xml" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/14/25678f144c438.svg"/></a><a class="social" href="https://github.com/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/github.svg"/></a><a class="social" href="https://twitter.com/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/twitter.svg"/></a><a class="social" href="https://t.me/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/telegram.svg"/></a><a class="social" href="/about/#comments" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/comments.svg"/></a></div></footer>
 
     </aside>
     <div class='l_main'>
@@ -153,16 +137,16 @@
       
 
 
-  <div class='breadcrumb-navigation'>
+  <div class='bread-nav fs12'>
   
     
-    <div id='breadcrumb'>
+    <div id='breadcrumb' style="color:#3fbac2">
       <a class='cap breadcrumb' href='/'>主页</a>
       <span class="sep"></span>
       <a class='cap breadcrumb' href='/'>文章</a>
       
         <span class="sep"></span>
-        <a class="cap breadcrumb-link" href="/categories/notes/">notes</a>
+        <a class="cap breadcrumb-link" href="/categories/%E6%8A%80%E6%9C%AF%E5%8A%A0%E6%B2%B9%E7%AB%99/">技术加油站</a>
       
     </div>
     <div id='post-meta'>
@@ -178,12 +162,12 @@
 
 
 
-<div class="article-footer"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
-</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2017/mgo-connection-mongodb-experience.html" /></div><div class="social-wrap"><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2017/mgo-connection-mongodb-experience.html&title=mgo 连接 MongoDB 数据库的使用实例 - LEEI&summary=123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263..."><img src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item email" href="mailto:?subject=mgo 连接 MongoDB 数据库的使用实例 - LEEI&amp;body=https://leeif.me/2017/mgo-connection-mongodb-experience.html"><img src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></div></section></div>
+<div class="article-footer fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2017/mgo-connection-mongodb-experience.html" /></div><div class="social-wrap"><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2017/mgo-connection-mongodb-experience.html&title=mgo 连接 MongoDB 数据库的使用实例 - LEEIF.ME&summary=123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=mgo 连接 MongoDB 数据库的使用实例 - LEEIF.ME&amp;body=https://leeif.me/2017/mgo-connection-mongodb-experience.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg"/></a></div></div></section></div>
 
 </article>
 
-<div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title unread"><a href="/2018/python-regular-expression.html">Python 之正则表达式</a></div><div class="post-title read"><a href="/2017/vscode-hotkey-record.html">更早一篇：VS Code 常用快捷键整理</a></div></section></div>
+<div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title h2"><a href="/2018/python-regular-expression.html">Python 之正则表达式</a></div><div class="post-title fs14"><a href="/2017/vscode-hotkey-record.html">更早一篇：VS Code 常用快捷键整理</a></div></section></div>
 
 <div class='related-wrap' id='related-posts'>
     <div class="related_posts">
@@ -191,13 +175,10 @@
       <div class='title cap theme'>您可能感兴趣的文章</div>
     </section>
     <section class='body'>
-    <div class="related-posts"><a class="item" href="\2017\nongdb-beginner.html" title="MongoDB 入门操作" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">MongoDB 入门操作</span></a><a class="item" href="\2018\gin-go-web-frame.html" title="高性能的 Go Web 框架 - gin" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">高性能的 Go Web 框架 - gin</span></a><a class="item" href="\2018\gin-swagger-build-document.html" title="gin-swagger 自动化构建 API 文档" rel="bookmark "><div class="img"><img src="http://orj2jcr7i.bkt.clouddn.com/blog/180727/2im5i3b45e.png?imageslim" class="lazyload" data-srcset="http://orj2jcr7i.bkt.clouddn.com/blog/180727/2im5i3b45e.png?imageslim" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">gin-swagger 自动化构建 API 文档</span></a><a class="item" href="\2018\redis-for-mysql-cache.html" title="初学 Redis 作缓存层" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">初学 Redis 作缓存层</span></a><a class="item" href="\2017\common-sorting-algorithm.html" title="常见排序算法" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">常见排序算法</span><span class="excerpt">时间复杂度为O(n2)  空间复杂度O(1)
+    <div class="related-posts"><a class="item" href="\2017\nongdb-beginner.html" title="MongoDB 入门操作"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">MongoDB 入门操作</span></a><a class="item" href="\2018\gin-go-web-frame.html" title="高性能的 Go Web 框架 - gin"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">高性能的 Go Web 框架 - gin</span></a><a class="item" href="\2018\gin-swagger-build-document.html" title="gin-swagger 自动化构建 API 文档"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="http://orj2jcr7i.bkt.clouddn.com/blog/180727/2im5i3b45e.png?imageslim" /></div><span class="title">gin-swagger 自动化构建 API 文档</span></a><a class="item" href="\2018\redis-for-mysql-cache.html" title="初学 Redis 作缓存层"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">初学 Redis 作缓存层</span></a><a class="item" href="\2017\git-experience-version-control.html" title="Git 实践 - 版本库控制"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">Git 实践 - 版本库控制</span><span class="excerpt">创建版本库把文件添加到版本库：
 
-冒泡排序
-（在0N-1的序列上相邻两个元素比较大小，大的在后，小的在前，一趟下来，最大值放在位置N-1上，在0N-2的序列上….）
-
-选择排序
-（在0N-1的序列中选择最小值放在位置0上...</span></a></div></section></div></div>
+通过git init命令把这个目录变成Git可以管理的仓库12$ git initInitialized empty Git repository in E:/git/test/.git/
+用命令gi...</span></a></div></section></div></div>
 
 
 
@@ -217,13 +198,11 @@
 
 
 
-      <footer class='page-footer'>
-        
-<div><hr><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
-<p>本站由 <a href="https://leeif.me/">@leei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5">Stellar</a> 作为主题。</p>
-</div>
+      
+<footer class="page-footer fs12"><hr><div><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<p>本站由 <a href="https://leeif.me/">@iliei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5">Stellar</a> 作为主题。</p>
+</div></footer>
 
-      </footer>
       <div class='float-panel mobile-only' style='display:none'>
   <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
     <svg class="icon" viewBox="0 0 1228 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2849"><path d="M0 0m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2850"></path><path d="M0 389.560798m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2851"></path><path d="M0 779.121596m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.390199l-973.901995 0q-97.390199 0-97.390199-97.390199l0 0q0-97.390199 97.390199-97.390199Z" p-id="2852"></path></svg>
@@ -235,6 +214,7 @@
   <div class='scripts'>
     <script type="text/javascript">
   stellar = {};
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5';
   stellar.config = {
     date_suffix: {
       just: '刚刚',
@@ -248,12 +228,13 @@
   // required plugins (only load if needs)
   stellar.plugins = {
     jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
-    issuesjs: '/js/issues.js',
+    sitesjs: '/js/plugins/sites.js',
+    friendsjs: '/js/plugins/friends.js',
   };
 
   // optional plugins
   if ('true' == 'true') {
-    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","onlypost":false,"loadingImg":null,"blurIn":true});
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur","onlypost":false,"loadingImg":null,"blurIn":true});
   }
   if ('true' == 'true') {
     stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper/swiper-bundle.min.css","js":"https://unpkg.com/swiper/swiper-bundle.min.js"});

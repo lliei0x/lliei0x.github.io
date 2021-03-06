@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang='zh-CN'>
 
-<head hexo-theme='https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5'>
+<head>
   <meta name="generator" content="Hexo 5.4.0">
   <meta charset="utf-8">
   
@@ -17,30 +17,21 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>gin-swagger 自动化构建 API 文档 - LEEI</title>
+  <title>gin-swagger 自动化构建 API 文档 - LEEIF.ME</title>
 
   
-    <meta name="description" content="前后端的交互一般流程是这样的，后端暴露出 API 后，交给前端，前端根据 API 的响应，编写前端页面，一定程度上 API 是前后端的交互桥梁。   API 文档主要要包含:  路由：包括路径参数、请求参数、还是请求体参数 动作：HTTP 请求动作，GET、POST、DELETE、PUT 响应：请求之后的返回值包含哪些信息，一般是 JSON  swagger 可以将代码和 api 文档维护在一起">
-<meta property="og:type" content="article">
-<meta property="og:title" content="gin-swagger 自动化构建 API 文档">
-<meta property="og:url" content="https://leeif.me/2018/gin-swagger-build-document.html">
-<meta property="og:site_name" content="LEEI">
-<meta property="og:description" content="前后端的交互一般流程是这样的，后端暴露出 API 后，交给前端，前端根据 API 的响应，编写前端页面，一定程度上 API 是前后端的交互桥梁。   API 文档主要要包含:  路由：包括路径参数、请求参数、还是请求体参数 动作：HTTP 请求动作，GET、POST、DELETE、PUT 响应：请求之后的返回值包含哪些信息，一般是 JSON  swagger 可以将代码和 api 文档维护在一起">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://orj2jcr7i.bkt.clouddn.com/blog/180727/2im5i3b45e.png?imageslim">
-<meta property="og:image" content="http://orj2jcr7i.bkt.clouddn.com/blog/180727/hidH469gKB.png?imageslim">
-<meta property="article:published_time" content="2018-07-27T12:36:25.000Z">
-<meta property="article:modified_time" content="2020-09-26T09:05:11.492Z">
-<meta property="article:author" content="leei">
-<meta property="article:tag" content="Go">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://orj2jcr7i.bkt.clouddn.com/blog/180727/2im5i3b45e.png?imageslim">
-  
-  
+  <meta name="description" content="
+前后端的交互一般流程是这样的，后端暴露出 API 后，交给前端，前端根据 API 的响应，编写前端页面，一定程度上 API 是前后端的交互桥梁。 
+
+API 文档主要要包含:
+
+路由：包括路径参数、请求参数、还是请求体参数
+动作：HTTP 请求动作，GET、POST、DELETE、PUT
+响...">
 
   <!-- feed -->
   
-    <link rel="alternate" href="/atom.xml" title="LEEI" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="LEEIF.ME" type="application/atom+xml">
   
 
   
@@ -50,7 +41,7 @@
   
 
   
-    <link rel="shortcut icon" type='image/x-icon' href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200927222029.ico">
+    <link rel="shortcut icon" type='image/x-icon' href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/favicon.svg">
   
 </head>
 
@@ -61,29 +52,28 @@
   <div class='l_body' id='start'>
     <aside class='l_left'>
     
-<div class='wrap'>
-  
+
 <header class='header'>
   <div class='logo-wrap'>
   
-    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2020/09/26/zSRUylAqpoZ8462.png'/></a>
+    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2021/03/06/MiwVdn4qeRPLp5r.png'/></a>
   
   
-    <a class='title' href='/'>LEEI</a>
+    <a class='title' href='/'>LEEIF.ME</a>
   
 </div>
 
-  <nav class="menu"><a class="nav-item active" href="/">文章</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/more/">更多</a></nav>
+  <nav class="menu dis-select"><a class="nav-item active" href="/">文章</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/about/">更多</a></nav>
 </header>
 
-  <div class='widgets'>
+<div class='widgets'>
+  
     
       
-        
-        
+      
 
   <div class='widget-wrap' id='toc'>
-    <div class='widget-header dis-select'>
+    <div class='widget-header h4 dis-select'>
       <span class='name'>
         
           本文目录
@@ -93,7 +83,7 @@
         <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10505"><path d="M884.526 163.323H208.881c-30.516 0-55.25 24.934-55.25 55.685s24.734 55.685 55.25 55.685h675.645c30.515 0 55.255-24.93 55.255-55.685s-24.74-55.685-55.255-55.685zM568.253 336.87a56.765 56.765 0 0 0-4.06-3.701c-0.63-0.517-1.29-0.968-1.935-1.454-0.799-0.605-1.577-1.224-2.406-1.787-0.779-0.528-1.583-0.978-2.386-1.46-0.748-0.45-1.485-0.926-2.253-1.341-0.81-0.44-1.649-0.814-2.483-1.208-0.8-0.384-1.588-0.784-2.407-1.132-0.814-0.338-1.643-0.61-2.463-0.906-0.875-0.323-1.745-0.66-2.641-0.932-0.825-0.25-1.66-0.435-2.489-0.645-0.916-0.236-1.817-0.492-2.75-0.681-0.962-0.19-1.935-0.307-2.902-0.445-0.814-0.118-1.618-0.272-2.442-0.354a55.163 55.163 0 0 0-5.438-0.276h-0.015c-0.267 0-0.528 0.036-0.794 0.036a54.856 54.856 0 0 0-39.86 16.271l-279.413 281.61c-21.576 21.75-21.576 57.006 0 78.756a54.876 54.876 0 0 0 39.07 16.312 54.835 54.835 0 0 0 39.066-16.312l186.67-188.145V898.09c0 30.75 24.74 55.685 55.256 55.685s55.255-24.934 55.255-55.685v-387.42L769.526 697.22a54.871 54.871 0 0 0 39.065 16.312 54.835 54.835 0 0 0 39.066-16.312c21.576-21.75 21.576-57.006 0-78.756L568.253 336.87z" p-id="10506"></path></svg>
       </a>
     </div>
-    <div class='widget-body post'>
+    <div class='widget-body fs14 post'>
       
         <div class='doc-tree active'>
           <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#doc%E6%96%87%E6%A1%A3"><span class="toc-text">doc文档</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%81%9A%E6%B3%95"><span class="toc-text">做法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E7%BC%96%E5%86%99%E5%85%A8%E5%B1%80%E4%BF%A1%E6%81%AF%E6%B3%A8%E9%87%8A%EF%BC%8C%E5%9C%A8%E4%B8%BB%E5%87%BD%E6%95%B0%E4%B8%8A%E7%BC%96%E5%86%99"><span class="toc-text">1. 编写全局信息注释，在主函数上编写</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E7%BC%96%E5%86%99%E5%BA%94%E7%94%A8%E6%B3%A8%E9%87%8A"><span class="toc-text">2. 编写应用注释</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E7%9B%AE%E5%BD%95%E4%B8%8B-%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="toc-text">3. 目录下 执行命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%AF%BC%E5%85%A5%E7%94%9F%E6%88%90%E7%9A%84-docs-%E6%96%87%E4%BB%B6"><span class="toc-text">4. 导入生成的 docs 文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-go-run-main-go"><span class="toc-text">5. go run main.go</span></a></li></ol></li></ol></li></ol>
@@ -103,12 +93,12 @@
   </div>
 
 
-      
+    
+  
     
       
-        
-        <div class='widget-wrap' id='recent'>
-  <div class='widget-header dis-select'>
+      <div class='widget-wrap' id='recent'>
+  <div class='widget-header h4 dis-select'>
     <span class='name'>最近更新</span>
     
       <a class='cap-action' id='rss' title='Subscribe' href='/atom.xml'>
@@ -116,16 +106,8 @@
       </a>
     
   </div>
-  <div class='widget-body'>
+  <div class='widget-body fs14'>
     
-    
-      <div class='post-title'>
-        <a href="/2020/kubernetes-operator.html">
-          
-            「转」 Kubernetes 控制器的进化之旅
-          
-        </a>
-      </div>
     
       <div class='post-title'>
         <a href="/2020/openldap-install-config.html">
@@ -152,9 +134,17 @@
       </div>
     
       <div class='post-title'>
-        <a href="/2019/deploy-airflow.html">
+        <a href="/2020/kubernetes-operator.html">
           
-            搭建 Airflow 任务调度环境
+            「转」 Kubernetes 控制器的进化之旅
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2019/operator-sdk-use.html">
+          
+            Opeartor-SDK 简单上手
           
         </a>
       </div>
@@ -162,11 +152,10 @@
   </div>
 </div>
 
-      
     
-  </div>
-  <footer class="footer"><div class="social-wrap"><a class="social" href="/atom.xml" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/25678f144c438.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/25678f144c438.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></footer>
+  
 </div>
+<footer class="footer"><div class="social-wrap dis-select"><a class="social" href="/atom.xml" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/14/25678f144c438.svg"/></a><a class="social" href="https://github.com/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/github.svg"/></a><a class="social" href="https://twitter.com/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/twitter.svg"/></a><a class="social" href="https://t.me/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/telegram.svg"/></a><a class="social" href="/about/#comments" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/comments.svg"/></a></div></footer>
 
     </aside>
     <div class='l_main'>
@@ -175,16 +164,16 @@
       
 
 
-  <div class='breadcrumb-navigation'>
+  <div class='bread-nav fs12'>
   
     
-    <div id='breadcrumb'>
+    <div id='breadcrumb' style="color:#3fbac2">
       <a class='cap breadcrumb' href='/'>主页</a>
       <span class="sep"></span>
       <a class='cap breadcrumb' href='/'>文章</a>
       
         <span class="sep"></span>
-        <a class="cap breadcrumb-link" href="/categories/collect/">collect</a>
+        <a class="cap breadcrumb-link" href="/categories/%E6%8A%80%E6%9C%AF%E5%8A%A0%E6%B2%B9%E7%AB%99/">技术加油站</a>
       
     </div>
     <div id='post-meta'>
@@ -216,7 +205,7 @@
 </ol>
 <p>注释语法这个，全靠查文档。对着文档来。</p>
 <p>当然我觉得最好的方法是什么呢，是模仿，找一个别人已经写好的，修修改改，看看能不能编译通过，编译通过后是不是你预期的结果。不是的话，继续修修改改，再编译，再看是不是你希望的结果。如此反复。</p>
-<p><img src="http://orj2jcr7i.bkt.clouddn.com/blog/180727/2im5i3b45e.png?imageslim" class="lazyload" data-srcset="http://orj2jcr7i.bkt.clouddn.com/blog/180727/2im5i3b45e.png?imageslim" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" alt="mark"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="http://orj2jcr7i.bkt.clouddn.com/blog/180727/2im5i3b45e.png?imageslim" alt="mark"></p>
 <h4 id="1-编写全局信息注释，在主函数上编写"><a href="#1-编写全局信息注释，在主函数上编写" class="headerlink" title="1. 编写全局信息注释，在主函数上编写"></a>1. 编写全局信息注释，在主函数上编写</h4><p>格式：<code>// @param info</code></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @title Swagger Example API</span></span><br><span class="line"><span class="comment">// @version 1.0</span></span><br><span class="line"><span class="comment">// @description This is a sample server Petstore server.</span></span><br><span class="line"><span class="comment">// @termsOfService http://swagger.io/terms/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @contact.name API Support</span></span><br><span class="line"><span class="comment">// @contact.url http://www.swagger.io/support</span></span><br><span class="line"><span class="comment">// @contact.email support@swagger.io</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @license.name Apache 2.0</span></span><br><span class="line"><span class="comment">// @license.url http://www.apache.org/licenses/LICENSE-2.0.html</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @host 127.0.0.1:8080</span></span><br><span class="line"><span class="comment">// @BasePath /v1</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	r := gin.Default()</span><br><span class="line">	r.GET(<span class="string">&quot;/docs/*any&quot;</span>, ginSwagger.WrapHandler(swaggerFiles.Handler))</span><br><span class="line">	r.GET(<span class="string">&quot;v1/hello/:name&quot;</span>, Name)</span><br><span class="line">	r.Run()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -239,21 +228,21 @@
 <p>即这个  <code>./docs</code></p>
 <h4 id="5-go-run-main-go"><a href="#5-go-run-main-go" class="headerlink" title="5. go run main.go"></a>5. go run main.go</h4><p>访问：<code>http://127.0.0.1:8080/docs/index.html</code></p>
 <p>即可查看 swagger 文档。</p>
-<p><img src="http://orj2jcr7i.bkt.clouddn.com/blog/180727/hidH469gKB.png?imageslim" class="lazyload" data-srcset="http://orj2jcr7i.bkt.clouddn.com/blog/180727/hidH469gKB.png?imageslim" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" alt="mark"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="http://orj2jcr7i.bkt.clouddn.com/blog/180727/hidH469gKB.png?imageslim" alt="mark"></p>
 
 
-<div class="article-footer"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
-</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2018/gin-swagger-build-document.html" /></div><div class="social-wrap"><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2018/gin-swagger-build-document.html&title=gin-swagger 自动化构建 API 文档 - LEEI&summary=
+<div class="article-footer fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2018/gin-swagger-build-document.html" /></div><div class="social-wrap"><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2018/gin-swagger-build-document.html&title=gin-swagger 自动化构建 API 文档 - LEEIF.ME&summary=
 前后端的交互一般流程是这样的，后端暴露出 API 后，交给前端，前端根据 API 的响应，编写前端页面，一定程度上 API 是前后端的交互桥梁。 
 
 API 文档主要要包含:
 
 路由：包括路径参数、请求参数、还是请求体参数
-动作：H..."><img src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item email" href="mailto:?subject=gin-swagger 自动化构建 API 文档 - LEEI&amp;body=https://leeif.me/2018/gin-swagger-build-document.html"><img src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></div></section></div>
+动作：H..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=gin-swagger 自动化构建 API 文档 - LEEIF.ME&amp;body=https://leeif.me/2018/gin-swagger-build-document.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg"/></a></div></div></section></div>
 
 </article>
 
-<div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title unread"><a href="/2018/vim-common-hotkey.html">你和大佬之间就差一个 vim</a></div><div class="post-title read"><a href="/2018/gin-go-web-frame.html">更早一篇：高性能的 Go Web 框架 - gin</a></div></section></div>
+<div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title h2"><a href="/2018/vim-common-hotkey.html">你和大佬之间就差一个 vim</a></div><div class="post-title fs14"><a href="/2018/gin-go-web-frame.html">更早一篇：高性能的 Go Web 框架 - gin</a></div></section></div>
 
 <div class='related-wrap' id='related-posts'>
     <div class="related_posts">
@@ -261,7 +250,10 @@ API 文档主要要包含:
       <div class='title cap theme'>您可能感兴趣的文章</div>
     </section>
     <section class='body'>
-    <div class="related-posts"><a class="item" href="\2017\mgo-connection-mongodb-experience.html" title="mgo 连接 MongoDB 数据库的使用实例" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">mgo 连接 MongoDB 数据库的使用实例</span></a><a class="item" href="\2018\gin-go-web-frame.html" title="高性能的 Go Web 框架 - gin" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">高性能的 Go Web 框架 - gin</span></a><a class="item" href="\2018\redis-for-mysql-cache.html" title="初学 Redis 作缓存层" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">初学 Redis 作缓存层</span></a><a class="item" href="\2019\go-channel-select.html" title="Select -- 无阻塞读写 channel" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">Select -- 无阻塞读写 channel</span></a><a class="item" href="\2017\raspberry-pi-getting-started.html" title="Raspberry Pi — 新手入门操作" rel="bookmark "><div class="img"><img src="https://img-blog.csdn.net/20170629170451112" class="lazyload" data-srcset="https://img-blog.csdn.net/20170629170451112" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">Raspberry Pi — 新手入门操作</span></a></div></section></div></div>
+    <div class="related-posts"><a class="item" href="\2017\mgo-connection-mongodb-experience.html" title="mgo 连接 MongoDB 数据库的使用实例"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">mgo 连接 MongoDB 数据库的使用实例</span></a><a class="item" href="\2018\gin-go-web-frame.html" title="高性能的 Go Web 框架 - gin"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">高性能的 Go Web 框架 - gin</span></a><a class="item" href="\2018\redis-for-mysql-cache.html" title="初学 Redis 作缓存层"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">初学 Redis 作缓存层</span></a><a class="item" href="\2019\go-channel-select.html" title="Select -- 无阻塞读写 channel"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">Select -- 无阻塞读写 channel</span></a><a class="item" href="\2017\git-experience-version-control.html" title="Git 实践 - 版本库控制"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">Git 实践 - 版本库控制</span><span class="excerpt">创建版本库把文件添加到版本库：
+
+通过git init命令把这个目录变成Git可以管理的仓库12$ git initInitialized empty Git repository in E:/git/test/.git/
+用命令gi...</span></a></div></section></div></div>
 
 
 
@@ -281,13 +273,11 @@ API 文档主要要包含:
 
 
 
-      <footer class='page-footer'>
-        
-<div><hr><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
-<p>本站由 <a href="https://leeif.me/">@leei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5">Stellar</a> 作为主题。</p>
-</div>
+      
+<footer class="page-footer fs12"><hr><div><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<p>本站由 <a href="https://leeif.me/">@iliei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5">Stellar</a> 作为主题。</p>
+</div></footer>
 
-      </footer>
       <div class='float-panel mobile-only' style='display:none'>
   <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
     <svg class="icon" viewBox="0 0 1228 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2849"><path d="M0 0m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2850"></path><path d="M0 389.560798m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2851"></path><path d="M0 779.121596m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.390199l-973.901995 0q-97.390199 0-97.390199-97.390199l0 0q0-97.390199 97.390199-97.390199Z" p-id="2852"></path></svg>
@@ -299,6 +289,7 @@ API 文档主要要包含:
   <div class='scripts'>
     <script type="text/javascript">
   stellar = {};
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5';
   stellar.config = {
     date_suffix: {
       just: '刚刚',
@@ -312,12 +303,13 @@ API 文档主要要包含:
   // required plugins (only load if needs)
   stellar.plugins = {
     jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
-    issuesjs: '/js/issues.js',
+    sitesjs: '/js/plugins/sites.js',
+    friendsjs: '/js/plugins/friends.js',
   };
 
   // optional plugins
   if ('true' == 'true') {
-    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","onlypost":false,"loadingImg":null,"blurIn":true});
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur","onlypost":false,"loadingImg":null,"blurIn":true});
   }
   if ('true' == 'true') {
     stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper/swiper-bundle.min.css","js":"https://unpkg.com/swiper/swiper-bundle.min.js"});

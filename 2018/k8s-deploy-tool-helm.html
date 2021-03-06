@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang='zh-CN'>
 
-<head hexo-theme='https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5'>
+<head>
   <meta name="generator" content="Hexo 5.4.0">
   <meta charset="utf-8">
   
@@ -17,28 +17,17 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>简化 Kubernetes 应用部署工具 -- Helm - LEEI</title>
+  <title>简化 Kubernetes 应用部署工具 -- Helm - LEEIF.ME</title>
 
   
-    <meta name="description" content="先区分下概念 Docker: 镜像是把一个单纯的 App 和它的安装环境整合在一起。 Kubertnetes: 管理 Docker 容器的生成和毁灭，保证 Docker 容器对应 App 的高可用（监控、自动创建）和易维护（部署和对外暴露、动态扩容、启动停止删除等）。 Helm: 是为了方便配置和部署、升级和回滚应用，尤其是多个 Service 组合创建的一个大型应用，比如网站  为什么要用？ 首">
-<meta property="og:type" content="article">
-<meta property="og:title" content="简化 Kubernetes 应用部署工具 -- Helm">
-<meta property="og:url" content="https://leeif.me/2018/k8s-deploy-tool-helm.html">
-<meta property="og:site_name" content="LEEI">
-<meta property="og:description" content="先区分下概念 Docker: 镜像是把一个单纯的 App 和它的安装环境整合在一起。 Kubertnetes: 管理 Docker 容器的生成和毁灭，保证 Docker 容器对应 App 的高可用（监控、自动创建）和易维护（部署和对外暴露、动态扩容、启动停止删除等）。 Helm: 是为了方便配置和部署、升级和回滚应用，尤其是多个 Service 组合创建的一个大型应用，比如网站  为什么要用？ 首">
-<meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2018-11-10T06:15:15.000Z">
-<meta property="article:modified_time" content="2020-09-26T09:06:22.952Z">
-<meta property="article:author" content="leei">
-<meta property="article:tag" content="容器学习">
-<meta property="article:tag" content="Kubernetes">
-<meta name="twitter:card" content="summary">
-  
-  
+  <meta name="description" content="先区分下概念
+Docker: 镜像是把一个单纯的 App 和它的安装环境整合在一起。
+Kubertnetes: 管理 Docker 容器的生成和毁灭，保证 Docker 容器对应 App 的高可用（监控、自动创建）和易维护（部署和对外暴露、动态扩容、启动停止删除等）。
+Helm: 是为了方便配...">
 
   <!-- feed -->
   
-    <link rel="alternate" href="/atom.xml" title="LEEI" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="LEEIF.ME" type="application/atom+xml">
   
 
   
@@ -48,7 +37,7 @@
   
 
   
-    <link rel="shortcut icon" type='image/x-icon' href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200927222029.ico">
+    <link rel="shortcut icon" type='image/x-icon' href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/favicon.svg">
   
 </head>
 
@@ -59,29 +48,28 @@
   <div class='l_body' id='start'>
     <aside class='l_left'>
     
-<div class='wrap'>
-  
+
 <header class='header'>
   <div class='logo-wrap'>
   
-    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2020/09/26/zSRUylAqpoZ8462.png'/></a>
+    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2021/03/06/MiwVdn4qeRPLp5r.png'/></a>
   
   
-    <a class='title' href='/'>LEEI</a>
+    <a class='title' href='/'>LEEIF.ME</a>
   
 </div>
 
-  <nav class="menu"><a class="nav-item active" href="/">文章</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/more/">更多</a></nav>
+  <nav class="menu dis-select"><a class="nav-item active" href="/">文章</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/about/">更多</a></nav>
 </header>
 
-  <div class='widgets'>
+<div class='widgets'>
+  
     
       
-        
-        
+      
 
   <div class='widget-wrap' id='toc'>
-    <div class='widget-header dis-select'>
+    <div class='widget-header h4 dis-select'>
       <span class='name'>
         
           本文目录
@@ -91,7 +79,7 @@
         <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10505"><path d="M884.526 163.323H208.881c-30.516 0-55.25 24.934-55.25 55.685s24.734 55.685 55.25 55.685h675.645c30.515 0 55.255-24.93 55.255-55.685s-24.74-55.685-55.255-55.685zM568.253 336.87a56.765 56.765 0 0 0-4.06-3.701c-0.63-0.517-1.29-0.968-1.935-1.454-0.799-0.605-1.577-1.224-2.406-1.787-0.779-0.528-1.583-0.978-2.386-1.46-0.748-0.45-1.485-0.926-2.253-1.341-0.81-0.44-1.649-0.814-2.483-1.208-0.8-0.384-1.588-0.784-2.407-1.132-0.814-0.338-1.643-0.61-2.463-0.906-0.875-0.323-1.745-0.66-2.641-0.932-0.825-0.25-1.66-0.435-2.489-0.645-0.916-0.236-1.817-0.492-2.75-0.681-0.962-0.19-1.935-0.307-2.902-0.445-0.814-0.118-1.618-0.272-2.442-0.354a55.163 55.163 0 0 0-5.438-0.276h-0.015c-0.267 0-0.528 0.036-0.794 0.036a54.856 54.856 0 0 0-39.86 16.271l-279.413 281.61c-21.576 21.75-21.576 57.006 0 78.756a54.876 54.876 0 0 0 39.07 16.312 54.835 54.835 0 0 0 39.066-16.312l186.67-188.145V898.09c0 30.75 24.74 55.685 55.256 55.685s55.255-24.934 55.255-55.685v-387.42L769.526 697.22a54.871 54.871 0 0 0 39.065 16.312 54.835 54.835 0 0 0 39.066-16.312c21.576-21.75 21.576-57.006 0-78.756L568.253 336.87z" p-id="10506"></path></svg>
       </a>
     </div>
-    <div class='widget-body post'>
+    <div class='widget-body fs14 post'>
       
         <div class='doc-tree active'>
           <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%88%E5%8C%BA%E5%88%86%E4%B8%8B%E6%A6%82%E5%BF%B5"><span class="toc-text">先区分下概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8%EF%BC%9F"><span class="toc-text">为什么要用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Helm-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">Helm 基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A6%81%E7%82%B9"><span class="toc-text">要点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Chart-%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="toc-text">Chart 的基本结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E9%80%94"><span class="toc-text">用途</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%84%E6%88%90"><span class="toc-text">组成</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Helm%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-text">Helm的安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Helm-Client-%E5%AE%89%E8%A3%85"><span class="toc-text">Helm Client 安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Helm-Tiller-%E5%AE%89%E8%A3%85"><span class="toc-text">Helm Tiller  安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%AE%E5%8A%A9%E6%96%87%E6%A1%A3"><span class="toc-text">帮助文档</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Helm%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">Helm的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Chart"><span class="toc-text">使用 Chart</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%A1%E7%90%86-Release"><span class="toc-text">管理 Release</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%A1%E7%90%86-Chart-Repository"><span class="toc-text">管理 Chart Repository</span></a></li></ol></li></ol>
@@ -101,12 +89,12 @@
   </div>
 
 
-      
+    
+  
     
       
-        
-        <div class='widget-wrap' id='recent'>
-  <div class='widget-header dis-select'>
+      <div class='widget-wrap' id='recent'>
+  <div class='widget-header h4 dis-select'>
     <span class='name'>最近更新</span>
     
       <a class='cap-action' id='rss' title='Subscribe' href='/atom.xml'>
@@ -114,16 +102,8 @@
       </a>
     
   </div>
-  <div class='widget-body'>
+  <div class='widget-body fs14'>
     
-    
-      <div class='post-title'>
-        <a href="/2020/kubernetes-operator.html">
-          
-            「转」 Kubernetes 控制器的进化之旅
-          
-        </a>
-      </div>
     
       <div class='post-title'>
         <a href="/2020/openldap-install-config.html">
@@ -150,9 +130,17 @@
       </div>
     
       <div class='post-title'>
-        <a href="/2019/deploy-airflow.html">
+        <a href="/2020/kubernetes-operator.html">
           
-            搭建 Airflow 任务调度环境
+            「转」 Kubernetes 控制器的进化之旅
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2019/operator-sdk-use.html">
+          
+            Opeartor-SDK 简单上手
           
         </a>
       </div>
@@ -160,11 +148,10 @@
   </div>
 </div>
 
-      
     
-  </div>
-  <footer class="footer"><div class="social-wrap"><a class="social" href="/atom.xml" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/25678f144c438.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/25678f144c438.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/08a41b181ce68.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/cf1ae151f9e83.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social" href="/" rel="noopener noreferrer"><img src="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/14/942ebbf1a4b91.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></footer>
+  
 </div>
+<footer class="footer"><div class="social-wrap dis-select"><a class="social" href="/atom.xml" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/14/25678f144c438.svg"/></a><a class="social" href="https://github.com/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/github.svg"/></a><a class="social" href="https://twitter.com/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/twitter.svg"/></a><a class="social" href="https://t.me/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/telegram.svg"/></a><a class="social" href="/about/#comments" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/comments.svg"/></a></div></footer>
 
     </aside>
     <div class='l_main'>
@@ -173,13 +160,16 @@
       
 
 
-  <div class='breadcrumb-navigation'>
+  <div class='bread-nav fs12'>
   
     
-    <div id='breadcrumb'>
+    <div id='breadcrumb' style="color:#3fbac2">
       <a class='cap breadcrumb' href='/'>主页</a>
       <span class="sep"></span>
       <a class='cap breadcrumb' href='/'>文章</a>
+      
+        <span class="sep"></span>
+        <a class="cap breadcrumb-link" href="/categories/%E6%8A%80%E6%9C%AF%E5%8A%A0%E6%B2%B9%E7%AB%99/">技术加油站</a>
       
     </div>
     <div id='post-meta'>
@@ -279,14 +269,14 @@
 </ul>
 
 
-<div class="article-footer"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
-</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2018/k8s-deploy-tool-helm.html" /></div><div class="social-wrap"><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2018/k8s-deploy-tool-helm.html&title=简化 Kubernetes 应用部署工具 -- Helm - LEEI&summary=先区分下概念
+<div class="article-footer fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2018/k8s-deploy-tool-helm.html" /></div><div class="social-wrap"><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2018/k8s-deploy-tool-helm.html&title=简化 Kubernetes 应用部署工具 -- Helm - LEEIF.ME&summary=先区分下概念
 Docker: 镜像是把一个单纯的 App 和它的安装环境整合在一起。
-Kubertnetes: 管理 Docker 容器的生成和毁灭，保证 Docker 容器对应 App 的高可用（监控、自动创建）和易维护（部署和对外..."><img src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item email" href="mailto:?subject=简化 Kubernetes 应用部署工具 -- Helm - LEEI&amp;body=https://leeif.me/2018/k8s-deploy-tool-helm.html"><img src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/24/8411ed322ced6.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII="/></a></div></div></section></div>
+Kubertnetes: 管理 Docker 容器的生成和毁灭，保证 Docker 容器对应 App 的高可用（监控、自动创建）和易维护（部署和对外..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=简化 Kubernetes 应用部署工具 -- Helm - LEEIF.ME&amp;body=https://leeif.me/2018/k8s-deploy-tool-helm.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg"/></a></div></div></section></div>
 
 </article>
 
-<div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title unread"><a href="/2018/gitlab-github-submit.html">Gitlab or Github 提交规范和建议</a></div><div class="post-title read"><a href="/2018/sftp-sync-project.html">更早一篇：vscode + sftp 开发环境同步差异文件</a></div></section></div>
+<div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title h2"><a href="/2018/gitlab-github-submit.html">Gitlab or Github 提交规范和建议</a></div><div class="post-title fs14"><a href="/2018/sftp-sync-project.html">更早一篇：vscode + sftp 开发环境同步差异文件</a></div></section></div>
 
 <div class='related-wrap' id='related-posts'>
     <div class="related_posts">
@@ -294,13 +284,12 @@ Kubertnetes: 管理 Docker 容器的生成和毁灭，保证 Docker 容器对应
       <div class='title cap theme'>您可能感兴趣的文章</div>
     </section>
     <section class='body'>
-    <div class="related-posts"><a class="item" href="\2018\open-cloud-native-study.html" title="开启云原生之门" rel="bookmark "><div class="img"><img src="https://leeifme-1252179361.cos.ap-shanghai.myqcloud.com/blog/CNCF.png" class="lazyload" data-srcset="https://leeifme-1252179361.cos.ap-shanghai.myqcloud.com/blog/CNCF.png" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">开启云原生之门</span></a><a class="item" href="\2019\k8s-deploy-metallb-LoadBalancer.html" title="Kuberntes 创建 LoadBalancer 类型服务" rel="bookmark "><div class="img"><img src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/metallb.jpg" class="lazyload" data-srcset="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/metallb.jpg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">Kuberntes 创建 LoadBalancer 类型服务</span></a><a class="item" href="\2019\operator-sdk-use.html" title="Opeartor-SDK 简单上手" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">Opeartor-SDK 简单上手</span></a><a class="item" href="\2018\k8s-cluster-deploy.html" title="暴力学习 k8s - 集群搭建" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">暴力学习 k8s - 集群搭建</span></a><a class="item" href="\2017\common-sorting-algorithm.html" title="常见排序算法" rel="bookmark "><div class="img"><img src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" class="lazyload" data-srcset="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" srcset="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" /></div><span class="title">常见排序算法</span><span class="excerpt">时间复杂度为O(n2)  空间复杂度O(1)
+    <div class="related-posts"><a class="item" href="\2018\open-cloud-native-study.html" title="开启云原生之门"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme-1252179361.cos.ap-shanghai.myqcloud.com/blog/CNCF.png" /></div><span class="title">开启云原生之门</span></a><a class="item" href="\2019\k8s-deploy-metallb-LoadBalancer.html" title="Kuberntes 创建 LoadBalancer 类型服务"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/metallb.jpg" /></div><span class="title">Kuberntes 创建 LoadBalancer 类型服务</span></a><a class="item" href="\2019\operator-sdk-use.html" title="Opeartor-SDK 简单上手"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">Opeartor-SDK 简单上手</span></a><a class="item" href="\2020\kubernetes-operator.html" title="「转」 Kubernetes 控制器的进化之旅"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://i.loli.net/2021/03/06/wkZFMbjoS9Aem3Q.jpg" /></div><span class="title">「转」 Kubernetes 控制器的进化之旅</span><span class="excerpt">
+我是一堆 Kubernetes 控制器。
+你可能会疑惑为什么是一堆，因为我不是一个人，我只是众多控制器中的一员，你也可以把我看成是众多控制器的集合。我的职责就是监控集群内资源的实际状态，一旦发现其与期望的状态不相符，就采取行动使其符...</span></a><a class="item" href="\2017\git-experience-version-control.html" title="Git 实践 - 版本库控制"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/20/76b86c0226ffd.svg" /></div><span class="title">Git 实践 - 版本库控制</span><span class="excerpt">创建版本库把文件添加到版本库：
 
-冒泡排序
-（在0N-1的序列上相邻两个元素比较大小，大的在后，小的在前，一趟下来，最大值放在位置N-1上，在0N-2的序列上….）
-
-选择排序
-（在0N-1的序列中选择最小值放在位置0上...</span></a></div></section></div></div>
+通过git init命令把这个目录变成Git可以管理的仓库12$ git initInitialized empty Git repository in E:/git/test/.git/
+用命令gi...</span></a></div></section></div></div>
 
 
 
@@ -320,13 +309,11 @@ Kubertnetes: 管理 Docker 容器的生成和毁灭，保证 Docker 容器对应
 
 
 
-      <footer class='page-footer'>
-        
-<div><hr><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
-<p>本站由 <a href="https://leeif.me/">@leei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5">Stellar</a> 作为主题。</p>
-</div>
+      
+<footer class="page-footer fs12"><hr><div><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<p>本站由 <a href="https://leeif.me/">@iliei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5">Stellar</a> 作为主题。</p>
+</div></footer>
 
-      </footer>
       <div class='float-panel mobile-only' style='display:none'>
   <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
     <svg class="icon" viewBox="0 0 1228 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2849"><path d="M0 0m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2850"></path><path d="M0 389.560798m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2851"></path><path d="M0 779.121596m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.390199l-973.901995 0q-97.390199 0-97.390199-97.390199l0 0q0-97.390199 97.390199-97.390199Z" p-id="2852"></path></svg>
@@ -338,6 +325,7 @@ Kubertnetes: 管理 Docker 容器的生成和毁灭，保证 Docker 容器对应
   <div class='scripts'>
     <script type="text/javascript">
   stellar = {};
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5';
   stellar.config = {
     date_suffix: {
       just: '刚刚',
@@ -351,12 +339,13 @@ Kubertnetes: 管理 Docker 容器的生成和毁灭，保证 Docker 容器对应
   // required plugins (only load if needs)
   stellar.plugins = {
     jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
-    issuesjs: '/js/issues.js',
+    sitesjs: '/js/plugins/sites.js',
+    friendsjs: '/js/plugins/friends.js',
   };
 
   // optional plugins
   if ('true' == 'true') {
-    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","onlypost":false,"loadingImg":null,"blurIn":true});
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur","onlypost":false,"loadingImg":null,"blurIn":true});
   }
   if ('true' == 'true') {
     stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper/swiper-bundle.min.css","js":"https://unpkg.com/swiper/swiper-bundle.min.js"});
