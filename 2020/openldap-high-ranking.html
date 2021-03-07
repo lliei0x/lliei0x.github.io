@@ -28,7 +28,7 @@
 <meta property="og:description" content="备份与恢复 主要介绍如何备份 OpenLDAP 的配置目录和数据目录，并将其恢复到另一个 OpenLDAP 服务中  OpenLDAP 的备份OpenLDAP 的备份可以通过服务端的 slapcat 命令或客户端的 ldapsearch 命令两种方式进行。下面展示了如何在 OpenLDAP 服务端使用 slapcat 对配置目录和数据目录进行导出。 12$ slapcat -n 0 -l .&amp;#x">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-08-01T07:15:15.000Z">
-<meta property="article:modified_time" content="2021-03-07T07:47:15.469Z">
+<meta property="article:modified_time" content="2021-03-07T11:33:00.497Z">
 <meta property="article:author" content="iliei">
 <meta property="article:tag" content="OpenLDAP">
 <meta name="twitter:card" content="summary_large_image">
@@ -116,17 +116,9 @@
     
     
       <div class='post-title'>
-        <a href="/2020/openldap-high-ranking.html">
+        <a href="/2020/openldap-getting-started.html">
           
-            OpenLDAP 快速落地实践-进阶
-          
-        </a>
-      </div>
-    
-      <div class='post-title'>
-        <a href="/2020/kubernetes-operator.html">
-          
-            「转」 Kubernetes 控制器的进化之旅
+            OpenLDAP 快速落地实践-基本介绍
           
         </a>
       </div>
@@ -140,9 +132,17 @@
       </div>
     
       <div class='post-title'>
-        <a href="/2020/openldap-getting-started.html">
+        <a href="/2020/kubernetes-operator.html">
           
-            OpenLDAP 快速落地实践-基本介绍
+            「转」 Kubernetes 控制器的进化之旅
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-high-ranking.html">
+          
+            OpenLDAP 快速落地实践-进阶
           
         </a>
       </div>
@@ -234,12 +234,12 @@
 <ol>
 <li>开启 memberof 支持。</li>
 </ol>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vim 1-load-memberof.ldif</span><br><span class="line"></span><br><span class="line">内容如下：</span><br><span class="line">dn: cn=module,cn=config</span><br><span class="line">objectClass: olcModuleList</span><br><span class="line">cn: module </span><br><span class="line">olcModuleLoad: memberof.la</span><br><span class="line">olcModulepath: /usr/lib64/openldap</span><br><span class="line"></span><br><span class="line"><span class="comment">#ldap库路径与操作系统版本是相关的，此处是64位操作系统。</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="number">1</span><span class="string">-load-memberof.ldif</span></span><br><span class="line"></span><br><span class="line"><span class="string">内容如下：</span></span><br><span class="line"><span class="attr">dn:</span> <span class="string">cn=module,cn=config</span></span><br><span class="line"><span class="attr">objectClass:</span> <span class="string">olcModuleList</span></span><br><span class="line"><span class="attr">cn:</span> <span class="string">module</span> </span><br><span class="line"><span class="attr">olcModuleLoad:</span> <span class="string">memberof.la</span></span><br><span class="line"><span class="attr">olcModulepath:</span> <span class="string">/usr/lib64/openldap</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#ldap库路径与操作系统版本是相关的，此处是64位操作系统。</span></span><br></pre></td></tr></table></figure>
 
 <ol start="2">
 <li>新增用户支持 memberof 配置。</li>
 </ol>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vim 2-use-memberof.ldif</span><br><span class="line"></span><br><span class="line">dn: olcOverlay=memberof,olcDatabase=&#123;2&#125;hdb,cn=config</span><br><span class="line">objectClass: olcConfig</span><br><span class="line">objectClass: olcMemberOf</span><br><span class="line">objectClass: olcOverlayConfig</span><br><span class="line">objectClass: top</span><br><span class="line">olcOverlay: memberof</span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">vim</span> <span class="number">2</span><span class="string">-use-memberof.ldif</span></span><br><span class="line"></span><br><span class="line"><span class="attr">dn:</span> <span class="string">olcOverlay=memberof,olcDatabase=&#123;2&#125;hdb,cn=config</span></span><br><span class="line"><span class="attr">objectClass:</span> <span class="string">olcConfig</span></span><br><span class="line"><span class="attr">objectClass:</span> <span class="string">olcMemberOf</span></span><br><span class="line"><span class="attr">objectClass:</span> <span class="string">olcOverlayConfig</span></span><br><span class="line"><span class="attr">objectClass:</span> <span class="string">top</span></span><br><span class="line"><span class="attr">olcOverlay:</span> <span class="string">memberof</span></span><br></pre></td></tr></table></figure>
 
 <ol start="3">
 <li>导入相关配置。</li>
@@ -295,7 +295,7 @@
 
 
 
-<div class="tag-plugin note"><div class="title"><strong>warning,</strong></div><div class="body"><p>如果你是使用旧版修改配置文件的方式，如下启用日志功能</p></div></div>
+<div class="tag-plugin note" color="orange"><div class="body"><p>如果你是使用旧版修改配置文件的方式，如下启用日志功能</p></div></div>
 
 
 <div class="tag-plugin timeline" order="-date"><svg class="icon top" width="1em" height="1em" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M7,0 C3.13425,0 0,3.13425 0,7 C0,10.86575 3.13425,14 7,14 C10.86575,14 14,10.86575 14,7 C14,3.13425 10.86575,0 7,0 Z M7,12.25 C4.104625,12.25 1.75,9.89449999 1.75,7 C1.75,4.10550001 4.104625,1.75 7,1.75 C9.895375,1.75 12.25,4.10550001 12.25,7 C12.25,9.89449999 9.895375,12.25 7,12.25 Z M8.75875001,7 L7.43750001,7 C7.19600001,7 7.00000002,6.804 7.00000002,6.56250001 L7.00000002,5.24125001 C7.00000002,4.76262501 6.61237501,4.37500001 6.13375002,4.37500001 L6.11625001,4.37500001 C5.63762502,4.37500001 5.25000001,4.76262501 5.25000001,5.24125001 L5.25000001,7.88375 C5.25000001,8.362375 5.63762502,8.75 6.11625001,8.75 L8.75875001,8.75 C9.237375,8.75 9.62500001,8.362375 9.62500001,7.88375 L9.62500001,7.86625 C9.62500001,7.387625 9.237375,7 8.75875001,7 L8.75875001,7 Z" id="top"></path></svg><div class="timenodes">
@@ -321,7 +321,7 @@
 </svg></a></div><div class="body"><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@backup2] /etc/openldap$ rm -rf /etc/openldap/slapd.d/*</span><br><span class="line">[root@backup2] /etc/openldap$ slaptest -f /etc/openldap/slapd.conf -F /etc/openldap/slapd.d/</span><br><span class="line">[root@backup2] /etc/openldap$ systemctl start slapd.service</span><br><span class="line">123</span><br></pre></td></tr></table></figure></div></div>
 </div><svg class="icon bottom" width="1em" height="1em" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M7,0 C10.8558804,0.0243061403 13.9756939,3.14411956 14,7 C14,10.8659932 10.8659932,14 7,14 C3.13400675,14 0,10.8659932 0,7 C0,3.13400675 3.13400675,0 7,0 Z M7,1.27272727 C4.67984382,1.25597015 2.57881097,2.64070073 1.67929035,4.77945461 C0.779769726,6.91820849 1.25950821,9.38836411 2.89419242,11.0349403 C4.52887664,12.6815164 6.99549008,13.1791467 9.14070778,12.2951521 C11.2859255,11.4111574 12.6859091,9.32021669 12.6859091,7 C12.6739296,3.85798179 10.1418488,1.30748075 7,1.27272727 Z M2.70454544,7 C2.7044994,7.39789465 2.91674722,7.76558417 3.26132643,7.96454478 C3.60590563,8.1635054 4.030458,8.1635054 4.3750372,7.96454478 C4.7196164,7.76558417 4.93186422,7.39789465 4.93181818,7 C4.93186422,6.60210535 4.7196164,6.23441583 4.3750372,6.03545522 C4.030458,5.8364946 3.60590563,5.8364946 3.26132643,6.03545522 C2.91674722,6.23441583 2.7044994,6.60210535 2.70454544,7 L2.70454544,7 Z M5.88636363,7 C5.88636363,7.39786396 6.09862151,7.76550543 6.44318181,7.96443741 C6.7877421,8.1633694 7.2122579,8.1633694 7.55681819,7.96443741 C7.90137849,7.76550543 8.11363637,7.39786396 8.11363637,7 C8.11363637,6.38495562 7.61504438,5.88636363 7,5.88636363 C6.38495562,5.88636363 5.88636363,6.38495562 5.88636363,7 L5.88636363,7 Z M9.06818182,7 C9.06813578,7.39789465 9.2803836,7.76558417 9.6249628,7.96454478 C9.969542,8.1635054 10.3940944,8.1635054 10.7386736,7.96454478 C11.0832528,7.76558417 11.2955006,7.39789465 11.2954546,7 C11.2955006,6.60210535 11.0832528,6.23441583 10.7386736,6.03545522 C10.3940944,5.8364946 9.969542,5.8364946 9.6249628,6.03545522 C9.2803836,6.23441583 9.06813578,6.60210535 9.06818182,7 Z" id="bottom"></path></svg></div>
 
-<div class="tag-plugin note"><div class="title"><strong>success,</strong></div><div class="body"><p>通过 <code>tailf /var/log/slapd.log</code> 来查看日志</p></div></div>
+<div class="tag-plugin note" color="green"><div class="title"><strong>来查看日志</strong></div><div class="body"><p>通过 <code>tailf /var/log/slapd.log</code> 来查看日志</p></div></div>
 
 <div class="article-footer fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
 </div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2020/openldap-high-ranking.html" /></div><div class="social-wrap"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/b32ef3da1162a.svg"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2020/openldap-high-ranking.html&title=OpenLDAP 快速落地实践-进阶 - LEEIF.ME&summary=备份与恢复
@@ -338,8 +338,8 @@ OpenLDAP 的备份OpenLDAP 的备份可以通过服务端的 slapcat 命令或�
       <div class='title cap theme'>您可能感兴趣的文章</div>
     </section>
     <section class='body'>
-    <div class="related-posts"><a class="item" href="\2020\openldap-getting-started.html" title="OpenLDAP 快速落地实践-基本介绍"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200809201834.png" /></div><span class="title">OpenLDAP 快速落地实践-基本介绍</span><span class="excerpt">场景需求
-warning,当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事...</span></a><a class="item" href="\2020\openldap-install-config.html" title="OpenLDAP 快速落地实践-部署配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20210307154427.jpg" /></div><span class="title">OpenLDAP 快速落地实践-部署配置</span></a><a class="item" href="\2017\python-virtual-environment-build.html" title="Python 虚拟坏境的搭建和配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20210307154428.jpg" /></div><span class="title">Python 虚拟坏境的搭建和配置</span></a></div></section></div>
+    <div class="related-posts"><a class="item" href="\2020\openldap-getting-started.html" title="OpenLDAP 快速落地实践-基本介绍"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210307192829.png" /></div><span class="title">OpenLDAP 快速落地实践-基本介绍</span><span class="excerpt">场景需求
+需求当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 ...</span></a><a class="item" href="\2020\openldap-install-config.html" title="OpenLDAP 快速落地实践-部署配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210307192830.png" /></div><span class="title">OpenLDAP 快速落地实践-部署配置</span></a><a class="item" href="\2017\python-virtual-environment-build.html" title="Python 虚拟坏境的搭建和配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210307212003.png" /></div><span class="title">Python 虚拟坏境的搭建和配置</span></a></div></section></div>
 
 
 

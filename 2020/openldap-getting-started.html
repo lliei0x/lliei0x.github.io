@@ -20,19 +20,19 @@
   <title>OpenLDAP 快速落地实践-基本介绍 - LEEIF.ME</title>
 
   
-    <meta name="description" content="场景需求 warning,当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 OPS 运维组的小伙伴们，都要在每个系统上去添加用户，搞得小伙伴们很不爽。  简单说一下 OPENLDAP 对运维管理的价值，支撑企业技术发展比如 GIT">
+    <meta name="description" content="场景需求 需求当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 OPS 运维组的小伙伴们，都要在每个系统上去添加用户，搞得小伙伴们很不爽。  简单说一下 OPENLDAP 对运维管理的价值，支撑企业技术发展比如 GIT、 ZABB">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OpenLDAP 快速落地实践-基本介绍">
 <meta property="og:url" content="https://leeif.me/2020/openldap-getting-started.html">
 <meta property="og:site_name" content="LEEIF.ME">
-<meta property="og:description" content="场景需求 warning,当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 OPS 运维组的小伙伴们，都要在每个系统上去添加用户，搞得小伙伴们很不爽。  简单说一下 OPENLDAP 对运维管理的价值，支撑企业技术发展比如 GIT">
+<meta property="og:description" content="场景需求 需求当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 OPS 运维组的小伙伴们，都要在每个系统上去添加用户，搞得小伙伴们很不爽。  简单说一下 OPENLDAP 对运维管理的价值，支撑企业技术发展比如 GIT、 ZABB">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200809201834.png">
 <meta property="article:published_time" content="2020-07-15T07:15:15.000Z">
-<meta property="article:modified_time" content="2021-03-06T13:59:00.110Z">
+<meta property="article:modified_time" content="2021-03-07T13:19:38.118Z">
 <meta property="article:author" content="iliei">
 <meta property="article:tag" content="OpenLDAP">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200809201834.png">
   
   
@@ -118,17 +118,9 @@
     
     
       <div class='post-title'>
-        <a href="/2020/openldap-high-ranking.html">
+        <a href="/2020/openldap-getting-started.html">
           
-            OpenLDAP 快速落地实践-进阶
-          
-        </a>
-      </div>
-    
-      <div class='post-title'>
-        <a href="/2020/kubernetes-operator.html">
-          
-            「转」 Kubernetes 控制器的进化之旅
+            OpenLDAP 快速落地实践-基本介绍
           
         </a>
       </div>
@@ -142,9 +134,17 @@
       </div>
     
       <div class='post-title'>
-        <a href="/2020/openldap-getting-started.html">
+        <a href="/2020/kubernetes-operator.html">
           
-            OpenLDAP 快速落地实践-基本介绍
+            「转」 Kubernetes 控制器的进化之旅
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-high-ranking.html">
+          
+            OpenLDAP 快速落地实践-进阶
           
         </a>
       </div>
@@ -194,7 +194,7 @@
 <article class='content md post reveal'>
 <h1 class="article-title"><span>OpenLDAP 快速落地实践-基本介绍</span></h1>
 <h2 id="场景需求"><a href="#场景需求" class="headerlink" title="场景需求"></a>场景需求</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200809201834.png" alt="openldap-architecture"></p>
-<div class="tag-plugin note"><div class="title"><strong>warning,</strong></div><div class="body"><p>当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 OPS 运维组的小伙伴们，都要在每个系统上去添加用户，搞得小伙伴们很不爽。</p></div></div>
+<div class="tag-plugin note" color="orange"><div class="title"><strong>需求</strong></div><div class="body"><p>当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 OPS 运维组的小伙伴们，都要在每个系统上去添加用户，搞得小伙伴们很不爽。</p></div></div>
 
 <p>简单说一下 OPENLDAP 对运维管理的价值，支撑企业技术发展比如 <code>GIT、 ZABBIX、 YAPI、 JUMPSERVER、 OA</code> 等大大小小系统，乃至 Windows，Linux 系统的认证登录。</p>
 <span id="more"></span>
@@ -244,7 +244,7 @@
 
 <div class="article-footer fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
 </div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2020/openldap-getting-started.html" /></div><div class="social-wrap"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/b32ef3da1162a.svg"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2020/openldap-getting-started.html&title=OpenLDAP 快速落地实践-基本介绍 - LEEIF.ME&summary=场景需求
-warning,当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=OpenLDAP 快速落地实践-基本介绍 - LEEIF.ME&amp;body=https://leeif.me/2020/openldap-getting-started.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg"/></a></div><div class="qrcode" id="qrcode-wechat" style="display:none"><img no-lazy src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://leeif.me/2020/openldap-getting-started.html"/ onerror="javascript:this.classList.add('error');this.src='https://7.dusays.com/2021/03/03/87519671e4837.svg';"></div></div></section></div>
+需求当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 ..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=OpenLDAP 快速落地实践-基本介绍 - LEEIF.ME&amp;body=https://leeif.me/2020/openldap-getting-started.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/24/8411ed322ced6.svg"/></a></div><div class="qrcode" id="qrcode-wechat" style="display:none"><img no-lazy src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://leeif.me/2020/openldap-getting-started.html"/ onerror="javascript:this.classList.add('error');this.src='https://7.dusays.com/2021/03/03/87519671e4837.svg';"></div></div></section></div>
 
 </article>
 
@@ -255,7 +255,7 @@ warning,当公司体量较大，内部有多个系统，如果每个平台都需
       <div class='title cap theme'>您可能感兴趣的文章</div>
     </section>
     <section class='body'>
-    <div class="related-posts"><a class="item" href="\2020\openldap-high-ranking.html" title="OpenLDAP 快速落地实践-进阶"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20210307154428.jpg" /></div><span class="title">OpenLDAP 快速落地实践-进阶</span></a><a class="item" href="\2020\openldap-install-config.html" title="OpenLDAP 快速落地实践-部署配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20210307154427.jpg" /></div><span class="title">OpenLDAP 快速落地实践-部署配置</span></a><a class="item" href="\2017\python-virtual-environment-build.html" title="Python 虚拟坏境的搭建和配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20210307154428.jpg" /></div><span class="title">Python 虚拟坏境的搭建和配置</span></a></div></section></div>
+    <div class="related-posts"><a class="item" href="\2020\openldap-high-ranking.html" title="OpenLDAP 快速落地实践-进阶"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210307192657.png" /></div><span class="title">OpenLDAP 快速落地实践-进阶</span></a><a class="item" href="\2020\openldap-install-config.html" title="OpenLDAP 快速落地实践-部署配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210307192830.png" /></div><span class="title">OpenLDAP 快速落地实践-部署配置</span></a><a class="item" href="\2017\python-virtual-environment-build.html" title="Python 虚拟坏境的搭建和配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210307212003.png" /></div><span class="title">Python 虚拟坏境的搭建和配置</span></a></div></section></div>
 
 
 

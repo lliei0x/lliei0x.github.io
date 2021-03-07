@@ -28,7 +28,7 @@
 <meta property="og:description" content="下载依赖本文中相关操作系统及依赖包的版本如下：  centos-release-7-4.1708.el7.centos.x86_64 openldap-clients-2.4.44-5.el7.x86_64：包含客户端程序，用来访问和修改 OpenLDAP 目录 openldap-servers-2.4.44-5.el7.x86_64：包含主 LDAP 服务器 slapd 和同步服务器 slurp">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-07-20T07:15:15.000Z">
-<meta property="article:modified_time" content="2021-03-07T07:46:47.948Z">
+<meta property="article:modified_time" content="2021-03-07T13:19:28.825Z">
 <meta property="article:author" content="iliei">
 <meta property="article:tag" content="OpenLDAP">
 <meta name="twitter:card" content="summary_large_image">
@@ -116,17 +116,9 @@
     
     
       <div class='post-title'>
-        <a href="/2020/openldap-high-ranking.html">
+        <a href="/2020/openldap-getting-started.html">
           
-            OpenLDAP 快速落地实践-进阶
-          
-        </a>
-      </div>
-    
-      <div class='post-title'>
-        <a href="/2020/kubernetes-operator.html">
-          
-            「转」 Kubernetes 控制器的进化之旅
+            OpenLDAP 快速落地实践-基本介绍
           
         </a>
       </div>
@@ -140,9 +132,17 @@
       </div>
     
       <div class='post-title'>
-        <a href="/2020/openldap-getting-started.html">
+        <a href="/2020/kubernetes-operator.html">
           
-            OpenLDAP 快速落地实践-基本介绍
+            「转」 Kubernetes 控制器的进化之旅
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-high-ranking.html">
+          
+            OpenLDAP 快速落地实践-进阶
           
         </a>
       </div>
@@ -243,8 +243,8 @@ openldap-clients-2.4.44-5.el7.x86_64：包含客户端程序，用来访问和..
       <div class='title cap theme'>您可能感兴趣的文章</div>
     </section>
     <section class='body'>
-    <div class="related-posts"><a class="item" href="\2020\openldap-getting-started.html" title="OpenLDAP 快速落地实践-基本介绍"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200809201834.png" /></div><span class="title">OpenLDAP 快速落地实践-基本介绍</span><span class="excerpt">场景需求
-warning,当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事...</span></a><a class="item" href="\2020\openldap-high-ranking.html" title="OpenLDAP 快速落地实践-进阶"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20210307154428.jpg" /></div><span class="title">OpenLDAP 快速落地实践-进阶</span></a><a class="item" href="\2017\python-virtual-environment-build.html" title="Python 虚拟坏境的搭建和配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20210307154428.jpg" /></div><span class="title">Python 虚拟坏境的搭建和配置</span></a></div></section></div>
+    <div class="related-posts"><a class="item" href="\2020\openldap-getting-started.html" title="OpenLDAP 快速落地实践-基本介绍"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210307192829.png" /></div><span class="title">OpenLDAP 快速落地实践-基本介绍</span><span class="excerpt">场景需求
+需求当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 ...</span></a><a class="item" href="\2020\openldap-high-ranking.html" title="OpenLDAP 快速落地实践-进阶"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210307192657.png" /></div><span class="title">OpenLDAP 快速落地实践-进阶</span></a><a class="item" href="\2017\python-virtual-environment-build.html" title="Python 虚拟坏境的搭建和配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210307212003.png" /></div><span class="title">Python 虚拟坏境的搭建和配置</span></a></div></section></div>
 
 
 
