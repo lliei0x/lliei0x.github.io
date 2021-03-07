@@ -28,7 +28,7 @@
 <meta property="og:description" content="备份与恢复 主要介绍如何备份 OpenLDAP 的配置目录和数据目录，并将其恢复到另一个 OpenLDAP 服务中  OpenLDAP 的备份OpenLDAP 的备份可以通过服务端的 slapcat 命令或客户端的 ldapsearch 命令两种方式进行。下面展示了如何在 OpenLDAP 服务端使用 slapcat 对配置目录和数据目录进行导出。 12$ slapcat -n 0 -l .&amp;#x">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-08-01T07:15:15.000Z">
-<meta property="article:modified_time" content="2021-03-06T13:59:18.043Z">
+<meta property="article:modified_time" content="2021-03-07T07:47:15.469Z">
 <meta property="article:author" content="iliei">
 <meta property="article:tag" content="OpenLDAP">
 <meta name="twitter:card" content="summary_large_image">
@@ -62,7 +62,7 @@
 <header class='header'>
   <div class='logo-wrap'>
   
-    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2021/03/06/5pKaHXUrhF7s89y.png'/></a>
+    <a class='avatar' href='/about/'><img no-lazy src='https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/avatar.png'/></a>
   
   
     <a class='title' href='/'>LEEIF.ME</a>
@@ -116,14 +116,6 @@
     
     
       <div class='post-title'>
-        <a href="/2020/openldap-install-config.html">
-          
-            OpenLDAP 快速落地实践-部署配置
-          
-        </a>
-      </div>
-    
-      <div class='post-title'>
         <a href="/2020/openldap-high-ranking.html">
           
             OpenLDAP 快速落地实践-进阶
@@ -132,17 +124,25 @@
       </div>
     
       <div class='post-title'>
-        <a href="/2020/openldap-getting-started.html">
+        <a href="/2020/kubernetes-operator.html">
           
-            OpenLDAP 快速落地实践-基本介绍
+            「转」 Kubernetes 控制器的进化之旅
           
         </a>
       </div>
     
       <div class='post-title'>
-        <a href="/2020/kubernetes-operator.html">
+        <a href="/2020/openldap-install-config.html">
           
-            「转」 Kubernetes 控制器的进化之旅
+            OpenLDAP 快速落地实践-部署配置
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2020/openldap-getting-started.html">
+          
+            OpenLDAP 快速落地实践-基本介绍
           
         </a>
       </div>
@@ -338,8 +338,8 @@ OpenLDAP 的备份OpenLDAP 的备份可以通过服务端的 slapcat 命令或�
       <div class='title cap theme'>您可能感兴趣的文章</div>
     </section>
     <section class='body'>
-    <div class="related-posts"><a class="item" href="\2020\openldap-install-config.html" title="OpenLDAP 快速落地实践-部署配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://i.loli.net/2021/03/06/NyzD9YMWnwSZmV1.jpg" /></div><span class="title">OpenLDAP 快速落地实践-部署配置</span></a><a class="item" href="\2020\openldap-getting-started.html" title="OpenLDAP 快速落地实践-基本介绍"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200809201834.png" /></div><span class="title">OpenLDAP 快速落地实践-基本介绍</span><span class="excerpt">场景需求
-warning,当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事...</span></a><a class="item" href="\2017\python-virtual-environment-build.html" title="Python 虚拟坏境的搭建和配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://i.loli.net/2021/03/06/wkZFMbjoS9Aem3Q.jpg" /></div><span class="title">Python 虚拟坏境的搭建和配置</span></a></div></section></div>
+    <div class="related-posts"><a class="item" href="\2020\openldap-getting-started.html" title="OpenLDAP 快速落地实践-基本介绍"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200809201834.png" /></div><span class="title">OpenLDAP 快速落地实践-基本介绍</span><span class="excerpt">场景需求
+warning,当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事...</span></a><a class="item" href="\2020\openldap-install-config.html" title="OpenLDAP 快速落地实践-部署配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20210307154427.jpg" /></div><span class="title">OpenLDAP 快速落地实践-部署配置</span></a><a class="item" href="\2017\python-virtual-environment-build.html" title="Python 虚拟坏境的搭建和配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20210307154428.jpg" /></div><span class="title">Python 虚拟坏境的搭建和配置</span></a></div></section></div>
 
 
 
