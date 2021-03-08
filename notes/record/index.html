@@ -20,15 +20,15 @@
   <title>notes：临时记录 - LEEIF.ME</title>
 
   
-    <meta name="description" content="leeifme,blog,睡沙发の沙皮狗,leeif.me,golang,kubernetes,k8s,docker,Backend Developer,研发">
+    <meta name="description" content="每日接触到的知识点，不系统，比较凌乱，只是记录   2020-08-13             Uber 的分布式追踪系统 Jaeger  2019-09-19             nohup。使用 nohup 命令让程序在关闭窗口（切换 SSH 连接）的时候程序还能继续在后台运行。如：nohup .&#x2F;caster &amp; or nohup .&#x2F;caster &gt;&#x2F;dev&#x2F;null">
 <meta property="og:type" content="website">
 <meta property="og:title" content="LEEIF.ME">
 <meta property="og:url" content="https://leeif.me/notes/record/">
 <meta property="og:site_name" content="LEEIF.ME">
-<meta property="og:description" content="leeifme,blog,睡沙发の沙皮狗,leeif.me,golang,kubernetes,k8s,docker,Backend Developer,研发">
+<meta property="og:description" content="每日接触到的知识点，不系统，比较凌乱，只是记录   2020-08-13             Uber 的分布式追踪系统 Jaeger  2019-09-19             nohup。使用 nohup 命令让程序在关闭窗口（切换 SSH 连接）的时候程序还能继续在后台运行。如：nohup .&#x2F;caster &amp; or nohup .&#x2F;caster &gt;&#x2F;dev&#x2F;null">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-03-06T19:24:05.001Z">
-<meta property="article:modified_time" content="2021-03-06T19:24:05.001Z">
+<meta property="article:published_time" content="2021-03-08T08:17:15.125Z">
+<meta property="article:modified_time" content="2021-03-08T08:17:15.125Z">
 <meta property="article:author" content="iliei">
 <meta name="twitter:card" content="summary">
   
@@ -75,88 +75,133 @@
   
     
       
-      <div class='widget-wrap' id='markdown'>
-  <div class='widget-header h4 dis-select'>
-    <span class='name'>公告</span>
+      
+
+  <div class='widget-wrap' id='toc'>
+    <div class='widget-header h4 dis-select'>
+      <span class='name'>
+        
+          notes
+        
+      </span>
+      <a class='cap-action' id='s-top' title='回到顶部' href='#start'>
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10505"><path d="M884.526 163.323H208.881c-30.516 0-55.25 24.934-55.25 55.685s24.734 55.685 55.25 55.685h675.645c30.515 0 55.255-24.93 55.255-55.685s-24.74-55.685-55.255-55.685zM568.253 336.87a56.765 56.765 0 0 0-4.06-3.701c-0.63-0.517-1.29-0.968-1.935-1.454-0.799-0.605-1.577-1.224-2.406-1.787-0.779-0.528-1.583-0.978-2.386-1.46-0.748-0.45-1.485-0.926-2.253-1.341-0.81-0.44-1.649-0.814-2.483-1.208-0.8-0.384-1.588-0.784-2.407-1.132-0.814-0.338-1.643-0.61-2.463-0.906-0.875-0.323-1.745-0.66-2.641-0.932-0.825-0.25-1.66-0.435-2.489-0.645-0.916-0.236-1.817-0.492-2.75-0.681-0.962-0.19-1.935-0.307-2.902-0.445-0.814-0.118-1.618-0.272-2.442-0.354a55.163 55.163 0 0 0-5.438-0.276h-0.015c-0.267 0-0.528 0.036-0.794 0.036a54.856 54.856 0 0 0-39.86 16.271l-279.413 281.61c-21.576 21.75-21.576 57.006 0 78.756a54.876 54.876 0 0 0 39.07 16.312 54.835 54.835 0 0 0 39.066-16.312l186.67-188.145V898.09c0 30.75 24.74 55.685 55.256 55.685s55.255-24.934 55.255-55.685v-387.42L769.526 697.22a54.871 54.871 0 0 0 39.065 16.312 54.835 54.835 0 0 0 39.066-16.312c21.576-21.75 21.576-57.006 0-78.756L568.253 336.87z" p-id="10506"></path></svg>
+      </a>
+    </div>
+    <div class='widget-body fs14 wiki'>
+      
+        
+        
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/go/"><span class="toc-text">Go</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/python/"><span class="toc-text">Python</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/rust/"><span class="toc-text">Rust</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/docker/"><span class="toc-text">Docker</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/kubernetes/"><span class="toc-text">Kubernetes</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/microservices/"><span class="toc-text">微服务</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/middleware/"><span class="toc-text">中间件</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/database/"><span class="toc-text">数据库</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/network/"><span class="toc-text">网络</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/linux/"><span class="toc-text">Linux</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/shell/"><span class="toc-text">常用 Shell</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/windows/"><span class="toc-text">Windows</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree active'>
+                <a class='doc-tree-link active' href="/notes/record/"><span class="toc-text">临时记录</span></a>
+                
+              </div>
+            
+          
+        
+      
+    </div>
   </div>
-  <div class='widget-body fs14'>
-    
-      <p>📢 本 Blog 持续更新迭代发布</p>
 
-    
-      <hr>
-
-    
-      <p>既往不念，纵情向前</p>
-
-    
-      <hr>
-
-    
-      <p>𝘼𝙡𝙬𝙖𝙮𝙨 𝙠𝙚𝙚𝙥 𝙩𝙝𝙚 𝙚𝙣𝙩𝙝𝙪𝙨𝙞𝙖𝙨𝙢 𝙖𝙣𝙙 𝙘𝙤𝙣𝙛𝙞𝙙𝙚𝙣𝙘𝙚 𝙩𝙤 𝙡𝙚𝙖𝙧𝙣 𝙣𝙚𝙬 𝙩𝙝𝙞𝙣𝙜𝙨.</p>
-
-    
-  </div>
-</div>
 
     
   
     
       
-      <div class='widget-wrap' id='recent'>
-  <div class='widget-header h4 dis-select'>
-    <span class='name'>最近更新</span>
-    
-      <a class='cap-action' id='rss' title='Subscribe' href='/atom.xml'>
-        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8938"><path d="M800.966 947.251c0-404.522-320.872-732.448-716.69-732.448V62.785c477.972 0 865.44 395.987 865.44 884.466h-148.75z m-162.273 0h-148.74c0-228.98-181.628-414.598-405.678-414.598v-152.01c306.205 0 554.418 253.68 554.418 566.608z m-446.24-221.12c59.748 0 108.189 49.503 108.189 110.557 0 61.063-48.44 110.563-108.188 110.563-59.747 0-108.18-49.5-108.18-110.563 0-61.054 48.433-110.556 108.18-110.556z" p-id="8939"></path></svg>
-      </a>
-    
-  </div>
-  <div class='widget-body fs14'>
+      
+  
     
     
-      <div class='post-title'>
-        <a href="/2020/openldap-getting-started.html">
-          
-            OpenLDAP 快速落地实践-基本介绍
-          
-        </a>
-      </div>
     
-      <div class='post-title'>
-        <a href="/2020/openldap-install-config.html">
-          
-            OpenLDAP 快速落地实践-部署配置
-          
-        </a>
-      </div>
     
-      <div class='post-title'>
-        <a href="/2020/kubernetes-operator.html">
-          
-            「转」 Kubernetes 控制器的进化之旅
-          
-        </a>
-      </div>
     
-      <div class='post-title'>
-        <a href="/2020/openldap-high-ranking.html">
-          
-            OpenLDAP 快速落地实践-进阶
-          
-        </a>
-      </div>
     
-      <div class='post-title'>
-        <a href="/2019/operator-sdk-use.html">
-          
-            Opeartor-SDK 简单上手
-          
-        </a>
-      </div>
     
-  </div>
-</div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 
     
   
@@ -164,7 +209,7 @@
 <footer class="footer"><div class="social-wrap dis-select"><a class="social" href="/atom.xml" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/14/25678f144c438.svg"/></a><a class="social" href="https://github.com/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/github.svg"/></a><a class="social" href="https://twitter.com/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/twitter.svg"/></a><a class="social" href="https://t.me/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/telegram.svg"/></a><a class="social" href="/about/#comments" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/comments.svg"/></a></div></footer>
 
     </aside>
-    <div class='l_main list'>
+    <div class='l_main'>
       
 
       
@@ -194,9 +239,14 @@
         
         
         
+        
+        
+        
+        
+        
     </div>
     <div id='post-meta'>
-      更新于&nbsp;<time datetime='2021-03-06T19:24:05.001Z'>2021-03-07</time>
+      更新于&nbsp;<time datetime='2021-03-08T08:17:15.125Z'>2021-03-08</time>
     </div>
   
   </div>
@@ -204,36 +254,59 @@
 
   <article class='content md wiki reveal'>
   
-  
+  <div class="tag-plugin note" color="green"><div class="body"><p>每日接触到的知识点，不系统，比较凌乱，只是记录</p></div></div>
+
+<div class="tag-plugin timeline" order="-date"><svg class="icon top" width="1em" height="1em" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M7,0 C3.13425,0 0,3.13425 0,7 C0,10.86575 3.13425,14 7,14 C10.86575,14 14,10.86575 14,7 C14,3.13425 10.86575,0 7,0 Z M7,12.25 C4.104625,12.25 1.75,9.89449999 1.75,7 C1.75,4.10550001 4.104625,1.75 7,1.75 C9.895375,1.75 12.25,4.10550001 12.25,7 C12.25,9.89449999 9.895375,12.25 7,12.25 Z M8.75875001,7 L7.43750001,7 C7.19600001,7 7.00000002,6.804 7.00000002,6.56250001 L7.00000002,5.24125001 C7.00000002,4.76262501 6.61237501,4.37500001 6.13375002,4.37500001 L6.11625001,4.37500001 C5.63762502,4.37500001 5.25000001,4.76262501 5.25000001,5.24125001 L5.25000001,7.88375 C5.25000001,8.362375 5.63762502,8.75 6.11625001,8.75 L8.75875001,8.75 C9.237375,8.75 9.62500001,8.362375 9.62500001,7.88375 L9.62500001,7.86625 C9.62500001,7.387625 9.237375,7 8.75875001,7 L8.75875001,7 Z" id="top"></path></svg><div class="timenodes">
+<div class="tag-plugin timenode fs14"><div class="header"><span>2020-08-13</span><a href="#comments"><svg class="icon comment" width="1em" height="1em" viewBox="0 0 16 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M2.9969419,5.71559633 C2.9969419,6.20032331 3.38989075,6.59327217 3.87461774,6.59327217 C4.35934472,6.59327217 4.75229358,6.20032331 4.75229358,5.71559633 C4.75229358,5.23086935 4.35934472,4.83792049 3.87461774,4.83792049 C3.38989075,4.83792049 2.9969419,5.23086935 2.9969419,5.71559633 L2.9969419,5.71559633 Z" id="Path"></path>
+  <path d="M6.76452599,5.71559633 C6.76452599,6.20032331 7.15747485,6.59327217 7.64220183,6.59327217 C8.12692882,6.59327217 8.51987768,6.20032331 8.51987768,5.71559633 C8.51987768,5.23086935 8.12692882,4.83792049 7.64220183,4.83792049 C7.15747485,4.83792049 6.76452599,5.23086935 6.76452599,5.71559633 L6.76452599,5.71559633 Z" id="Path"></path>
+  <path d="M10.5321101,5.71559633 C10.5321101,6.20032331 10.925059,6.59327217 11.4097859,6.59327217 C11.8945129,6.59327217 12.2874618,6.20032331 12.2874618,5.71559633 C12.2874618,5.23086935 11.8945129,4.83792049 11.4097859,4.83792049 C10.925059,4.83792049 10.5321101,5.23086935 10.5321101,5.71559633 L10.5321101,5.71559633 Z" id="Path"></path>
+  <path d="M7.60209315,13.9999855 L7.55255823,13.9999855 C7.30643038,13.9884675 7.07504521,13.8795376 6.90961525,13.6972904 L4.89384746,11.4483761 L1.65891421,11.4483761 C0.743346584,11.4478203 0.00111501673,10.7074957 6.1284311e-14,9.79372406 L6.1284311e-14,1.65465205 C0.00111501673,0.740880414 0.743346584,0.000555821957 1.65891421,0 L13.5877306,0 C14.5013239,0.00333115 15.2404835,0.742844925 15.2415902,1.65465205 L15.2415902,9.82701889 C15.2251033,10.7277804 14.490407,11.4502791 13.5877306,11.4534208 L10.271924,11.4534208 L8.2976038,13.6892189 C8.27421324,13.715602 8.24923084,13.7405354 8.22279597,13.7638801 C8.05262919,13.9170682 7.83125236,14.0012711 7.60209315,13.9999855 L7.60209315,13.9999855 Z M1.66396879,1.21475675 C1.41971289,1.21474108 1.22092389,1.41089082 1.21815455,1.65465205 L1.21815455,9.78968833 C1.21926521,10.0347976 1.41837601,10.2330673 1.66396879,10.2336194 L5.44075337,10.2336194 L7.60007132,12.6520346 L9.72299626,10.2467355 L13.5877306,10.2467355 C13.8298342,10.2462637 14.0275201,10.0534394 14.0335448,9.81188488 L14.0335448,1.65465205 C14.0329874,1.4093126 13.8335527,1.21072101 13.5877306,1.21072101 L1.66396879,1.21475675 Z" id="comment"></path>
+</svg></a></div><div class="body"><p>Uber 的分布式追踪系统 <a target="_blank" rel="noopener" href="https://github.com/jaegertracing/jaeger">Jaeger</a></p></div></div>
+
+<div class="tag-plugin timenode fs14"><div class="header"><span>2019-09-19</span><a href="#comments"><svg class="icon comment" width="1em" height="1em" viewBox="0 0 16 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M2.9969419,5.71559633 C2.9969419,6.20032331 3.38989075,6.59327217 3.87461774,6.59327217 C4.35934472,6.59327217 4.75229358,6.20032331 4.75229358,5.71559633 C4.75229358,5.23086935 4.35934472,4.83792049 3.87461774,4.83792049 C3.38989075,4.83792049 2.9969419,5.23086935 2.9969419,5.71559633 L2.9969419,5.71559633 Z" id="Path"></path>
+  <path d="M6.76452599,5.71559633 C6.76452599,6.20032331 7.15747485,6.59327217 7.64220183,6.59327217 C8.12692882,6.59327217 8.51987768,6.20032331 8.51987768,5.71559633 C8.51987768,5.23086935 8.12692882,4.83792049 7.64220183,4.83792049 C7.15747485,4.83792049 6.76452599,5.23086935 6.76452599,5.71559633 L6.76452599,5.71559633 Z" id="Path"></path>
+  <path d="M10.5321101,5.71559633 C10.5321101,6.20032331 10.925059,6.59327217 11.4097859,6.59327217 C11.8945129,6.59327217 12.2874618,6.20032331 12.2874618,5.71559633 C12.2874618,5.23086935 11.8945129,4.83792049 11.4097859,4.83792049 C10.925059,4.83792049 10.5321101,5.23086935 10.5321101,5.71559633 L10.5321101,5.71559633 Z" id="Path"></path>
+  <path d="M7.60209315,13.9999855 L7.55255823,13.9999855 C7.30643038,13.9884675 7.07504521,13.8795376 6.90961525,13.6972904 L4.89384746,11.4483761 L1.65891421,11.4483761 C0.743346584,11.4478203 0.00111501673,10.7074957 6.1284311e-14,9.79372406 L6.1284311e-14,1.65465205 C0.00111501673,0.740880414 0.743346584,0.000555821957 1.65891421,0 L13.5877306,0 C14.5013239,0.00333115 15.2404835,0.742844925 15.2415902,1.65465205 L15.2415902,9.82701889 C15.2251033,10.7277804 14.490407,11.4502791 13.5877306,11.4534208 L10.271924,11.4534208 L8.2976038,13.6892189 C8.27421324,13.715602 8.24923084,13.7405354 8.22279597,13.7638801 C8.05262919,13.9170682 7.83125236,14.0012711 7.60209315,13.9999855 L7.60209315,13.9999855 Z M1.66396879,1.21475675 C1.41971289,1.21474108 1.22092389,1.41089082 1.21815455,1.65465205 L1.21815455,9.78968833 C1.21926521,10.0347976 1.41837601,10.2330673 1.66396879,10.2336194 L5.44075337,10.2336194 L7.60007132,12.6520346 L9.72299626,10.2467355 L13.5877306,10.2467355 C13.8298342,10.2462637 14.0275201,10.0534394 14.0335448,9.81188488 L14.0335448,1.65465205 C14.0329874,1.4093126 13.8335527,1.21072101 13.5877306,1.21072101 L1.66396879,1.21475675 Z" id="comment"></path>
+</svg></a></div><div class="body"><p>nohup。使用 nohup 命令让程序在关闭窗口（切换 SSH 连接）的时候程序还能继续在后台运行。如：<code>nohup ./caster &amp;</code> or <code>nohup ./caster &gt;/dev/null 2&gt;&amp;1 &amp;  </code></p></div></div>
+
+<div class="tag-plugin timenode fs14"><div class="header"><span>2019-08-29</span><a href="#comments"><svg class="icon comment" width="1em" height="1em" viewBox="0 0 16 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M2.9969419,5.71559633 C2.9969419,6.20032331 3.38989075,6.59327217 3.87461774,6.59327217 C4.35934472,6.59327217 4.75229358,6.20032331 4.75229358,5.71559633 C4.75229358,5.23086935 4.35934472,4.83792049 3.87461774,4.83792049 C3.38989075,4.83792049 2.9969419,5.23086935 2.9969419,5.71559633 L2.9969419,5.71559633 Z" id="Path"></path>
+  <path d="M6.76452599,5.71559633 C6.76452599,6.20032331 7.15747485,6.59327217 7.64220183,6.59327217 C8.12692882,6.59327217 8.51987768,6.20032331 8.51987768,5.71559633 C8.51987768,5.23086935 8.12692882,4.83792049 7.64220183,4.83792049 C7.15747485,4.83792049 6.76452599,5.23086935 6.76452599,5.71559633 L6.76452599,5.71559633 Z" id="Path"></path>
+  <path d="M10.5321101,5.71559633 C10.5321101,6.20032331 10.925059,6.59327217 11.4097859,6.59327217 C11.8945129,6.59327217 12.2874618,6.20032331 12.2874618,5.71559633 C12.2874618,5.23086935 11.8945129,4.83792049 11.4097859,4.83792049 C10.925059,4.83792049 10.5321101,5.23086935 10.5321101,5.71559633 L10.5321101,5.71559633 Z" id="Path"></path>
+  <path d="M7.60209315,13.9999855 L7.55255823,13.9999855 C7.30643038,13.9884675 7.07504521,13.8795376 6.90961525,13.6972904 L4.89384746,11.4483761 L1.65891421,11.4483761 C0.743346584,11.4478203 0.00111501673,10.7074957 6.1284311e-14,9.79372406 L6.1284311e-14,1.65465205 C0.00111501673,0.740880414 0.743346584,0.000555821957 1.65891421,0 L13.5877306,0 C14.5013239,0.00333115 15.2404835,0.742844925 15.2415902,1.65465205 L15.2415902,9.82701889 C15.2251033,10.7277804 14.490407,11.4502791 13.5877306,11.4534208 L10.271924,11.4534208 L8.2976038,13.6892189 C8.27421324,13.715602 8.24923084,13.7405354 8.22279597,13.7638801 C8.05262919,13.9170682 7.83125236,14.0012711 7.60209315,13.9999855 L7.60209315,13.9999855 Z M1.66396879,1.21475675 C1.41971289,1.21474108 1.22092389,1.41089082 1.21815455,1.65465205 L1.21815455,9.78968833 C1.21926521,10.0347976 1.41837601,10.2330673 1.66396879,10.2336194 L5.44075337,10.2336194 L7.60007132,12.6520346 L9.72299626,10.2467355 L13.5877306,10.2467355 C13.8298342,10.2462637 14.0275201,10.0534394 14.0335448,9.81188488 L14.0335448,1.65465205 C14.0329874,1.4093126 13.8335527,1.21072101 13.5877306,1.21072101 L1.66396879,1.21475675 Z" id="comment"></path>
+</svg></a></div><div class="body"><p>DSL（<code>Domain Specific Language</code> 领域特定语言） &amp; GPL（<code>General Purpose Language</code> 通用编程语言） <a target="_blank" rel="noopener" href="https://draveness.me/dsl">https://draveness.me/dsl</a></p></div></div>
+
+<div class="tag-plugin timenode fs14"><div class="header"><span>2019-08-28</span><a href="#comments"><svg class="icon comment" width="1em" height="1em" viewBox="0 0 16 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M2.9969419,5.71559633 C2.9969419,6.20032331 3.38989075,6.59327217 3.87461774,6.59327217 C4.35934472,6.59327217 4.75229358,6.20032331 4.75229358,5.71559633 C4.75229358,5.23086935 4.35934472,4.83792049 3.87461774,4.83792049 C3.38989075,4.83792049 2.9969419,5.23086935 2.9969419,5.71559633 L2.9969419,5.71559633 Z" id="Path"></path>
+  <path d="M6.76452599,5.71559633 C6.76452599,6.20032331 7.15747485,6.59327217 7.64220183,6.59327217 C8.12692882,6.59327217 8.51987768,6.20032331 8.51987768,5.71559633 C8.51987768,5.23086935 8.12692882,4.83792049 7.64220183,4.83792049 C7.15747485,4.83792049 6.76452599,5.23086935 6.76452599,5.71559633 L6.76452599,5.71559633 Z" id="Path"></path>
+  <path d="M10.5321101,5.71559633 C10.5321101,6.20032331 10.925059,6.59327217 11.4097859,6.59327217 C11.8945129,6.59327217 12.2874618,6.20032331 12.2874618,5.71559633 C12.2874618,5.23086935 11.8945129,4.83792049 11.4097859,4.83792049 C10.925059,4.83792049 10.5321101,5.23086935 10.5321101,5.71559633 L10.5321101,5.71559633 Z" id="Path"></path>
+  <path d="M7.60209315,13.9999855 L7.55255823,13.9999855 C7.30643038,13.9884675 7.07504521,13.8795376 6.90961525,13.6972904 L4.89384746,11.4483761 L1.65891421,11.4483761 C0.743346584,11.4478203 0.00111501673,10.7074957 6.1284311e-14,9.79372406 L6.1284311e-14,1.65465205 C0.00111501673,0.740880414 0.743346584,0.000555821957 1.65891421,0 L13.5877306,0 C14.5013239,0.00333115 15.2404835,0.742844925 15.2415902,1.65465205 L15.2415902,9.82701889 C15.2251033,10.7277804 14.490407,11.4502791 13.5877306,11.4534208 L10.271924,11.4534208 L8.2976038,13.6892189 C8.27421324,13.715602 8.24923084,13.7405354 8.22279597,13.7638801 C8.05262919,13.9170682 7.83125236,14.0012711 7.60209315,13.9999855 L7.60209315,13.9999855 Z M1.66396879,1.21475675 C1.41971289,1.21474108 1.22092389,1.41089082 1.21815455,1.65465205 L1.21815455,9.78968833 C1.21926521,10.0347976 1.41837601,10.2330673 1.66396879,10.2336194 L5.44075337,10.2336194 L7.60007132,12.6520346 L9.72299626,10.2467355 L13.5877306,10.2467355 C13.8298342,10.2462637 14.0275201,10.0534394 14.0335448,9.81188488 L14.0335448,1.65465205 C14.0329874,1.4093126 13.8335527,1.21072101 13.5877306,1.21072101 L1.66396879,1.21475675 Z" id="comment"></path>
+</svg></a></div><div class="body"><p>缓存优化，常见缓存算法 &amp; <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/20374919">快照与备份的区别</a>，常见快照机制 <code>cow</code> 和 <code>row</code></p></div></div>
+
+<div class="tag-plugin timenode fs14"><div class="header"><span>2019-08-27</span><a href="#comments"><svg class="icon comment" width="1em" height="1em" viewBox="0 0 16 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M2.9969419,5.71559633 C2.9969419,6.20032331 3.38989075,6.59327217 3.87461774,6.59327217 C4.35934472,6.59327217 4.75229358,6.20032331 4.75229358,5.71559633 C4.75229358,5.23086935 4.35934472,4.83792049 3.87461774,4.83792049 C3.38989075,4.83792049 2.9969419,5.23086935 2.9969419,5.71559633 L2.9969419,5.71559633 Z" id="Path"></path>
+  <path d="M6.76452599,5.71559633 C6.76452599,6.20032331 7.15747485,6.59327217 7.64220183,6.59327217 C8.12692882,6.59327217 8.51987768,6.20032331 8.51987768,5.71559633 C8.51987768,5.23086935 8.12692882,4.83792049 7.64220183,4.83792049 C7.15747485,4.83792049 6.76452599,5.23086935 6.76452599,5.71559633 L6.76452599,5.71559633 Z" id="Path"></path>
+  <path d="M10.5321101,5.71559633 C10.5321101,6.20032331 10.925059,6.59327217 11.4097859,6.59327217 C11.8945129,6.59327217 12.2874618,6.20032331 12.2874618,5.71559633 C12.2874618,5.23086935 11.8945129,4.83792049 11.4097859,4.83792049 C10.925059,4.83792049 10.5321101,5.23086935 10.5321101,5.71559633 L10.5321101,5.71559633 Z" id="Path"></path>
+  <path d="M7.60209315,13.9999855 L7.55255823,13.9999855 C7.30643038,13.9884675 7.07504521,13.8795376 6.90961525,13.6972904 L4.89384746,11.4483761 L1.65891421,11.4483761 C0.743346584,11.4478203 0.00111501673,10.7074957 6.1284311e-14,9.79372406 L6.1284311e-14,1.65465205 C0.00111501673,0.740880414 0.743346584,0.000555821957 1.65891421,0 L13.5877306,0 C14.5013239,0.00333115 15.2404835,0.742844925 15.2415902,1.65465205 L15.2415902,9.82701889 C15.2251033,10.7277804 14.490407,11.4502791 13.5877306,11.4534208 L10.271924,11.4534208 L8.2976038,13.6892189 C8.27421324,13.715602 8.24923084,13.7405354 8.22279597,13.7638801 C8.05262919,13.9170682 7.83125236,14.0012711 7.60209315,13.9999855 L7.60209315,13.9999855 Z M1.66396879,1.21475675 C1.41971289,1.21474108 1.22092389,1.41089082 1.21815455,1.65465205 L1.21815455,9.78968833 C1.21926521,10.0347976 1.41837601,10.2330673 1.66396879,10.2336194 L5.44075337,10.2336194 L7.60007132,12.6520346 L9.72299626,10.2467355 L13.5877306,10.2467355 C13.8298342,10.2462637 14.0275201,10.0534394 14.0335448,9.81188488 L14.0335448,1.65465205 C14.0329874,1.4093126 13.8335527,1.21072101 13.5877306,1.21072101 L1.66396879,1.21475675 Z" id="comment"></path>
+</svg></a></div><div class="body"><p>状态机，有助于编码实现，<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1075931">有限状态机 FSM 的原理与 Go 的实现</a></p></div></div>
+</div><svg class="icon bottom" width="1em" height="1em" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M7,0 C10.8558804,0.0243061403 13.9756939,3.14411956 14,7 C14,10.8659932 10.8659932,14 7,14 C3.13400675,14 0,10.8659932 0,7 C0,3.13400675 3.13400675,0 7,0 Z M7,1.27272727 C4.67984382,1.25597015 2.57881097,2.64070073 1.67929035,4.77945461 C0.779769726,6.91820849 1.25950821,9.38836411 2.89419242,11.0349403 C4.52887664,12.6815164 6.99549008,13.1791467 9.14070778,12.2951521 C11.2859255,11.4111574 12.6859091,9.32021669 12.6859091,7 C12.6739296,3.85798179 10.1418488,1.30748075 7,1.27272727 Z M2.70454544,7 C2.7044994,7.39789465 2.91674722,7.76558417 3.26132643,7.96454478 C3.60590563,8.1635054 4.030458,8.1635054 4.3750372,7.96454478 C4.7196164,7.76558417 4.93186422,7.39789465 4.93181818,7 C4.93186422,6.60210535 4.7196164,6.23441583 4.3750372,6.03545522 C4.030458,5.8364946 3.60590563,5.8364946 3.26132643,6.03545522 C2.91674722,6.23441583 2.7044994,6.60210535 2.70454544,7 L2.70454544,7 Z M5.88636363,7 C5.88636363,7.39786396 6.09862151,7.76550543 6.44318181,7.96443741 C6.7877421,8.1633694 7.2122579,8.1633694 7.55681819,7.96443741 C7.90137849,7.76550543 8.11363637,7.39786396 8.11363637,7 C8.11363637,6.38495562 7.61504438,5.88636363 7,5.88636363 C6.38495562,5.88636363 5.88636363,6.38495562 5.88636363,7 L5.88636363,7 Z M9.06818182,7 C9.06813578,7.39789465 9.2803836,7.76558417 9.6249628,7.96454478 C9.969542,8.1635054 10.3940944,8.1635054 10.7386736,7.96454478 C11.0832528,7.76558417 11.2955006,7.39789465 11.2954546,7 C11.2955006,6.60210535 11.0832528,6.23441583 10.7386736,6.03545522 C10.3940944,5.8364946 9.969542,5.8364946 9.6249628,6.03545522 C9.2803836,6.23441583 9.06813578,6.60210535 9.06818182,7 Z" id="bottom"></path></svg></div>
   
 
 
   </article>
   
-<div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title fs14"><a href="/notes/shell/">上一篇：常用 Shell</a></div></section></div>
+<div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title fs14"><a href="/notes/windows/">上一篇：Windows</a></div></section></div>
 
   
-
-  <div class='related-wrap md' id="comments">
-    <div class='cmt-title cap theme'>
-      快来参与讨论吧
-    </div>
-    <div class='cmt-body utterances'>
-      
-
-<svg class="loading" style="vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
-
-<div id="utterances" repo="leeifme/blog-comments" issue-term="notes" theme="github-light"></div>
-
-    </div>
-  </div>
 
 
 
 
       
 <footer class="page-footer fs12"><hr><div><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
-<p>本站由 <a href="https://leeif.me/">@iliei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5">Stellar</a> 作为主题。</p>
+<p>本站由 <a href="https://leeif.me/">@iliei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.6">Stellar</a> 作为主题。</p>
 </div></footer>
 
       <div class='float-panel mobile-only' style='display:none'>
@@ -247,7 +320,7 @@
   <div class='scripts'>
     <script type="text/javascript">
   stellar = {};
-  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.5';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.6';
   stellar.config = {
     date_suffix: {
       just: '刚刚',
@@ -273,7 +346,7 @@
     stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper/swiper-bundle.min.css","js":"https://unpkg.com/swiper/swiper-bundle.min.js"});
   }
   if ('true' == 'true') {
-    stellar.plugins.scrollreveal = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.7/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+    stellar.plugins.scrollreveal = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
   }
   if ('true' == 'true') {
     stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});

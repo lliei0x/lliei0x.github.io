@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head>
+  <meta name="generator" content="Hexo 5.4.0">
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex,nofollow">
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>notes：Kubernetes - LEEIF.ME</title>
+
+  
+    <meta name="description" content="K8S 的架构像大多数的分布式系统，K8S 集群至少需要一个主节点 Master 和多个计算节点 NodeMaster（控制节点）由三个紧密协作的独立组件组合而成负责 API 服务的 kube-apiserver负责调度的 kube-scheduler负责容器编排的 kube-controller-manager整个集群的持久化数据，则由 kube-apiserver 处理后保存在 Etcd 中N">
+<meta property="og:type" content="website">
+<meta property="og:title" content="LEEIF.ME">
+<meta property="og:url" content="https://leeif.me/notes/kubernetes/">
+<meta property="og:site_name" content="LEEIF.ME">
+<meta property="og:description" content="K8S 的架构像大多数的分布式系统，K8S 集群至少需要一个主节点 Master 和多个计算节点 NodeMaster（控制节点）由三个紧密协作的独立组件组合而成负责 API 服务的 kube-apiserver负责调度的 kube-scheduler负责容器编排的 kube-controller-manager整个集群的持久化数据，则由 kube-apiserver 处理后保存在 Etcd 中N">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210309005449.png">
+<meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210309005448.png">
+<meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210309011324.png">
+<meta property="article:published_time" content="2021-03-08T17:15:05.134Z">
+<meta property="article:modified_time" content="2021-03-08T17:15:05.134Z">
+<meta property="article:author" content="iliei">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210309005449.png">
+  
+  
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="LEEIF.ME" type="application/atom+xml">
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+    <link rel="shortcut icon" type='image/x-icon' href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/favicon.svg">
+  
+</head>
+
+<body theme='light'>
+  
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left'>
+    
+
+<header class='header'>
+  <div class='logo-wrap'>
+  
+    <a class='avatar' href='/about/'><img no-lazy src='https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/avatar.png'/></a>
+  
+  
+    <a class='title' href='/'>LEEIF.ME</a>
+  
+</div>
+
+  <nav class="menu dis-select"><a class="nav-item" href="/">文章</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item active" href="/notes/">笔记</a><a class="nav-item" href="/about/">更多</a></nav>
+</header>
+
+<div class='widgets'>
+  
+    
+      
+      
+
+  <div class='widget-wrap' id='toc'>
+    <div class='widget-header h4 dis-select'>
+      <span class='name'>
+        
+          notes
+        
+      </span>
+      <a class='cap-action' id='s-top' title='回到顶部' href='#start'>
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10505"><path d="M884.526 163.323H208.881c-30.516 0-55.25 24.934-55.25 55.685s24.734 55.685 55.25 55.685h675.645c30.515 0 55.255-24.93 55.255-55.685s-24.74-55.685-55.255-55.685zM568.253 336.87a56.765 56.765 0 0 0-4.06-3.701c-0.63-0.517-1.29-0.968-1.935-1.454-0.799-0.605-1.577-1.224-2.406-1.787-0.779-0.528-1.583-0.978-2.386-1.46-0.748-0.45-1.485-0.926-2.253-1.341-0.81-0.44-1.649-0.814-2.483-1.208-0.8-0.384-1.588-0.784-2.407-1.132-0.814-0.338-1.643-0.61-2.463-0.906-0.875-0.323-1.745-0.66-2.641-0.932-0.825-0.25-1.66-0.435-2.489-0.645-0.916-0.236-1.817-0.492-2.75-0.681-0.962-0.19-1.935-0.307-2.902-0.445-0.814-0.118-1.618-0.272-2.442-0.354a55.163 55.163 0 0 0-5.438-0.276h-0.015c-0.267 0-0.528 0.036-0.794 0.036a54.856 54.856 0 0 0-39.86 16.271l-279.413 281.61c-21.576 21.75-21.576 57.006 0 78.756a54.876 54.876 0 0 0 39.07 16.312 54.835 54.835 0 0 0 39.066-16.312l186.67-188.145V898.09c0 30.75 24.74 55.685 55.256 55.685s55.255-24.934 55.255-55.685v-387.42L769.526 697.22a54.871 54.871 0 0 0 39.065 16.312 54.835 54.835 0 0 0 39.066-16.312c21.576-21.75 21.576-57.006 0-78.756L568.253 336.87z" p-id="10506"></path></svg>
+      </a>
+    </div>
+    <div class='widget-body fs14 wiki'>
+      
+        
+        
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/go/"><span class="toc-text">Go</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/python/"><span class="toc-text">Python</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/rust/"><span class="toc-text">Rust</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/docker/"><span class="toc-text">Docker</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree active'>
+                <a class='doc-tree-link active' href="/notes/kubernetes/"><span class="toc-text">Kubernetes</span></a>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#K8S-%E7%9A%84%E6%9E%B6%E6%9E%84"><span class="toc-text">K8S 的架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Prometheus%E3%80%81Metrics-Server-%E4%B8%8E-K8S-%E7%9B%91%E6%8E%A7%E4%BD%93%E7%B3%BB"><span class="toc-text">Prometheus、Metrics Server 与 K8S 监控体系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E%E5%BC%8F-API-%E5%92%8C-K8S-%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-text">声明式 API 和 K8S 控制器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GPU-%E5%9C%A8%E5%AE%B9%E5%99%A8%E4%BA%91%E4%B8%AD%E7%9A%84%E6%96%B9%E6%A1%88%E5%8F%8A%E4%BD%BF%E7%94%A8"><span class="toc-text">GPU 在容器云中的方案及使用</span></a></li></ol>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/microservices/"><span class="toc-text">微服务</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/middleware/"><span class="toc-text">中间件</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/database/"><span class="toc-text">数据库</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/network/"><span class="toc-text">网络</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/linux/"><span class="toc-text">Linux</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/shell/"><span class="toc-text">常用 Shell</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/windows/"><span class="toc-text">Windows</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/record/"><span class="toc-text">临时记录</span></a>
+              </div>
+            
+          
+        
+      
+    </div>
+  </div>
+
+
+    
+  
+    
+      
+      
+  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+    
+  
+</div>
+<footer class="footer"><div class="social-wrap dis-select"><a class="social" href="/atom.xml" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/14/25678f144c438.svg"/></a><a class="social" href="https://github.com/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/github.svg"/></a><a class="social" href="https://twitter.com/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/twitter.svg"/></a><a class="social" href="https://t.me/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/telegram.svg"/></a><a class="social" href="/about/#comments" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/comments.svg"/></a></div></footer>
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+  
+  
+  <div class='bread-nav fs12'>
+  
+    
+    <div id='breadcrumb'>
+      <a class='cap breadcrumb' href='/'>主页</a>
+      <span class="sep"></span>
+      
+        <a class='cap breadcrumb' href='/notes/'>笔记</a>
+      
+      
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    </div>
+    <div id='post-meta'>
+      更新于&nbsp;<time datetime='2021-03-08T17:15:05.134Z'>2021-03-09</time>
+    </div>
+  
+  </div>
+
+
+  <article class='content md wiki reveal'>
+  
+  <h2 id="K8S-的架构"><a href="#K8S-的架构" class="headerlink" title="K8S 的架构"></a>K8S 的架构</h2><details class="tag-plugin"  open><summary><span>像大多数的分布式系统，K8S 集群至少需要一个主节点 Master 和多个计算节点 Node</span></summary><div class="body"><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210309005449.png" alt="k8s架构图"></p><details class="tag-plugin" color="blue"><summary><span>Master（控制节点）</span></summary><div class="body"><p><strong>由三个紧密协作的独立组件组合而成</strong></p><ul><li>负责 API 服务的 <code>kube-apiserver</code></li><li>负责调度的 <code>kube-scheduler</code></li><li>负责容器编排的 <code>kube-controller-manager</code><br>整个集群的持久化数据，则由 kube-apiserver 处理后保存在 <code>Etcd</code> 中</li></ul></div></details><details class="tag-plugin" color="green"><summary><span>Node（计算节点）</span></summary><div class="body"><p>最核心的是 <code>kubelet</code> 的组件，具备以下功能</p><ul><li><strong>负责同容器运行时（比如 Docker 项目）打交道</strong>。而这个交互所依赖的，是一个称作 <code>CRI（Container Runtime Interface）</code>的远程调用接口，这个接口定义了容器运行时的各项核心操作</li><li><strong>通过 gRPC 协议同一个叫作 Device Plugin 的插件进行交互</strong>。这个插件，是 K8S 项目用来管理 GPU 等宿主机物理设备的主要组件</li><li><strong>调用网络插件和存储插件为容器配置网络和持久化存储</strong>。这两个插件与 kubelet 进行交互的接口，分别是 <code>CNI（Container Networking Interface）</code>和 <code>CSI（Container Storage Interface）</code></li></ul></div></details><p><strong>补充：</strong>K8S 项目并不关心你部署的是什么容器运行时、使用的什么技术实现，只要你的这个容器运行时能够运行标准的容器镜像，它就可以通过实现 <code>CRI</code> 接入到 K8S 项目当中；而具体的容器运行时，比如 <code>Docker</code> 项目，则一般通过 <code>OCI</code> 这个容器运行时规范同底层的 Linux 操作系统进行交互，即：把 <code>CRI</code> 请求翻译成对 Linux 操作系统的调用（操作 Linux Namespace 和 Cgroups 等）</p></div></details>
+
+<h2 id="Prometheus、Metrics-Server-与-K8S-监控体系"><a href="#Prometheus、Metrics-Server-与-K8S-监控体系" class="headerlink" title="Prometheus、Metrics Server 与 K8S 监控体系"></a>Prometheus、Metrics Server 与 K8S 监控体系</h2><p>Prometheus 项目工作的核心，是使用 <strong>Pull</strong> （抓取）的方式去搜集被监控对象的 Metrics 数据（监控指标数据），然后，再把这些数据保存在一个 TSDB （时间序列数据库，比如 OpenTSDB、InfluxDB 等）当中，以便后续可以按照时间进行检索；其主要的特点如下：</p>
+<ul>
+<li><strong>多维度的数据模型</strong>：由指标名称和键 / 值对标签标识的时间序列数据来组成多维的数据模型。</li>
+<li><strong>灵活的查询语言</strong>：在 Prometheus 中使用强大的查询语言 PromSQL 来进行查询。</li>
+<li><strong>不依赖分布式存储</strong>，Prometheus 单个节点也可以直接工作，支持本地存储（TSDB）和远程存储的模式。</li>
+<li><strong>服务端采集数据</strong>：Prometheus 基于 HTTP pull 方式去对不同的端采集时间序列数据。</li>
+<li><strong>客户端主动推送</strong>：支持通过 PushGateway 组件主动推送时间序列数据。</li>
+</ul>
+<p>Prometheus 作用和工作方式，如下图<br><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210309005448.png" alt="Prometheus 作用和工作方式"></p>
+<p>Prometheus 剩下的组件就是用来配合这套机制的运行</p>
+<ul>
+<li><p><strong>Prometheus Serve</strong>r：<a target="_blank" rel="noopener" href="https://github.com/prometheus/prometheus">Prometheus 服务端</a>，用于收集指标和存储时间序列数据，并提供一系列的查询和设置接口。</p>
+</li>
+<li><p><strong>Client Libraries</strong>：<a target="_blank" rel="noopener" href="https://prometheus.io/docs/instrumenting/clientlibs/">客户端库</a>，用于帮助需要监控采集的服务暴露 metrics handler 给 Prometheus server，直接调用 promhttp 暴露了一个 metrics 接口。</p>
+</li>
+<li><p><strong>Push Gateway</strong>：推送网关，Prometheus 服务端仅支持 HTTP pull 的采集方式，而有一些指存在的时间短，Prometheus 来 pull 前就结束了。又或是该类指标，就是要客户端自行上报的，这时候就可以采用 Push Gateway 的方式，客户端将指标 push 到 Push Gateway，再由 Prometheus Server 从 Pushgateway 上 pull</p>
+</li>
+<li><p><strong>Exporters</strong>：用于暴露已有的第三方服务的 metrics 给 Prometheus Server</p>
+</li>
+<li><p><strong>Alertmanager</strong>：可以根据 Metrics 信息灵活地设置报警，从 Prometheus server 端接收到 alerts 后，会进行去重，分组，然后路由到对应的 Receiver，发出报警</p>
+</li>
+<li><p><strong>Grafana</strong>：对外暴露出的、可以灵活配置的监控数据可视化界面</p>
+</li>
+</ul>
+<p>按照 Metrics 数据的来源，来对 K8S 的监控体系做一个汇总：</p>
+<ul>
+<li><strong>第一种 Metrics，是宿主机的监控数据。</strong>这部分数据的提供，需要借助一个由 Prometheus 维护的<a target="_blank" rel="noopener" href="https://github.com/prometheus/node_exporter">Node Exporter</a> 工具</li>
+<li><strong>第二种 Metrics，是来自于 Kubernetes 的 API Server、kubelet 等组件的 /metrics API</strong>。除了常规的 CPU、内存的信息外，这部分信息还主要包括了各个组件的核心监控指标。比如，对于 API Server 来说，它就会在 /metrics API 里，暴露出各个 Controller 的工作队列</li>
+<li><strong>第三种 Metrics，是 Kubernetes 相关的监控数据。</strong>这部分数据，一般叫作 Kubernetes 核心监控数据（core metrics）。这其中包括了 Pod、Node、容器、Service 等主要 Kubernetes 核心概念的 Metrics。</li>
+</ul>
+<p>其中，容器相关的 Metrics 主要来自于 kubelet 内置的 <code>cAdvisor</code> 服务。在 kubelet 启动后，cAdvisor 服务也随之启动，而它能够提供的信息，可以细化到每一个容器的 CPU 、文件系统、内存、网络等资源的使用情况。</p>
+<p>需要注意的是，这里提到的 Kubernetes 核心监控数据，其实使用的是 Kubernetes 的一个非常重要的扩展能力，叫作 <code>Metrics Server</code>。</p>
+<h2 id="声明式-API-和-K8S-控制器"><a href="#声明式-API-和-K8S-控制器" class="headerlink" title="声明式 API 和 K8S 控制器"></a>声明式 API 和 K8S 控制器</h2><blockquote>
+<p>声明式 API</p>
+</blockquote>
+<p><strong>是 Kubernetes 项目编排能力“赖以生存”的核心所在</strong></p>
+<ul>
+<li>首先，所谓“声明式”，指的就是我只需要提交一个定义好的 API 对象来“声明”，我所期望的状态是什么样子</li>
+<li>其次，“声明式 API”允许有多个 API 写端，以 PATCH 的方式对 API 对象进行修改，而无需关心本地原始 YAML 文件的内容</li>
+<li>最后，也是最重要的，有了上述两个能力，Kubernetes 项目才可以基于对 API 对象的增、删、改、查，在完全无需外界干预的情况下，完成对“实际状态”和“期望状态”的调谐（Reconcile）过程</li>
+</ul>
+<p>实际运用项目：</p>
+<p><strong>Istio 项目使用的，是 K8S 中的一个非常重要的功能，叫作 Dynamic Admission Control（动态入场控制），也叫作：Initializer（初始化器）。提供了一种“热插拔”式的 Admission 机制</strong></p>
+<blockquote>
+<p>Kubernetes 控制器</p>
+</blockquote>
+<div class="tag-plugin tag link dis-select"><a class="link-card" title="Kubernetes" href="./2020/kubernetes-operator.html"><div class="left"><span class="title fs14">Kubernetes</span><span class="url fs12">控制器的进化之旅 https://leeif.me/2020/kubernetes-operator.html</span></div><div class="right"><div class="lazy img" data-bg="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/link/8f277b4ee0ecd.svg"></div></div></a></div>
+
+<h2 id="GPU-在容器云中的方案及使用"><a href="#GPU-在容器云中的方案及使用" class="headerlink" title="GPU 在容器云中的方案及使用"></a>GPU 在容器云中的方案及使用</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210309011324.png" alt="GPU 在容器云中的方案及使用"><br>核心功能模块:</p>
+<ul>
+<li><code>GPU Share Scheduler Extender</code>: 利用 Kubernetes 的调度器扩展机制，负责在全局调度器 Filter 和 Bind 的时候判断节点上单个 GPU 卡是否能够提供足够的 GPU Mem，并且在 Bind 的时刻将 GPU 的分配结果通过 annotation 记录到 Pod Spec 以供后续 Filter 检查分配结果。</li>
+<li><code>GPU Share Device Plugin</code>: 利用 <code>Device Plugin</code> 机制，在节点上被 Kubelet 调用负责 GPU 卡的分配，依赖 scheduler Extender 分配结果执行。</li>
+</ul>
+<p>具体流程：</p>
+<ol>
+<li><p>资源上报<br> GPU Share Device Plugin利用nvml库查询到GPU卡的数量和每张GPU卡的显存， 通过 <code>ListAndWatch()</code> 将节点的GPU总显存（数量 <em>显存）作为另外 Extended Resource 汇报给 Kubelet； Kubelet 进一步汇报给 Kubernetes API Server</em></p>
+</li>
+<li><p>扩展调度<br> GPU Share Scheduler Extender 可以在分配 gpu-mem 给 Pod 的同时将分配信息以 annotation 的形式保留在 Pod spec 中，并且在过滤时刻根据此信息判断每张卡是否包含足够可用的 gpu-mem 分配。</p>
+</li>
+<li><p>节点上运行<br> 当Pod和节点绑定的事件被Kubelet接收到后，Kubelet就会在节点上创建真正的Pod实体，在这个过程中, Kubelet会调用GPU Share Device Plugin的 <code>Allocate</code> 方法, <code>Allocate</code> 方法的参数是Pod申请的gpu-mem。而在 <code>Allocate</code> 方法中，会根据GPU Share Scheduler Extender的调度决策运行对应的Pod</p>
+</li>
+</ol>
+
+  
+
+
+  </article>
+  
+<div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title h2"><a href="/notes/microservices/">微服务</a></div><div class="post-title fs14"><a href="/notes/docker/">上一篇：Docker</a></div></section></div>
+
+  
+
+
+
+
+      
+<footer class="page-footer fs12"><hr><div><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<p>本站由 <a href="https://leeif.me/">@iliei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.6">Stellar</a> 作为主题。</p>
+</div></footer>
+
+      <div class='float-panel mobile-only' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" viewBox="0 0 1228 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2849"><path d="M0 0m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2850"></path><path d="M0 389.560798m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2851"></path><path d="M0 779.121596m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.390199l-973.901995 0q-97.390199 0-97.390199-97.390199l0 0q0-97.390199 97.390199-97.390199Z" p-id="2852"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {};
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.6';
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
+    sitesjs: '/js/plugins/sites.js',
+    friendsjs: '/js/plugins/friends.js',
+  };
+
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper/swiper-bundle.min.css","js":"https://unpkg.com/swiper/swiper-bundle.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+  <script>
+  function utterances(){
+    if(!document.getElementById("utterances"))return;
+    setTimeout(function() {
+      var checkUtterances = setInterval(function () {
+        var el = document.getElementById("utterances");
+        if (!el) return
+        clearInterval(checkUtterances)
+        try {
+          el.innerHTML="";
+        } catch (error) {}
+        var script = document.createElement('script');
+        script.src = 'https://utteranc.es/client.js';
+        const keys = ['repo', 'issue-term', 'issue-number', 'theme', 'label', 'crossorigin'];
+        keys.forEach((key, i) => {
+          if (el.attributes[key] && el.attributes[key].value) {
+            script.setAttribute(key, el.attributes[key].value);
+          }
+        });
+        el.appendChild(script);
+       }, 200)
+    });
+  }
+  utterances();
+</script>
+
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>
