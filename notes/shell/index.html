@@ -20,15 +20,15 @@
   <title>notes：常用 Shell - LEEIF.ME</title>
 
   
-    <meta name="description" content="leeifme,blog,睡沙发の沙皮狗,leeif.me,golang,kubernetes,k8s,docker,Backend Developer,研发">
+    <meta name="description" content="docker cli1234567891011kill -9 $(ps -ef|grep caster|awk &amp;#x27;NR&#x3D;&#x3D;1 &amp;#123;print $3&amp;#125;&amp;#x27;)docker rmi $(docker images | grep &amp;#x27;&lt;none&gt;&amp;#x27;| awk &amp;#x27;&amp;#123;print $3&amp;#125;&amp;#x27;)docker r">
 <meta property="og:type" content="website">
 <meta property="og:title" content="LEEIF.ME">
 <meta property="og:url" content="https://leeif.me/notes/shell/">
 <meta property="og:site_name" content="LEEIF.ME">
-<meta property="og:description" content="leeifme,blog,睡沙发の沙皮狗,leeif.me,golang,kubernetes,k8s,docker,Backend Developer,研发">
+<meta property="og:description" content="docker cli1234567891011kill -9 $(ps -ef|grep caster|awk &amp;#x27;NR&#x3D;&#x3D;1 &amp;#123;print $3&amp;#125;&amp;#x27;)docker rmi $(docker images | grep &amp;#x27;&lt;none&gt;&amp;#x27;| awk &amp;#x27;&amp;#123;print $3&amp;#125;&amp;#x27;)docker r">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-03-08T07:35:07.676Z">
-<meta property="article:modified_time" content="2021-03-08T07:35:07.676Z">
+<meta property="article:published_time" content="2021-03-09T07:18:11.604Z">
+<meta property="article:modified_time" content="2021-03-09T07:18:11.604Z">
 <meta property="article:author" content="iliei">
 <meta name="twitter:card" content="summary">
   
@@ -75,88 +75,137 @@
   
     
       
-      <div class='widget-wrap' id='markdown'>
-  <div class='widget-header h4 dis-select'>
-    <span class='name'>公告</span>
+      
+
+  <div class='widget-wrap' id='toc'>
+    <div class='widget-header h4 dis-select'>
+      <span class='name'>
+        
+          notes
+        
+      </span>
+      <a class='cap-action' id='s-top' title='回到顶部' href='#start'>
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10505"><path d="M884.526 163.323H208.881c-30.516 0-55.25 24.934-55.25 55.685s24.734 55.685 55.25 55.685h675.645c30.515 0 55.255-24.93 55.255-55.685s-24.74-55.685-55.255-55.685zM568.253 336.87a56.765 56.765 0 0 0-4.06-3.701c-0.63-0.517-1.29-0.968-1.935-1.454-0.799-0.605-1.577-1.224-2.406-1.787-0.779-0.528-1.583-0.978-2.386-1.46-0.748-0.45-1.485-0.926-2.253-1.341-0.81-0.44-1.649-0.814-2.483-1.208-0.8-0.384-1.588-0.784-2.407-1.132-0.814-0.338-1.643-0.61-2.463-0.906-0.875-0.323-1.745-0.66-2.641-0.932-0.825-0.25-1.66-0.435-2.489-0.645-0.916-0.236-1.817-0.492-2.75-0.681-0.962-0.19-1.935-0.307-2.902-0.445-0.814-0.118-1.618-0.272-2.442-0.354a55.163 55.163 0 0 0-5.438-0.276h-0.015c-0.267 0-0.528 0.036-0.794 0.036a54.856 54.856 0 0 0-39.86 16.271l-279.413 281.61c-21.576 21.75-21.576 57.006 0 78.756a54.876 54.876 0 0 0 39.07 16.312 54.835 54.835 0 0 0 39.066-16.312l186.67-188.145V898.09c0 30.75 24.74 55.685 55.256 55.685s55.255-24.934 55.255-55.685v-387.42L769.526 697.22a54.871 54.871 0 0 0 39.065 16.312 54.835 54.835 0 0 0 39.066-16.312c21.576-21.75 21.576-57.006 0-78.756L568.253 336.87z" p-id="10506"></path></svg>
+      </a>
+    </div>
+    <div class='widget-body fs14 wiki'>
+      
+        
+        
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/go/"><span class="toc-text">Go</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/python/"><span class="toc-text">Python</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/rust/"><span class="toc-text">Rust</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/docker/"><span class="toc-text">Docker</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/kubernetes/"><span class="toc-text">Kubernetes</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/microservices/"><span class="toc-text">微服务</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/middleware/"><span class="toc-text">中间件</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/database/"><span class="toc-text">数据库</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/network/"><span class="toc-text">网络</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/linux/"><span class="toc-text">Linux</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree active'>
+                <a class='doc-tree-link active' href="/notes/shell/"><span class="toc-text">常用 Shell</span></a>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-cli"><span class="toc-text">docker cli</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E9%80%9A%E9%98%B2%E7%81%AB%E5%A2%99%E7%AB%AF%E5%8F%A3"><span class="toc-text">开通防火墙端口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%81%E8%AE%B8%E8%BF%9C%E7%A8%8B%E4%B8%BB%E6%9C%BA%E8%AE%BF%E9%97%AE%E6%9C%AC%E6%9C%BA%E7%9A%84-80-%E7%AB%AF%E5%8F%A3"><span class="toc-text">允许远程主机访问本机的 80 端口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%91%E6%8E%A7-linux-%E7%A3%81%E7%9B%98%E6%A0%B9%E5%88%86%E5%8C%BA"><span class="toc-text">监控 linux 磁盘根分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E6%8A%93%E5%8C%85-tcpdump"><span class="toc-text">网络抓包 tcpdump</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-snmpd-%E6%8A%93%E5%8F%96%E7%89%88%E6%9C%AC%E4%B8%BA-v2-%E7%9A%84-cacti-%E6%95%B0%E6%8D%AE%E6%96%B9%E5%BC%8F"><span class="toc-text">使用 snmpd 抓取版本为 v2 的 cacti 数据方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CPU-%E6%BB%A1%E8%BD%BD%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B"><span class="toc-text">CPU 满载测试用例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE%E5%BD%93%E5%89%8D%E7%9B%AE%E5%BD%95%E4%B8%8B%E4%BB%A5-tar-%E7%9A%84%E6%96%87%E4%BB%B6%E7%A7%BB%E5%8A%A8%E5%88%B0%E6%8C%87%E5%AE%9A%E7%9B%AE%E5%BD%95"><span class="toc-text">查找当前目录下以 .tar 的文件移动到指定目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%B9%E9%87%8F%E8%A7%A3%E5%8E%8B%E5%BD%93%E5%89%8D%E7%9B%AE%E5%BD%95%E4%B8%8B-zip-%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E4%BB%B6%E5%88%B0%E6%8C%87%E5%AE%9A%E7%9B%AE%E5%BD%95"><span class="toc-text">批量解压当前目录下 .zip 的所有文件到指定目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E7%9B%AE%E5%BD%95%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8"><span class="toc-text">判断目录是否存在</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nginx-%E6%97%A5%E5%BF%97%E7%BB%9F%E8%AE%A1%E5%89%8D10%E4%B8%AA-IP"><span class="toc-text">nginx 日志统计前10个 IP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%93%E5%8D%B0%E5%87%BA%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6%E9%87%8C%E9%9D%A2%E6%9C%80%E5%A4%A7%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC"><span class="toc-text">打印出一个文件里面最大和最小值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE3%E5%A4%A9%E5%89%8D%E5%88%9B%E5%BB%BA%E4%B8%94%E5%90%8E%E7%BC%80%E6%98%AF-log-%E7%9A%84%E6%96%87%E4%BB%B6%E5%B9%B6%E5%88%A0%E9%99%A4"><span class="toc-text">查找3天前创建且后缀是 \*.log 的文件并删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86%E6%9F%90%E7%9B%AE%E5%BD%95%E4%B8%8B%E5%A4%A7%E4%BA%8E-100k-%E7%9A%84%E6%96%87%E4%BB%B6%E7%A7%BB%E5%8A%A8%E8%87%B3-tmp-%E4%B8%8B"><span class="toc-text">将某目录下大于 100k 的文件移动至 &#x2F;tmp 下</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sed-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">sed 常用命令</span></a></li></ol>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/windows/"><span class="toc-text">Windows</span></a>
+              </div>
+            
+          
+            
+              <div class='doc-tree'>
+                <a class='doc-tree-link' href="/notes/record/"><span class="toc-text">临时记录</span></a>
+              </div>
+            
+          
+        
+      
+    </div>
   </div>
-  <div class='widget-body fs14'>
-    
-      <p>📢 本 Blog 持续更新迭代发布</p>
 
-    
-      <hr>
-
-    
-      <p>既往不念，纵情向前</p>
-
-    
-      <hr>
-
-    
-      <p>𝘼𝙡𝙬𝙖𝙮𝙨 𝙠𝙚𝙚𝙥 𝙩𝙝𝙚 𝙚𝙣𝙩𝙝𝙪𝙨𝙞𝙖𝙨𝙢 𝙖𝙣𝙙 𝙘𝙤𝙣𝙛𝙞𝙙𝙚𝙣𝙘𝙚 𝙩𝙤 𝙡𝙚𝙖𝙧𝙣 𝙣𝙚𝙬 𝙩𝙝𝙞𝙣𝙜𝙨.</p>
-
-    
-  </div>
-</div>
 
     
   
     
       
-      <div class='widget-wrap' id='recent'>
-  <div class='widget-header h4 dis-select'>
-    <span class='name'>最近更新</span>
-    
-      <a class='cap-action' id='rss' title='Subscribe' href='/atom.xml'>
-        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8938"><path d="M800.966 947.251c0-404.522-320.872-732.448-716.69-732.448V62.785c477.972 0 865.44 395.987 865.44 884.466h-148.75z m-162.273 0h-148.74c0-228.98-181.628-414.598-405.678-414.598v-152.01c306.205 0 554.418 253.68 554.418 566.608z m-446.24-221.12c59.748 0 108.189 49.503 108.189 110.557 0 61.063-48.44 110.563-108.188 110.563-59.747 0-108.18-49.5-108.18-110.563 0-61.054 48.433-110.556 108.18-110.556z" p-id="8939"></path></svg>
-      </a>
-    
-  </div>
-  <div class='widget-body fs14'>
+      
+  
     
     
-      <div class='post-title'>
-        <a href="/2020/openldap-install-config.html">
-          
-            OpenLDAP 快速落地实践-部署配置
-          
-        </a>
-      </div>
     
-      <div class='post-title'>
-        <a href="/2020/openldap-high-ranking.html">
-          
-            OpenLDAP 快速落地实践-进阶
-          
-        </a>
-      </div>
     
-      <div class='post-title'>
-        <a href="/2020/openldap-getting-started.html">
-          
-            OpenLDAP 快速落地实践-基本介绍
-          
-        </a>
-      </div>
     
-      <div class='post-title'>
-        <a href="/2020/kubernetes-operator.html">
-          
-            「转」 Kubernetes 控制器的进化之旅
-          
-        </a>
-      </div>
     
-      <div class='post-title'>
-        <a href="/2019/operator-sdk-use.html">
-          
-            Opeartor-SDK 简单上手
-          
-        </a>
-      </div>
     
-  </div>
-</div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 
     
   
@@ -164,7 +213,7 @@
 <footer class="footer"><div class="social-wrap dis-select"><a class="social" href="/atom.xml" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/14/25678f144c438.svg"/></a><a class="social" href="https://github.com/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/github.svg"/></a><a class="social" href="https://twitter.com/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/twitter.svg"/></a><a class="social" href="https://t.me/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/telegram.svg"/></a><a class="social" href="/about/#comments" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/comments.svg"/></a></div></footer>
 
     </aside>
-    <div class='l_main list'>
+    <div class='l_main'>
       
 
       
@@ -199,9 +248,13 @@
         
         
         
+        
+        
+        
+        
     </div>
     <div id='post-meta'>
-      更新于&nbsp;<time datetime='2021-03-08T07:35:07.676Z'>2021-03-08</time>
+      更新于&nbsp;<time datetime='2021-03-09T07:18:11.604Z'>2021-03-09</time>
     </div>
   
   </div>
@@ -209,7 +262,51 @@
 
   <article class='content md wiki reveal'>
   
-  
+  <h2 id="docker-cli"><a href="#docker-cli" class="headerlink" title="docker cli"></a>docker cli</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">kill</span> -9 $(ps -ef|grep caster|awk <span class="string">&#x27;NR==1 &#123;print $3&#125;&#x27;</span>)</span><br><span class="line">docker rmi $(docker images | grep <span class="string">&#x27;&lt;none&gt;&#x27;</span>| awk <span class="string">&#x27;&#123;print $3&#125;&#x27;</span>)</span><br><span class="line">docker rmi $(docker images | grep <span class="string">&#x27;&lt;none&gt;&#x27;</span>| awk <span class="string">&#x27;&#123;next&#125;&#123;print $3&#125;&#x27;</span>) </span><br><span class="line">umount $(df -h|grep danaos|awk <span class="string">&#x27;&#123;print $6&#125;&#x27;</span>)</span><br><span class="line"></span><br><span class="line">shuf -n 1000000 alluser_id | awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span> &gt; test_random_1000000</span><br><span class="line">awk <span class="string">&#x27;END&#123;print NR&#125;&#x27;</span> test_random_1000000</span><br><span class="line"></span><br><span class="line">docker inspect --format <span class="string">&#x27;&#123;&#123; .NetworkSettings.IPAddress &#125;&#125;&#x27;</span> centos</span><br><span class="line"></span><br><span class="line">docker run -itd --name=centos --privileged=<span class="literal">true</span> -v /sys/fs/cgroup:/sys/fs/cgroup -p 8888:8888 centos:centos7 /usr/sbin/init</span><br></pre></td></tr></table></figure>
+
+<h2 id="开通防火墙端口"><a href="#开通防火墙端口" class="headerlink" title="开通防火墙端口"></a>开通防火墙端口</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iptables -I INPUT -p tcp --dport 8888 -j ACCEPT</span><br></pre></td></tr></table></figure>
+
+<h2 id="允许远程主机访问本机的-80-端口"><a href="#允许远程主机访问本机的-80-端口" class="headerlink" title="允许远程主机访问本机的 80 端口"></a>允许远程主机访问本机的 80 端口</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">iptables -F</span><br><span class="line">iptables -X</span><br><span class="line">iptables -A INPUT -p tcp --dport 80 -j accept</span><br><span class="line">iptables -A INPUT -p tcp -j REJECT</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">iptables -A INPUT -m state --state NEW-m tcp -p tcp --dport 80 -j ACCEPT</span><br></pre></td></tr></table></figure>
+
+<h2 id="监控-linux-磁盘根分区"><a href="#监控-linux-磁盘根分区" class="headerlink" title="监控 linux 磁盘根分区"></a>监控 linux 磁盘根分区</h2><ul>
+<li><p>打印根分区大小</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 注解：awk ‘&#123;print $5&#125;’意思是打印第 5 个域，-F 的意思为分隔，例如以 % 分隔，简单意思就是去掉百分号，awk –F. ‘&#123;print $1&#125;’分隔点. 号</span></span><br><span class="line">df -h |sed -n <span class="string">&#x27;//$/p&#x27;</span>|awk <span class="string">&#x27;&#123;print $5&#125;&#x27;</span>|awk –F ”%” <span class="string">&#x27;&#123;print $1&#125;&#x27;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>if 条件判断该大小是否大于 90，如果大于 90 则发送邮件报警</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> sleep 5m</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> `df -h |sed -n <span class="string">&#x27;//$/p&#x27;</span> |awk <span class="string">&#x27;&#123;print $5&#125;&#x27;</span> |sed <span class="string">&#x27;s/%//g&#x27;</span>`</span><br><span class="line">        <span class="keyword">do</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line">            <span class="keyword">if</span> [<span class="variable">$i</span> -ge 90];<span class="keyword">then</span></span><br><span class="line">            <span class="built_in">echo</span> “More than 90% Linux of disk space ,Please LinuxSA Check Linux Disk !” |mail -s “Warn Linux / Parts is <span class="variable">$i</span>%” </span><br><span class="line">            XXX@XXX.XX</span><br><span class="line">            <span class="keyword">fi</span></span><br><span class="line">        <span class="keyword">done</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="网络抓包-tcpdump"><a href="#网络抓包-tcpdump" class="headerlink" title="网络抓包 tcpdump"></a>网络抓包 <code>tcpdump</code></h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 抓取 56.7 通过 80 请求的数据包。</span></span><br><span class="line">tcpdump -nn host 192.168.56.7 and port 80  </span><br><span class="line"></span><br><span class="line"><span class="comment"># 80 排除 0.22 80 端口！</span></span><br><span class="line">tcpdump -nn host 192.168.56.7 or ! host 192.168.0.22 and port  </span><br><span class="line"></span><br><span class="line"><span class="comment"># tcp/ip 7 层协议物理层–数据链路层 - 网络层 - 传输层 - 会话层 - 表示层 - 应用层。</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-snmpd-抓取版本为-v2-的-cacti-数据方式"><a href="#使用-snmpd-抓取版本为-v2-的-cacti-数据方式" class="headerlink" title="使用 snmpd 抓取版本为 v2 的 cacti 数据方式"></a>使用 snmpd 抓取版本为 v2 的 <code>cacti</code> 数据方式</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">snmpwalk -v2c -c public 192.168.0.241</span><br></pre></td></tr></table></figure>
+
+<h2 id="CPU-满载测试用例"><a href="#CPU-满载测试用例" class="headerlink" title="CPU 满载测试用例"></a>CPU 满载测试用例</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 由于连续执行Ｎ个 (Ｎ是CPU个数) 的 dd 命令, 且使用率为100%,　这时调度器会调度每个 dd 命令在不同的 CPU 上处理；最终就实现所有 CPU 占用率 100%</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `seq 1 $(cat /proc/cpuinfo |grep <span class="string">&quot;physical id&quot;</span> |wc -l)`; <span class="keyword">do</span> dd <span class="keyword">if</span>=/dev/zero of=/dev/null &amp; <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<p>说明:</p>
+<ul>
+<li><code>cat /proc/cpuinfo |grep &quot;physical id&quot; | wc -l </code> 可以获得 CPU 的个数,　我们将其表示为 N.</li>
+<li><code>seq 1 N </code> 用来生成１到Ｎ之间的数字</li>
+<li><code>for i in seq 1 N</code>;  就是循环执行命令, 从１到Ｎ</li>
+<li><code>dd if=/dev/zero of=/dev/null</code> 执行 dd 命令,　输出到 <code>/dev/null</code>, 实际上只占用 CPU,　没有 IO 操作.</li>
+</ul>
+<p>另外，上述程序的结束可以使用：</p>
+<ol>
+<li>fg 后按 ctrl + C (因为该命令是放在后台执行)</li>
+<li>pkill -9 dd</li>
+</ol>
+<h2 id="查找当前目录下以-tar-的文件移动到指定目录"><a href="#查找当前目录下以-tar-的文件移动到指定目录" class="headerlink" title="查找当前目录下以 .tar 的文件移动到指定目录"></a>查找当前目录下以 <code>.tar</code> 的文件移动到指定目录</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">find . -name “*.tar” -<span class="built_in">exec</span> mv &#123;&#125; ./backup/ </span><br><span class="line"></span><br><span class="line"><span class="comment"># 注解：find –name 主要用于查找某个文件名字，-exec 、xargs 可以用来承接前面的结果，然后将要执行的动作，一般跟 find 在一起用的很多，find 使用我们可以延伸 - mtime 查找修改时间、-type 是指定对象类型（常见包括 f 代表文件、d 代表目录），-size 指定大小，例如经常用到的：查找当前目录 30 天以前大于 100M 的 LOG 文件并删除</span></span><br><span class="line">find . -name <span class="string">&quot;*.log&quot;</span> –mtime +30 –typef –size +100M |xargs rm –rf &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="批量解压当前目录下-zip-的所有文件到指定目录"><a href="#批量解压当前目录下-zip-的所有文件到指定目录" class="headerlink" title="批量解压当前目录下 .zip 的所有文件到指定目录"></a>批量解压当前目录下 <code>.zip</code> 的所有文件到指定目录</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 注解：forI in （command）;do … done 为 for 循环的一个常用格式，其中 I 为变量，可以自己指定</span></span><br><span class="line"><span class="keyword">for</span> i  <span class="keyword">in</span>  `find . –name “*.zip”–<span class="built_in">type</span> f `</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">   unzip –d <span class="variable">$i</span> /data/www/img/</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="判断目录是否存在"><a href="#判断目录是否存在" class="headerlink" title="判断目录是否存在"></a>判断目录是否存在</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 注解：if…;then …else ..fi：为 if 条件语句,! 叹号表示反义 “不存在 “，-d 代表目录。</span></span><br><span class="line"><span class="keyword">if</span></span><br><span class="line">	[! –d /data/backup/];<span class="keyword">then</span></span><br><span class="line">	Mkdir–p /data/backup/</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">	<span class="built_in">echo</span>  <span class="string">&quot;The Directory alreadyexists,please exit&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="nginx-日志统计前10个-IP"><a href="#nginx-日志统计前10个-IP" class="headerlink" title="nginx 日志统计前10个 IP"></a>nginx 日志统计前10个 IP</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/logs/nginx/default</span><br><span class="line"></span><br><span class="line"><span class="comment"># 注解：sort 排序、uniq（检查及删除文本文件中重复出现的行列 ）</span></span><br><span class="line">sort -m -k 4 -o access.logok access.1 access.2 access.3 ..... </span><br><span class="line"></span><br><span class="line">cat access.log |awk <span class="string">&#x27;&#123;print $1&#125;&#x27;</span>|sort -n|uniq -c|sort -nr |head -10</span><br></pre></td></tr></table></figure>
+
+<h2 id="打印出一个文件里面最大和最小值"><a href="#打印出一个文件里面最大和最小值" class="headerlink" title="打印出一个文件里面最大和最小值"></a>打印出一个文件里面最大和最小值</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cat a.txt |sort -nr|awk ‘&#123;&#125;END&#123;<span class="built_in">print</span>&#125; NR==1′</span><br><span class="line"></span><br><span class="line">cat a.txt |sort -nr |awk ‘END&#123;<span class="built_in">print</span>&#125; NR==1′</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这个才是真正的打印最大最小值：</span></span><br><span class="line">sed ‘s/ / /g’ a.txt |sort -nr|sed -n ’1p;<span class="variable">$p</span>’</span><br></pre></td></tr></table></figure>
+
+<h2 id="查找3天前创建且后缀是-log-的文件并删除"><a href="#查找3天前创建且后缀是-log-的文件并删除" class="headerlink" title="查找3天前创建且后缀是 \*.log 的文件并删除"></a>查找3天前创建且后缀是 <code>\*.log</code> 的文件并删除</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -mtime +3  -name <span class="string">&quot;*.log&quot;</span> |xargs rm -rf &#123;&#125; ;</span><br></pre></td></tr></table></figure>
+
+<h2 id="将某目录下大于-100k-的文件移动至-tmp-下"><a href="#将某目录下大于-100k-的文件移动至-tmp-下" class="headerlink" title="将某目录下大于 100k 的文件移动至 /tmp 下"></a>将某目录下大于 100k 的文件移动至 <code>/tmp</code> 下</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -size +100k -<span class="built_in">exec</span> mv &#123;&#125; /tmp ;</span><br></pre></td></tr></table></figure>
+
+<h2 id="sed-常用命令"><a href="#sed-常用命令" class="headerlink" title="sed 常用命令"></a>sed 常用命令</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如何去掉行首的. 字符: </span></span><br><span class="line">sed -i <span class="string">&#x27;s/^.//g&#x27;</span> test.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在行首添加一个 a 字符: </span></span><br><span class="line">sed <span class="string">&#x27;s/^/a/g&#x27;</span> test.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在行尾添加一个 a 字符: </span></span><br><span class="line">sed <span class="string">&#x27;s/$/a/&#x27;</span> tets.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在特定行后添加一个 c 字符: </span></span><br><span class="line">sed <span class="string">&#x27;/wuguangke/ac&#x27;</span> test.txt</span><br><span class="line"></span><br><span class="line"><span class="comment">#在行前加入一个 c 字符: </span></span><br><span class="line">sed <span class="string">&#x27;/wuguangke/ic&#x27;</span> test.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改文本中以 jk 结尾的替换成 yz</span></span><br><span class="line">sed -e ‘s/jk$/yz/g’ b.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># sed 冒号方式 </span></span><br><span class="line">sed -i ‘s:/tmp:/tmp/abc/:g’test.txt  <span class="comment"># 意思是将 /tmp 改成 /tmp/abc/</span></span><br></pre></td></tr></table></figure>
   
 
 
