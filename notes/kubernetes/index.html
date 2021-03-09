@@ -209,6 +209,7 @@
     
     
     
+    
 
 
     
@@ -256,6 +257,7 @@
         
         
         
+        
     </div>
     <div id='post-meta'>
       更新于&nbsp;<time datetime='2021-03-09T01:10:22.868Z'>2021-03-09</time>
@@ -266,7 +268,7 @@
 
   <article class='content md wiki reveal'>
   
-  <h2 id="K8S-的架构"><a href="#K8S-的架构" class="headerlink" title="K8S 的架构"></a>K8S 的架构</h2><details class="tag-plugin"  open><summary><span>像大多数的分布式系统，K8S 集群至少需要一个主节点 Master 和多个计算节点 Node</span></summary><div class="body"><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210309005449.png" alt="k8s架构图"></p><details class="tag-plugin" color="blue"><summary><span>Master（控制节点）</span></summary><div class="body"><p><strong>由三个紧密协作的独立组件组合而成</strong></p><ul><li>负责 API 服务的 <code>kube-apiserver</code></li><li>负责调度的 <code>kube-scheduler</code></li><li>负责容器编排的 <code>kube-controller-manager</code><br>整个集群的持久化数据，则由 kube-apiserver 处理后保存在 <code>Etcd</code> 中</li></ul></div></details><details class="tag-plugin" color="green"><summary><span>Node（计算节点）</span></summary><div class="body"><p>最核心的是 <code>kubelet</code> 的组件，具备以下功能</p><ul><li><strong>负责同容器运行时（比如 Docker 项目）打交道</strong>。而这个交互所依赖的，是一个称作 <code>CRI（Container Runtime Interface）</code>的远程调用接口，这个接口定义了容器运行时的各项核心操作</li><li><strong>通过 gRPC 协议同一个叫作 Device Plugin 的插件进行交互</strong>。这个插件，是 K8S 项目用来管理 GPU 等宿主机物理设备的主要组件</li><li><strong>调用网络插件和存储插件为容器配置网络和持久化存储</strong>。这两个插件与 kubelet 进行交互的接口，分别是 <code>CNI（Container Networking Interface）</code>和 <code>CSI（Container Storage Interface）</code></li></ul></div></details><p><strong>补充：</strong>K8S 项目并不关心你部署的是什么容器运行时、使用的什么技术实现，只要你的这个容器运行时能够运行标准的容器镜像，它就可以通过实现 <code>CRI</code> 接入到 K8S 项目当中；而具体的容器运行时，比如 <code>Docker</code> 项目，则一般通过 <code>OCI</code> 这个容器运行时规范同底层的 Linux 操作系统进行交互，即：把 <code>CRI</code> 请求翻译成对 Linux 操作系统的调用（操作 Linux Namespace 和 Cgroups 等）</p></div></details>
+  <h2 id="K8S-的架构"><a href="#K8S-的架构" class="headerlink" title="K8S 的架构"></a>K8S 的架构</h2><details class="tag-plugin folding"  open><summary><span>像大多数的分布式系统，K8S 集群至少需要一个主节点 Master 和多个计算节点 Node</span></summary><div class="body"><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210309005449.png" alt="k8s架构图"></p><details class="tag-plugin folding" color="blue"><summary><span>Master（控制节点）</span></summary><div class="body"><p><strong>由三个紧密协作的独立组件组合而成</strong></p><ul><li>负责 API 服务的 <code>kube-apiserver</code></li><li>负责调度的 <code>kube-scheduler</code></li><li>负责容器编排的 <code>kube-controller-manager</code><br>整个集群的持久化数据，则由 kube-apiserver 处理后保存在 <code>Etcd</code> 中</li></ul></div></details><details class="tag-plugin folding" color="green"><summary><span>Node（计算节点）</span></summary><div class="body"><p>最核心的是 <code>kubelet</code> 的组件，具备以下功能</p><ul><li><strong>负责同容器运行时（比如 Docker 项目）打交道</strong>。而这个交互所依赖的，是一个称作 <code>CRI（Container Runtime Interface）</code>的远程调用接口，这个接口定义了容器运行时的各项核心操作</li><li><strong>通过 gRPC 协议同一个叫作 Device Plugin 的插件进行交互</strong>。这个插件，是 K8S 项目用来管理 GPU 等宿主机物理设备的主要组件</li><li><strong>调用网络插件和存储插件为容器配置网络和持久化存储</strong>。这两个插件与 kubelet 进行交互的接口，分别是 <code>CNI（Container Networking Interface）</code>和 <code>CSI（Container Storage Interface）</code></li></ul></div></details><p><strong>补充：</strong>K8S 项目并不关心你部署的是什么容器运行时、使用的什么技术实现，只要你的这个容器运行时能够运行标准的容器镜像，它就可以通过实现 <code>CRI</code> 接入到 K8S 项目当中；而具体的容器运行时，比如 <code>Docker</code> 项目，则一般通过 <code>OCI</code> 这个容器运行时规范同底层的 Linux 操作系统进行交互，即：把 <code>CRI</code> 请求翻译成对 Linux 操作系统的调用（操作 Linux Namespace 和 Cgroups 等）</p></div></details>
 
 <h2 id="Prometheus、Metrics-Server-与-K8S-监控体系"><a href="#Prometheus、Metrics-Server-与-K8S-监控体系" class="headerlink" title="Prometheus、Metrics Server 与 K8S 监控体系"></a>Prometheus、Metrics Server 与 K8S 监控体系</h2><p>Prometheus 项目工作的核心，是使用 <strong>Pull</strong> （抓取）的方式去搜集被监控对象的 Metrics 数据（监控指标数据），然后，再把这些数据保存在一个 TSDB （时间序列数据库，比如 OpenTSDB、InfluxDB 等）当中，以便后续可以按照时间进行检索；其主要的特点如下：</p>
 <ul>
@@ -314,7 +316,7 @@
 <blockquote>
 <p>Kubernetes 控制器</p>
 </blockquote>
-<div class="tag-plugin tag link dis-select"><a class="link-card" title="Kubernetes控制器的进化之旅" href="../../2020/kubernetes-operator.html"><div class="left"><span class="title fs14">Kubernetes控制器的进化之旅</span><span class="url fs12">https://leeif.me/2020/kubernetes-operator.html</span></div><div class="right"><div class="lazy img" data-bg="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/link/8f277b4ee0ecd.svg"></div></div></a></div>
+<div class="tag-plugin link dis-select"><a class="link-card" title="Kubernetes控制器的进化之旅" href="../../2020/kubernetes-operator.html"><div class="left"><span class="title fs14">Kubernetes控制器的进化之旅</span><span class="url fs12">https://leeif.me/2020/kubernetes-operator.html</span></div><div class="right"><div class="lazy img" data-bg="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/link/8f277b4ee0ecd.svg"></div></div></a></div>
 
 <h2 id="GPU-在容器云中的方案及使用"><a href="#GPU-在容器云中的方案及使用" class="headerlink" title="GPU 在容器云中的方案及使用"></a>GPU 在容器云中的方案及使用</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20210309011324.png" alt="GPU 在容器云中的方案及使用"><br>核心功能模块:</p>
 <ul>
