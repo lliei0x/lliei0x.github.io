@@ -114,14 +114,6 @@
     
     
       <div class='post-title'>
-        <a href="/2017/git-experience-modify.html">
-          
-            Git 实践 - 修改操作
-          
-        </a>
-      </div>
-    
-      <div class='post-title'>
         <a href="/2020/openldap-install-config.html">
           
             OpenLDAP 快速落地实践-部署配置
@@ -149,6 +141,14 @@
         <a href="/2020/kubernetes-operator.html">
           
             「转」 Kubernetes 控制器的进化之旅
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2019/operator-sdk-use.html">
+          
+            Opeartor-SDK 简单上手
           
         </a>
       </div>
@@ -206,59 +206,7 @@
   </nav>
 </div>
 
-  <div class="post-list post"><a class="post-card post article reveal" href="/2017/raspberry-pi-getting-started.html"><article class="excerpt md">
-
-<h2 class="post-title">
-  Raspberry Pi — 新手入门操作
-</h2>
-<div class='excerpt'>
-  
-    <p>通过 SSH 访问树莓派
-SSH 的主要目的是用来取代传统的 telnet 和 R 系列命令远程登陆和远程执行命令的工具，实现对远程登陆和远程执行命令加密。同样通过 SSH 功能也能快速的打开树莓派得终端。
-
-###开启 SSH 服务
-
-树莓派系统一般都含有树莓派服务，因此不需要进行安装。在树莓派系统中打开命令行窗口，输入：sudo raspi-config 进入配置界面，将选中条选择到 “...</p>
-  
-</div>
-<div class='meta cap'>
-  <span class='cap' id='post-meta'>
-    发布于&nbsp;<time datetime='2017-11-20T12:36:25.000Z'>2017-11-20</time>
-  </span>
-  
-    
-      
-      <span class="cap breadcrumb" style="color:#d49a89">折腾不止</span>
-    
-  
-  
-</div>
-</article></a><a class="post-card post article reveal" href="/2017/python-virtual-environment-build.html"><article class="excerpt md">
-
-<h2 class="post-title">
-  Python 虚拟坏境的搭建和配置
-</h2>
-<div class='excerpt'>
-  
-    <p>
-Python易用，但用好却不易，其中比较头疼的就是包管理和Python不同版本的问题，特别是当你使用Windows的时候。为了解决这些问题，有不少发行版的Python，比如WinPython、Anaconda等，这些发行版将python和许多常用的package打包，方便pythoners直接使用，此外，还有virtualenv、pyenv等工具管理虚拟环境。
-
-这篇文章主要就是记录了不使...</p>
-  
-</div>
-<div class='meta cap'>
-  <span class='cap' id='post-meta'>
-    发布于&nbsp;<time datetime='2017-09-23T09:12:00.000Z'>2017-09-23</time>
-  </span>
-  
-    
-      
-      <span class="cap breadcrumb" style="color:#d49a89">折腾不止</span>
-    
-  
-  
-</div>
-</article></a><a class="post-card post article reveal" href="/2017/common-sorting-algorithm.html"><article class="excerpt md">
+  <div class="post-list post"><a class="post-card post article reveal" href="/2017/common-sorting-algorithm.html"><article class="excerpt md">
 
 <h2 class="post-title">
   常见排序算法
@@ -282,75 +230,6 @@ Python易用，但用好却不易，其中比较头疼的就是包管理和Pytho
 <div class='meta cap'>
   <span class='cap' id='post-meta'>
     发布于&nbsp;<time datetime='2017-09-20T15:32:45.000Z'>2017-09-20</time>
-  </span>
-  
-    
-      
-      <span class="cap breadcrumb" style="color:#3fbac2">技术加油站</span>
-    
-  
-  
-</div>
-</article></a><a class="post-card post article reveal" href="/2017/git-experience-version-control.html"><article class="excerpt md">
-
-<h2 class="post-title">
-  Git 实践 - 版本库控制
-</h2>
-<div class='excerpt'>
-  
-    <p>创建版本库把文件添加到版本库：
-
-通过git init命令把这个目录变成Git可以管理的仓库12$ git initInitialized empty Git repository in E:/git/test/.git/
-用命令git add告诉Git，把文件添加到仓库1$ git add README.md
-用命令git commit告诉Git，把文件提交到仓库1234$ git commit -m &quot;initial commit&quot;[master (root-commit) 6010c7e] initial commit 1 file changed, 7 insertions(+) create mode 100644 README.md
-另外：初始创建一个 github仓库时，github会给一些命令你去创建git本地项目.
-
-1git remote add origin https://github.com/leeifme/test.git
-这里的origin仅仅是一个名字，你可以把 origin命名为 test -git remote add test https://github.com/leeifme/test.git`, 以后就可以用git push text master了
-git push -u origin master , 这里就是把 master（默认 git 分支）推送到 origin， -u也就是--set-upstream, 代表的是更新默认推送的地方，这里就是默认以后git pull和git push时，都是推送和拉自 origin 。</p>
-  
-</div>
-<div class='meta cap'>
-  <span class='cap' id='post-meta'>
-    发布于&nbsp;<time datetime='2017-09-15T07:36:25.000Z'>2017-09-15</time>
-  </span>
-  
-    
-      
-      <span class="cap breadcrumb" style="color:#3fbac2">技术加油站</span>
-    
-  
-  
-</div>
-</article></a><a class="post-card post article reveal" href="/2017/git-experience-modify.html"><article class="excerpt md">
-
-<h2 class="post-title">
-  Git 实践 - 修改操作
-</h2>
-<div class='excerpt'>
-  
-    <p>工作区和版本库
-工作区：
-就是你电脑文件夹能看到的目录，就如我创建的test文件夹就是一个工作区
-123leeif@leeif MINGW64 /e/git/test (master)$ lsgit.txt  index.html  README.md
-版本库(Repository)：
-工作区有一个隐藏的目录文件.git，这个虽然在工作区目录下，但不算在工作区，而是Git的版本库。
-Git的版本库里存了很多东西，其中最重要的就是称为stage（或者叫index）的暂存区，还有Git为我们自动创建的第一个分支master，以及指向master的一个指针叫HEAD。
- 
-
-上一篇讲了我们把文件往Git版本库里添加的时候，是分两步执行的：
-
-用git add把文件添加进去，实际上就是把文件修改添加到暂存区；
-用git commit提交更改，实际上就是把暂存区的所有内容提交到当前分支。
-
-因为我们创建Git版本库时，Git自动为我们创建了唯一一个master分支，所以，现在，git commit就是往master分支上提交更改。
-你可以简单理解为，需要提交的文件修改通通放到暂存区，然后，一次性提交暂存区的所有修改。
-ok，我们实践一下：</p>
-  
-</div>
-<div class='meta cap'>
-  <span class='cap' id='post-meta'>
-    发布于&nbsp;<time datetime='2017-09-11T12:36:25.000Z'>2017-09-11</time>
   </span>
   
     
@@ -415,7 +294,7 @@ casual
 
       
 <footer class="page-footer fs12"><hr><div><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
-<p>本站由 <a href="https://leeif.me/">@iliei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.6">Stellar</a> 作为主题。</p>
+<p>本站由 <a href="https://leeif.me/">@iliei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0">Stellar</a> 作为主题。</p>
 </div></footer>
 
       <div class='float-panel mobile-only' style='display:none'>
@@ -429,7 +308,7 @@ casual
   <div class='scripts'>
     <script type="text/javascript">
   stellar = {};
-  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.6';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0';
   stellar.config = {
     date_suffix: {
       just: '刚刚',

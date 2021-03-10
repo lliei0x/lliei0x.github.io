@@ -114,14 +114,6 @@
     
     
       <div class='post-title'>
-        <a href="/2017/git-experience-modify.html">
-          
-            Git 实践 - 修改操作
-          
-        </a>
-      </div>
-    
-      <div class='post-title'>
         <a href="/2020/openldap-install-config.html">
           
             OpenLDAP 快速落地实践-部署配置
@@ -149,6 +141,14 @@
         <a href="/2020/kubernetes-operator.html">
           
             「转」 Kubernetes 控制器的进化之旅
+          
+        </a>
+      </div>
+    
+      <div class='post-title'>
+        <a href="/2019/operator-sdk-use.html">
+          
+            Opeartor-SDK 简单上手
           
         </a>
       </div>
@@ -277,57 +277,6 @@ Go 语言是为并发而生的语言，Go 语言是为数不多的在语言层�
 <div class='meta cap'>
   <span class='cap' id='post-meta'>
     发布于&nbsp;<time datetime='2019-01-22T06:15:15.000Z'>2019-01-22</time>
-  </span>
-  
-    
-      
-      <span class="cap breadcrumb" style="color:#035aa6">设计开发</span>
-    
-  
-  
-</div>
-</article></a><a class="post-card post article reveal" href="/2019/git-flow-work-process.html"><article class="excerpt md">
-
-<h2 class="post-title">
-  git-flow 的工作流程
-</h2>
-<div class='excerpt'>
-  
-    <p>前言
-当在团队开发中使用版本控制系统时，商定一个统一的工作流程是至关重要的。Git 的确可以在各个方面做很多事情，然而，如果在你的团队中还没有能形成一个特定有效的工作流程，那么混乱就将是不可避免的。
-git-flow 就是当前非常流行且行之有效的工作流程， 是一个 Git 扩展集，按 Vincent Driessen 的分支模型提供高层次的库操作，并且提供了极其出色的命令帮忙以及输出提示，本...</p>
-  
-</div>
-<div class='meta cap'>
-  <span class='cap' id='post-meta'>
-    发布于&nbsp;<time datetime='2019-01-06T06:15:15.000Z'>2019-01-06</time>
-  </span>
-  
-    
-      
-      <span class="cap breadcrumb" style="color:#035aa6">设计开发</span>
-    
-  
-  
-</div>
-</article></a><a class="post-card post article reveal" href="/2018/gitlab-github-submit.html"><article class="excerpt md">
-
-<h2 class="post-title">
-  Gitlab or Github 提交规范和建议
-</h2>
-<div class='excerpt'>
-  
-    <p>标签（tag）的管理规范标签分类正式标签：以发布的版本号居多，例：v.1.2
-临时标签：版本测试期间做回溯和标记使用，例：v1.1-st 、 v1.1-sit2
-命名规范
-标签前缀（大多）以发布版本号命名，示例：v1.3.1（后期遇到特殊情况再讨论）
-如果需要在版本号后加备注信息，用『“-”：连字符』连接，不再使用 “_” 下划线，且字母全部小写，强烈建议不要以中文命名。
-版本经历多次修改时...</p>
-  
-</div>
-<div class='meta cap'>
-  <span class='cap' id='post-meta'>
-    发布于&nbsp;<time datetime='2018-12-06T06:15:15.000Z'>2018-12-06</time>
   </span>
   
     
@@ -476,6 +425,84 @@ service 网络： 10.96.0.0/...</p>
   
   
 </div>
+</article></a><a class="post-card post article reveal" href="/2018/vim-common-hotkey.html"><article class="excerpt md">
+
+<h2 class="post-title">
+  你和大佬之间就差一个 vim
+</h2>
+<div class='excerpt'>
+  
+    <p>进入 vim
+
+
+命令
+描述
+
+
+
+vim filename
+打开或新建文件, 并将光标置于第一行首
+
+
+vim +n filename
+打开文件，并将光标置于第 n 行首
+
+
+vim + filename
+打开文件，并将光标置于最后一行首
+
+
+vim +/pattern filename
+打开文件，并将光标置于第一个与 pattern 匹配的串处
+
+
+vim -r filename
+在上次...</p>
+  
+</div>
+<div class='meta cap'>
+  <span class='cap' id='post-meta'>
+    发布于&nbsp;<time datetime='2018-08-15T06:15:15.000Z'>2018-08-15</time>
+  </span>
+  
+    
+      
+      <span class="cap breadcrumb" style="color:#f67280">安利系列</span>
+    
+  
+  
+</div>
+</article></a><a class="post-card post article reveal" href="/2018/gin-swagger-build-document.html"><article class="excerpt md">
+
+<h2 class="post-title">
+  gin-swagger 自动化构建 API 文档
+</h2>
+<div class='excerpt'>
+  
+    <p>
+前后端的交互一般流程是这样的，后端暴露出 API 后，交给前端，前端根据 API 的响应，编写前端页面，一定程度上 API 是前后端的交互桥梁。 
+
+API 文档主要要包含:
+
+路由：包括路径参数、请求参数、还是请求体参数
+动作：HTTP 请求动作，GET、POST、DELETE、PUT
+响应：请求之后的返回值包含哪些信息，一般是 JSON
+
+swagger 可以将代码和 api 文档维护...</p>
+  
+</div>
+<div class='meta cap'>
+  <span class='cap' id='post-meta'>
+    发布于&nbsp;<time datetime='2018-07-27T12:36:25.000Z'>2018-07-27</time>
+  </span>
+  
+    
+      
+      <span class="cap breadcrumb" style="color:#3fbac2">技术加油站</span>
+    
+  
+  
+</div>
 </article></a></div>
   
   <div class='paginator-wrap dis-select'>
@@ -495,7 +522,7 @@ service 网络： 10.96.0.0/...</p>
 
       
 <footer class="page-footer fs12"><hr><div><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
-<p>本站由 <a href="https://leeif.me/">@iliei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.6">Stellar</a> 作为主题。</p>
+<p>本站由 <a href="https://leeif.me/">@iliei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0">Stellar</a> 作为主题。</p>
 </div></footer>
 
       <div class='float-panel mobile-only' style='display:none'>
@@ -509,7 +536,7 @@ service 网络： 10.96.0.0/...</p>
   <div class='scripts'>
     <script type="text/javascript">
   stellar = {};
-  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0-rc.6';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.0';
   stellar.config = {
     date_suffix: {
       just: '刚刚',
