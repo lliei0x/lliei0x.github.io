@@ -1,3 +1,17 @@
+@font-face {
+  font-family: 'fwzc';
+  src: url("https://cdn.jsdelivr.net/gh/leeif-me/cdn/static/fonts/foundertype/fwzcN.OTF");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'sxls';
+  src: url("https://cdn.jsdelivr.net/gh/leeif-me/cdn/static/fonts/foundertype/sxls.OTF");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 :root {
   --width-left: 280px;
   --width-main: 680px;
@@ -522,7 +536,7 @@ pre .coffeescript .title {
   outline: none;
 }
 html {
-  font-family: system-ui, "Microsoft Yahei", "Segoe UI", -apple-system, Roboto, Ubuntu, "Helvetica Neue", Arial, "WenQuanYi Micro Hei", sans-serif;
+  font-family: fwzc, system-ui, "Segoe UI", -apple-system, Roboto, Ubuntu, "Helvetica Neue", Arial, "WenQuanYi Micro Hei", sans-serif;
   font-size: 16px;
 }
 body {
@@ -2346,7 +2360,7 @@ details[codeblock]>div.body .highlight {
   font-weight: 900;
   color: inherit;
   line-height: 1;
-  font-family: system-ui, "Microsoft Yahei", "Segoe UI", -apple-system, Roboto, Ubuntu, "Helvetica Neue", Arial, "WenQuanYi Micro Hei", sans-serif;
+  font-family: fwzc, system-ui, "Segoe UI", -apple-system, Roboto, Ubuntu, "Helvetica Neue", Arial, "WenQuanYi Micro Hei", sans-serif;
 }
 nav.menu {
   margin-top: 0;
