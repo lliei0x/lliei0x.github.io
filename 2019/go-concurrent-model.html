@@ -1,442 +1,49 @@
-<!DOCTYPE html>
-<html lang='zh-CN'>
-
-<head>
-  <meta name="generator" content="Hexo 5.4.0">
-  <meta charset="utf-8">
-  
-
-  <meta http-equiv='x-dns-prefetch-control' content='on' />
-  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-
-  <meta name="renderer" content="webkit">
-  <meta name="force-rendering" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-  <meta name="HandheldFriendly" content="True" >
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-  <title>Go 并发模型 - LEEIF.ME</title>
-
-  
-    <meta name="description" content="前言 Go 语言是为并发而生的语言，Go 语言是为数不多的在语言层面实现并发的语言；也正是 Go 语言的并发特性，吸引了全球无数的开发者  并发 (concurrency) 和并行(parallellism)在了解 Go 的并发原理之前，先了解什么是并发什么是并行；  并发 ( concurrency ) 两个或两个以上的任务在一段时间内被执行。我们不必 care 这些任务在某一个时间点是否是同时">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Go 并发模型">
-<meta property="og:url" content="https://leeif.me/2019/go-concurrent-model.html">
-<meta property="og:site_name" content="LEEIF.ME">
-<meta property="og:description" content="前言 Go 语言是为并发而生的语言，Go 语言是为数不多的在语言层面实现并发的语言；也正是 Go 语言的并发特性，吸引了全球无数的开发者  并发 (concurrency) 和并行(parallellism)在了解 Go 的并发原理之前，先了解什么是并发什么是并行；  并发 ( concurrency ) 两个或两个以上的任务在一段时间内被执行。我们不必 care 这些任务在某一个时间点是否是同时">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/go-cps.png">
-<meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/20190124110810.png">
-<meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/20190124112954.png">
-<meta property="article:published_time" content="2019-01-22T06:15:15.000Z">
-<meta property="article:modified_time" content="2021-03-06T13:55:55.644Z">
-<meta property="article:author" content="iliei">
-<meta property="article:tag" content="Go">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/go-cps.png">
-  
-  
-
-  <!-- feed -->
-  
-    <link rel="alternate" href="/atom.xml" title="LEEIF.ME" type="application/atom+xml">
-  
-
-  
-    
-<link rel="stylesheet" href="/css/main.css">
-
-  
-
-  
-    <link rel="shortcut icon" type='image/x-icon' href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/favicon.svg">
-  
-</head>
-
-<body theme='light'>
-  
-
-
-  <div class='l_body' id='start'>
-    <aside class='l_left'>
-    
-
-<header class='header'>
-  <div class='logo-wrap'>
-  
-    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2021/03/19/7zgY3RcHymVe9rx.png'/></a>
-  
-  
-    <a class='title' href='/'>LEEIF.ME</a>
-  
-</div>
-
-  <nav class="menu dis-select"><a class="nav-item active" href="/">文章</a><a class="nav-item" href="/wiki/">WIKI</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/about/">更多</a></nav>
-</header>
-
-<div class='widgets'>
-  
-    
-      
-      
-
-  <div class='widget-wrap' id='toc'>
-    <div class='widget-header h4 dis-select'>
-      <span class='name'>
-        
-          本文目录
-        
-      </span>
-      <a class='cap-action' id='s-top' title='回到顶部' href='#start'>
-        <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10505"><path d="M884.526 163.323H208.881c-30.516 0-55.25 24.934-55.25 55.685s24.734 55.685 55.25 55.685h675.645c30.515 0 55.255-24.93 55.255-55.685s-24.74-55.685-55.255-55.685zM568.253 336.87a56.765 56.765 0 0 0-4.06-3.701c-0.63-0.517-1.29-0.968-1.935-1.454-0.799-0.605-1.577-1.224-2.406-1.787-0.779-0.528-1.583-0.978-2.386-1.46-0.748-0.45-1.485-0.926-2.253-1.341-0.81-0.44-1.649-0.814-2.483-1.208-0.8-0.384-1.588-0.784-2.407-1.132-0.814-0.338-1.643-0.61-2.463-0.906-0.875-0.323-1.745-0.66-2.641-0.932-0.825-0.25-1.66-0.435-2.489-0.645-0.916-0.236-1.817-0.492-2.75-0.681-0.962-0.19-1.935-0.307-2.902-0.445-0.814-0.118-1.618-0.272-2.442-0.354a55.163 55.163 0 0 0-5.438-0.276h-0.015c-0.267 0-0.528 0.036-0.794 0.036a54.856 54.856 0 0 0-39.86 16.271l-279.413 281.61c-21.576 21.75-21.576 57.006 0 78.756a54.876 54.876 0 0 0 39.07 16.312 54.835 54.835 0 0 0 39.066-16.312l186.67-188.145V898.09c0 30.75 24.74 55.685 55.256 55.685s55.255-24.934 55.255-55.685v-387.42L769.526 697.22a54.871 54.871 0 0 0 39.065 16.312 54.835 54.835 0 0 0 39.066-16.312c21.576-21.75 21.576-57.006 0-78.756L568.253 336.87z" p-id="10506"></path></svg>
-      </a>
-    </div>
-    <div class='widget-body fs14 post'>
-      
-        <div class='doc-tree active'>
-          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91-concurrency-%E5%92%8C%E5%B9%B6%E8%A1%8C-parallellism"><span class="toc-text">并发 (concurrency) 和并行(parallellism)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSP-%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B"><span class="toc-text">CSP 并发模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%BF%90%E7%94%A8"><span class="toc-text">并发模型的运用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF%E6%A8%A1%E5%9E%8B"><span class="toc-text">流水线模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF-FAN-%E6%A8%A1%E5%BC%8F"><span class="toc-text">流水线 FAN 模式</span></a></li></ol></li></ol>
-        </div>
-      
-    </div>
-  </div>
-
-
-    
-  
-    
-      
-      
-<div class="widget-wrap" id="recent"><div class="widget-header h4 dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><div class="post-title reveal"><div class="cap"><time>2021-03-31</time></div><a href="/2020/openldap-high-ranking.html">OpenLDAP 快速落地实践-进阶</a></div><div class="post-title reveal"><div class="cap"><time>2021-03-31</time></div><a href="/2020/kubernetes-operator.html">「转」 Kubernetes 控制器的进化之旅</a></div><div class="post-title reveal"><div class="cap"><time>2021-03-09</time></div><a href="/2020/openldap-install-config.html">OpenLDAP 快速落地实践-部署配置</a></div><div class="post-title reveal"><div class="cap"><time>2021-03-09</time></div><a href="/2020/openldap-getting-started.html">OpenLDAP 快速落地实践-基本介绍</a></div><div class="post-title reveal"><div class="cap"><time>2021-03-06</time></div><a href="/2019/operator-sdk-use.html">Opeartor-SDK 简单上手</a></div></div></div>
-
-    
-  
-</div>
-<footer class="footer"><div class="social-wrap dis-select"><a class="social" href="/atom.xml" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://7.dusays.com/2021/02/14/25678f144c438.svg"/></a><a class="social" href="https://github.com/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/github.svg"/></a><a class="social" href="https://twitter.com/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/twitter.svg"/></a><a class="social" href="https://t.me/leeifme" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/telegram.svg"/></a><a class="social" href="/about/#comments" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/svg/comments.svg"/></a></div></footer>
-
-    </aside>
-    <div class='l_main'>
-      
-
-      
-
-
-  <div class='bread-nav fs12'>
-  
-    
-    <div id='breadcrumb' style="color:#035aa6">
-      <a class='cap breadcrumb' href='/'>主页</a>
-      <span class="sep"></span>
-      <a class='cap breadcrumb' href='/'>文章</a>
-      
-        <span class="sep"></span>
-        <a class="cap breadcrumb-link" href="/categories/%E8%AE%BE%E8%AE%A1%E5%BC%80%E5%8F%91/">设计开发</a>
-      
-    </div>
-    <div id='post-meta'>
-      发布于&nbsp;<time datetime='2019-01-22T06:15:15.000Z'>2019-01-22</time>
-    </div>
-  
-  </div>
-
-
-<article class='content md post'>
-<h1 class="article-title"><span>Go 并发模型</span></h1>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
-<p>Go 语言是为并发而生的语言，Go 语言是为数不多的在语言层面实现并发的语言；也正是 Go 语言的并发特性，吸引了全球无数的开发者</p>
-</blockquote>
-<h2 id="并发-concurrency-和并行-parallellism"><a href="#并发-concurrency-和并行-parallellism" class="headerlink" title="并发 (concurrency) 和并行(parallellism)"></a>并发 (concurrency) 和并行(parallellism)</h2><p>在了解 <strong>Go</strong> 的并发原理之前，先了解什么是并发什么是并行；</p>
-<ul>
-<li><p>并发 <strong>( concurrency )</strong></p>
-<p>两个或两个以上的任务在一段时间内被执行。我们不必 care 这些任务在某一个时间点是否是同时执行，可能同时执行，也可能不是，我们只关心在一段时间内，哪怕是很短的时间（一秒或者两秒）是否执行解决了两个或两个以上任务</p>
-</li>
-<li><p>并行  <strong>( parallellism )</strong></p>
-<p>两个或两个以上的任务在同一时刻被同时执行</p>
-</li>
-</ul>
-<p>并发说的是逻辑上的概念，而并行，强调的是物理运行状态；并发 “包含” 并行；( 详情请见：<strong>Rob Pike</strong> 的 <a target="_blank" rel="noopener" href="https://talks.golang.org/2012/concurrency.slide#1">PPT</a>)</p>
-<h2 id="CSP-并发模型"><a href="#CSP-并发模型" class="headerlink" title="CSP 并发模型"></a>CSP 并发模型</h2><p>Go 实现了两种并发形式。第一种是大家普遍认知的：多线程共享内存。其实就是 Java 或者 C++ 等语言中的多线程开发。另外一种是 Go 语言特有的，也是 Go 语言推荐的：<code>CSP</code>（communicating sequential processes）并发模型</p>
-<p>请记住下面这句话：</p>
-<blockquote>
-<p><strong>Do not communicate by sharing memory; instead, share memory by communicating.</strong><br>“不要以共享内存的方式来通信，相反，要通过通信来共享内存”</p>
-</blockquote>
-<p>普通的线程并发模型，就是像 Java、C++、或者 Python，他们线程间通信都是通过共享内存的方式来进行的。非常典型的方式就是，在访问共享数据（例如数组、Map、或者某个结构体或对象）的时候，通过锁来访问，因此，在很多时候，衍生出一种方便操作的数据结构，叫做 “线程安全的数据结构”</p>
-<p>Go 的 CSP 并发模型，是通过<code>goroutine</code>和<code>channel</code>来实现的。</p>
-<ul>
-<li><code>goroutine:</code> 是 Go 语言中并发的执行单位，有点抽象，其实就是和传统概念上的<code>线程 </code>类似，但它比线程更为轻量，称之为<code>协程</code></li>
-<li><code>channel：</code> 是 Go 语言中各个并发结构体 (<code>goroutine</code>) 之前的通信机制。 通俗的讲，就是各个<code>goroutine</code>之间通信的” 管道 “，有点类似于 Linux 中的管道</li>
-</ul>
-<p>创建一个 <code>goroutine</code> 很简单，只要使用 <code>go</code> 关键字就可以了，如下；</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
-
-<p>通信机制 <code>channel</code> 也很方便，传数据用 <code>channel &lt;- data</code> ，取数据用 <code>&lt;-channel</code></p>
-<p>在通信过程中，传数据 <code>channel &lt;- data</code> 和取数据 <code>&lt;-channel</code> 必然会成对出现，因为这边传，那边取，两个<code>goroutine</code>之间才会实现通信，而且不管传还是取，必阻塞，直到另外的<code>goroutine</code>传或者取为止</p>
-<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/go-cps.png">
-
-<p>这便是 <code>Golang CSP</code> 并发模型最基本的形式，本问内容不详细阐述并发原理</p>
-<h2 id="并发模型的运用"><a href="#并发模型的运用" class="headerlink" title="并发模型的运用"></a>并发模型的运用</h2><h3 id="流水线模型"><a href="#流水线模型" class="headerlink" title="流水线模型"></a>流水线模型</h3><blockquote>
-<p>Golang 并发核心思路是关注数据流动。数据流动的过程交给 channel，数据处理的每个环节都交给 goroutine，把这些流程画起来，有始有终形成一条线，那就能构成流水线模型</p>
-</blockquote>
-<p>流水线并不是什么新奇的概念，它能极大的提高生产效率，在当代社会流水线非常普遍，我们用的几乎任何产品（手机、电脑、汽车、水杯），都是从流水线上生产出来的；<strong>在 Golang 中，流水线由多个阶段组成，每个阶段之间通过 channel 连接，每个节点可以由多个同时运行的 goroutine 组成</strong></p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/20190124110810.png"></p>
-<p>如上图，从最简单的流水线入手，由 3 个阶段组成，分别是 A、B、C；第一个阶段的协程是<strong>生产者</strong>，它们只生产数据，最后一个阶段的协程是<strong>消费者</strong>，A 是生成者，C 是消费者，而 B 只是中间过程的处理者；A 和 B 之间是通道<code>aCh</code>，B 和 C 之间是通道<code>bCh</code>，A 生成数据传递给 B，B 生成数据传递给 C</p>
-<blockquote>
-<p>举个例子，设计一个程序：计算一个整数切片中元素的平方值并把它打印出来。非并发的方式是使用 for 遍历整个切片，然后计算平方，打印结果</p>
-</blockquote>
-<p>我们使用流水线模型实现这个简单的功能，从流水线的角度，可以分为 3 个阶段：</p>
-<ol>
-<li>遍历切片，这是生产者。</li>
-<li>计算平方值。</li>
-<li>打印结果，这是消费者。</li>
-</ol>
-<p>具体代码，参考 <a target="_blank" rel="noopener" href="https://github.com/leeifme/Go-test/blob/master/go-concurrent/assembly-line/simple.go"><strong>simple.go</strong></a></p>
-<ul>
-<li><code>producer()</code>负责生产数据，它会把数据写入通道，并把它写数据的通道返回</li>
-<li><code>square()</code>负责从某个通道读数字，然后计算平方，将结果写入通道，并把它的输出通道返回</li>
-<li><code>main()</code>负责启动 producer 和 square，并且还是消费者，读取 suqre 的结果，并打印出来</li>
-</ul>
-<p><strong>流水线的特点</strong></p>
-<ol>
-<li>每个阶段把数据通过 channel 传递给下一个阶段</li>
-<li>每个阶段要创建 1 个 goroutine 和 1 个通道，这个 goroutine 向里面写数据，函数要返回这个通道</li>
-<li>有 1 个函数来组织流水线，我们例子中是 main 函数</li>
-</ol>
-<h3 id="流水线-FAN-模式"><a href="#流水线-FAN-模式" class="headerlink" title="流水线 FAN 模式"></a>流水线 FAN 模式</h3><blockquote>
-<p>流水线模型进阶，FAN-IN 和 FAN-OUT 模式，FAN 模式可以让我们的流水线模型更好的利用 Golang 并发，提高软件性能</p>
-</blockquote>
-<p>这里还是以生产汽车的流水线为例，汽车生产线上有个阶段是给小汽车装 4 个轮子，可以把这个阶段任务交给 4 个人同时去做，这 4 个人把轮子都装完后，再把汽车移动到生产线下一个阶段；这个过程中，就有任务的分发，和任务结果的收集；<strong>其中任务分发是 FAN-OUT，任务收集是 FAN-IN</strong></p>
-<ul>
-<li><strong>FAN-OUT 模式：多个 goroutine 从同一个通道读取数据，直到该通道关闭；</strong>OUT 是一种张开的模式，所以又被称为扇出，可以用来分发任务</li>
-<li><strong>FAN-IN 模式：1 个 goroutine 从多个通道读取数据，直到这些通道关闭；</strong>IN 是一种收敛的模式，所以又被称为扇入，用来收集处理的结果</li>
-</ul>
-<p>如下图所示，</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/20190124112954.png"></p>
-<p>依然延用上面的案例需求，计算一个整数切片中元素的平方值并把它打印出来，这次我们修改一下，添加 <code>merge()</code> 方法，具体代码参考 <a target="_blank" rel="noopener" href="https://github.com/leeifme/Go-test/blob/master/go-concurrent/assembly-line/fan.go"><strong>fan.go</strong></a></p>
-<ul>
-<li><code>producer()</code>保持不变，负责生产数据</li>
-<li><code>squre()</code>也不变，负责计算平方值</li>
-<li>修改<code>main()</code>，启动 3 个 square，这 3 个 squre 从 producer 生成的通道读数据，<strong>这是 FAN-OUT</strong></li>
-<li>增加<code>merge()</code>，入参是 3 个 square 各自写数据的通道，给这 3 个通道分别启动 1 个协程，把数据写入到自己创建的通道，并返回该通道，<strong>这是 FAN-IN</strong></li>
-</ul>
-
-
-<div class="article-footer fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
-</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://leeif.me/2019/go-concurrent-model.html" /></div><div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/b32ef3da1162a.svg"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://leeif.me/2019/go-concurrent-model.html&title=Go 并发模型 - LEEIF.ME&summary=前言
-Go 语言是为并发而生的语言，Go 语言是为数不多的在语言层面实现并发的语言；也正是 Go 语言的并发特性，吸引了全球无数的开发者
-
-并发 (concurrency) 和并行(parallellism)在了解 Go 的并发原理之..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=Go 并发模型 - LEEIF.ME&amp;body=https://leeif.me/2019/go-concurrent-model.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/8411ed322ced6.svg"/></a></div><div class="qrcode" id="qrcode-wechat" style="visibility:hidden;height:0"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://leeif.me/2019/go-concurrent-model.html"/></div></div></section></div>
-
-</article>
-
-<div class="related-wrap" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body"><div class="post-title h2"><a href="/2018/k8s-deploy-tool-helm.html">简化 Kubernetes 应用部署工具 -- Helm</a></div><div class="post-title fs14"><a href="/2019/k8s-deploy-metallb-LoadBalancer.html">上一篇：Kuberntes 创建 LoadBalancer 类型服务</a></div></section></div>
-
-
-<div class="related-wrap" id="related-posts">
-    <section class='header'>
-      <div class='title cap theme'>您可能感兴趣的文章</div>
-    </section>
-    <section class='body'>
-    <div class="related-posts"><a class="item" href="\2017\mgo-connection-mongodb-experience.html" title="mgo 连接 MongoDB 数据库的使用实例"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/cover/20210307212003.png" /></div><span class="title">mgo 连接 MongoDB 数据库的使用实例</span></a><a class="item" href="\2018\gin-go-web-frame.html" title="高性能的 Go Web 框架 - gin"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/cover/20210307212003.png" /></div><span class="title">高性能的 Go Web 框架 - gin</span></a><a class="item" href="\2018\gin-swagger-build-document.html" title="gin-swagger 自动化构建 API 文档"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="http://orj2jcr7i.bkt.clouddn.com/blog/180727/2im5i3b45e.png?imageslim" /></div><span class="title">gin-swagger 自动化构建 API 文档</span></a><a class="item" href="\2018\redis-for-mysql-cache.html" title="初学 Redis 作缓存层"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/cover/20210307212003.png" /></div><span class="title">初学 Redis 作缓存层</span></a><a class="item" href="\2018\open-cloud-native-study.html" title="开启云原生之门"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme-1252179361.cos.ap-shanghai.myqcloud.com/blog/CNCF.png" /></div><span class="title">开启云原生之门</span></a></div></section></div>
-
-
-
-  <div class='related-wrap md' id="comments">
-    <div class='cmt-title cap theme'>
-      快来参与讨论吧
-    </div>
-    <div class='cmt-body utterances'>
-      
-
-<svg class="loading" style="vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
-
-<div id="utterances" repo="leeifme/blog-comments" issue-term="pathname" theme="github-light"></div>
-
-    </div>
-  </div>
-
-
-
-      
-<footer class="page-footer fs12"><hr><div><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
-<p>本站由 <a href="https://leeif.me/">@iliei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.1">Stellar</a> 作为主题。</p>
-</div></footer>
-
-      <div class='float-panel mobile-only' style='display:none'>
-  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
-    <svg class="icon" viewBox="0 0 1228 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2849"><path d="M0 0m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2850"></path><path d="M0 389.560798m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.3902l-973.901995 0q-97.390199 0-97.390199-97.3902l0 0q0-97.390199 97.390199-97.390199Z" p-id="2851"></path><path d="M0 779.121596m97.390199 0l973.901995 0q97.390199 0 97.390199 97.390199l0 0q0 97.390199-97.390199 97.390199l-973.901995 0q-97.390199 0-97.390199-97.390199l0 0q0-97.390199 97.390199-97.390199Z" p-id="2852"></path></svg>
-  </button>
-</div>
-
-    </div>
-  </div>
-  <div class='scripts'>
-    <script type="text/javascript">
-  stellar = {
-    // 懒加载 css https://github.com/filamentgroup/loadCSS
-    loadCSS: (href, before, media, attributes) => {
-      var doc = window.document;
-      var ss = doc.createElement("link");
-      var ref;
-      if (before) {
-        ref = before;
-      } else {
-        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
-        ref = refs[refs.length - 1];
-      }
-      var sheets = doc.styleSheets;
-      if (attributes) {
-        for (var attributeName in attributes) {
-          if (attributes.hasOwnProperty(attributeName)) {
-            ss.setAttribute(attributeName, attributes[attributeName]);
-          }
-        }
-      }
-      ss.rel = "stylesheet";
-      ss.href = href;
-      ss.media = "only x";
-      function ready(cb) {
-        if (doc.body) {
-          return cb();
-        }
-        setTimeout(function () {
-          ready(cb);
-        });
-      }
-      ready(function () {
-        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
-      });
-      var onloadcssdefined = function (cb) {
-        var resolvedHref = ss.href;
-        var i = sheets.length;
-        while (i--) {
-          if (sheets[i].href === resolvedHref) {
-            return cb();
-          }
-        }
-        setTimeout(function () {
-          onloadcssdefined(cb);
-        });
-      };
-      function loadCB() {
-        if (ss.addEventListener) {
-          ss.removeEventListener("load", loadCB);
-        }
-        ss.media = media || "all";
-      }
-      if (ss.addEventListener) {
-        ss.addEventListener("load", loadCB);
-      }
-      ss.onloadcssdefined = onloadcssdefined;
-      onloadcssdefined(loadCB);
-      return ss;
-    },
-
-    // 从 butterfly 和 volantis 获得灵感
-    loadScript: (src, opt) => new Promise((resolve, reject) => {
-      var script = document.createElement('script')
-      script.src = src
-      if (opt) {
-        for (let key of Object.keys(opt)) {
-          script[key] = opt[key]
-        }
-      } else {
-        // 默认异步，如果需要同步，第二个参数传入 {} 即可
-        script.async = true
-      }
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(script)
-    }),
-
-    // https://github.com/jerryc127/hexo-theme-butterfly
-    jQuery: (fn) => {
-      if (typeof jQuery === 'undefined') {
-        stellar.loadScript(stellar.plugins.jQuery).then(fn)
-      } else {
-        fn()
-      }
-    }
-  };
-  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.1';
-  stellar.config = {
-    date_suffix: {
-      just: '刚刚',
-      min: '分钟前',
-      hour: '小时前',
-      day: '天前',
-      month: '个月前',
-    },
-  };
-
-  // required plugins (only load if needs)
-  stellar.plugins = {
-    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
-    sitesjs: '/js/plugins/sites.js',
-    friendsjs: '/js/plugins/friends.js',
-  };
-
-  // optional plugins
-  if ('true' == 'true') {
-    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+.l_body {
+  display: flex;
+  margin: auto;
+  padding: 0 var(--gap-l);
+  justify-content: center;
+}
+.l_body .l_left {
+  z-index: 8;
+  width: var(--width-left);
+  flex-shrink: 0;
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+}
+.l_body .l_main {
+  flex-shrink: 1;
+  flex-grow: 1;
+  width: 320px;
+  max-width: var(--width-main);
+}
+.l_body.mobile.sidebar .sidebar-toggle.mobile {
+  background: $color-hover;
+  color: #fff;
+}
+@media screen and (max-width: $device-tablet) {
+  .mobile-only {
+    display: block !important;
   }
-  if ('true' == 'true') {
-    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper/swiper-bundle.min.css","js":"https://unpkg.com/swiper/swiper-bundle.min.js"});
+  .l_body {
+    padding: 0;
   }
-  if ('' == 'true') {
-    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  .l_body .l_left {
+    position: fixed;
+    transform: translateX(-320px);
+    margin: 0;
+    left: 0;
+    background: var(--site-bg);
+    box-shadow: $boxshadow-card-float;
   }
-  if ('true' == 'true') {
-    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  .l_body .l_main {
+    max-width: 100%;
   }
-</script>
-
-<!-- required -->
-
-  
-<script src="/js/main.js" async></script>
-
-
-
-<!-- optional -->
-
-  <script>
-  function utterances(){
-    if(!document.getElementById("utterances"))return;
-    setTimeout(function() {
-      var checkUtterances = setInterval(function () {
-        var el = document.getElementById("utterances");
-        if (!el) return
-        clearInterval(checkUtterances)
-        try {
-          el.innerHTML="";
-        } catch (error) {}
-        var script = document.createElement('script');
-        script.src = 'https://utteranc.es/client.js';
-        const keys = ['repo', 'issue-term', 'issue-number', 'theme', 'label', 'crossorigin'];
-        keys.forEach((key, i) => {
-          if (el.attributes[key] && el.attributes[key].value) {
-            script.setAttribute(key, el.attributes[key].value);
-          }
-        });
-        el.appendChild(script);
-       }, 200)
-    });
+  .l_body.mobile .l_left {
+    transition: transform 0.3s ease-out;
   }
-  utterances();
-</script>
-
-
-
-
-<!-- inject -->
-
-
-  </div>
-</body>
-</html>
+  .l_body.mobile.sidebar .l_left {
+    transform: translateX(0px);
+  }
+}

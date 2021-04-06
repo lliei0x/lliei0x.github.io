@@ -1,3 +1,4 @@
+console.log('hexo-theme-stellar:\n' + stellar.github);
 // utils
 const util = {
 
@@ -124,9 +125,6 @@ const init = {
   sidebar: () => {
     stellar.jQuery(() => {
       $("#toc a.toc-link").click(function(e) {
-        l_body.classList.remove("sidebar");
-      });
-      $("#toc a#s-top").click(function(e) {
         l_body.classList.remove("sidebar");
       });
     })
@@ -275,5 +273,3 @@ if (stellar.plugins.preload) {
     stellar.loadScript(stellar.plugins.preload.flying_pages, {defer:true})
   }
 }
-
-console.log('hexo-theme-stellar:\n' + stellar.github);
