@@ -62,10 +62,17 @@
 <header class='header'>
   <div class='logo-wrap'>
   
-    <a class='avatar' href='/about/'><img no-lazy src='https://i.loli.net/2021/03/19/7zgY3RcHymVe9rx.png'/></a>
+    <a class='avatar' href='/about/'>
+      
+        <img no-lazy class='bg' src='https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.2/avatar/round/rainbow64@3x.webp'/>
+      
+      <img no-lazy class='avatar' src='https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/favicon.svg'/>
+    </a>
   
   
-    <a class='title' href='/'>LEEIF.ME</a>
+    <a class='title' href='/'>
+      LEEIF.ME
+    </a>
   
 </div>
 
@@ -77,24 +84,7 @@
     
       
       
-
-  <div class='widget-wrap' id='toc'>
-    <div class='widget-header h4 dis-select'>
-      <span class='name'>
-        
-          本文目录
-        
-      </span>
-    </div>
-    <div class='widget-body fs14 post'>
-      
-        <div class='doc-tree active'>
-          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D"><span class="toc-text">备份与恢复</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#OpenLDAP-%E7%9A%84%E5%A4%87%E4%BB%BD"><span class="toc-text">OpenLDAP 的备份</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OpenLDAP-%E7%9A%84%E6%81%A2%E5%A4%8D"><span class="toc-text">OpenLDAP 的恢复</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0-memberof-%E6%94%AF%E6%8C%81"><span class="toc-text">添加 memberof 支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%90%AF%E6%97%A5%E5%BF%97"><span class="toc-text">开启日志</span></a></li></ol>
-        </div>
-      
-    </div>
-  </div>
-
+<div class="widget-wrap" id="toc"><div class="widget-header h4 dis-select"><span class="name">本文目录</span></div><div class="widget-body fs14 post"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D"><span class="toc-text">备份与恢复</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#OpenLDAP-%E7%9A%84%E5%A4%87%E4%BB%BD"><span class="toc-text">OpenLDAP 的备份</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OpenLDAP-%E7%9A%84%E6%81%A2%E5%A4%8D"><span class="toc-text">OpenLDAP 的恢复</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0-memberof-%E6%94%AF%E6%8C%81"><span class="toc-text">添加 memberof 支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%90%AF%E6%97%A5%E5%BF%97"><span class="toc-text">开启日志</span></a></li></ol></div></div></div>
 
     
   
@@ -278,7 +268,7 @@ OpenLDAP 的备份OpenLDAP 的备份可以通过服务端的 slapcat 命令或�
     </section>
     <section class='body'>
     <div class="related-posts"><a class="item" href="\2020\openldap-getting-started.html" title="OpenLDAP 快速落地实践-基本介绍"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/cover/20210307192829.png" /></div><span class="title">OpenLDAP 快速落地实践-基本介绍</span><span class="excerpt">场景需求
-需求当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 ...</span></a><a class="item" href="\2020\openldap-install-config.html" title="OpenLDAP 快速落地实践-部署配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/cover/20210307192830.png" /></div><span class="title">OpenLDAP 快速落地实践-部署配置</span></a><a class="item" href="\2017\python-virtual-environment-build.html" title="Python 虚拟坏境的搭建和配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/cover/20210307212003.png" /></div><span class="title">Python 虚拟坏境的搭建和配置</span></a></div></section></div>
+需求当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 ...</span></a><a class="item" href="\2020\openldap-install-config.html" title="OpenLDAP 快速落地实践-部署配置"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/cover/20210307192830.png" /></div><span class="title">OpenLDAP 快速落地实践-部署配置</span></a><a class="item" href="\2017\raspberry-pi-getting-started.html" title="Raspberry Pi — 新手入门操作"><div class="img"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://img-blog.csdn.net/20170629170451112" /></div><span class="title">Raspberry Pi — 新手入门操作</span></a></div></section></div>
 
 
 
@@ -300,7 +290,7 @@ OpenLDAP 的备份OpenLDAP 的备份可以通过服务端的 slapcat 命令或�
 
       
 <footer class="page-footer fs12"><hr><div><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
-<p>本站由 <a href="https://leeif.me/">@iliei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.1">Stellar</a> 作为主题。</p>
+<p>本站由 <a href="https://leeif.me/">@iliei</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.1.0">Stellar</a> 作为主题。</p>
 </div></footer>
 
       <div class='float-panel mobile-only' style='display:none'>
@@ -404,7 +394,7 @@ OpenLDAP 的备份OpenLDAP 的备份可以通过服务端的 slapcat 命令或�
       }
     }
   };
-  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.0.1';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.1.0';
   stellar.config = {
     date_suffix: {
       just: '刚刚',
