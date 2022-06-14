@@ -11,5 +11,5 @@ Disallow: /fonts/
 Disallow: /vendors/
 Disallow: /fancybox/
 
-Sitemap: http://leeif.me/sitemap.xml
-Sitemap: http://leeif.me/baidusitemap.xml
+Sitemap: http://liei.cc/sitemap.xml
+Sitemap: http://liei.cc/baidusitemap.xml
