@@ -91,10 +91,9 @@ labels:
   - name: share
     labeled:
       issue:
-        action: close
         body: |
           :wave: Hello,
-          The article you shared has been included, click [here](https://liei.cc) to view it, we look forward to your next sharing!
+          The news you shared has been included, click [here](https://liei.cc/more/) to view it, we look forward to your next sharing!
 
           :wave: 您好，
-          您分享文章已经被收录，点击 [此处](https://liei.cc) 可以查看效果，期待您的下次分享！
+          您分享的动态已经被收录，点击 [此处](https://liei.cc/more/) 可以查看效果，期待您的下次分享！
