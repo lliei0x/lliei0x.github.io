@@ -1,2 +1,384 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 6.3.0"><meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5"><meta charset="utf-8"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://gcore.jsdelivr.net"><link rel="preconnect" href="https://gcore.jsdelivr.net" crossorigin><link rel="dns-prefetch" href="//unpkg.com"><meta name="renderer" content="webkit"><meta name="force-rendering" content="webkit"><meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"><meta name="HandheldFriendly" content="True"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#f8f8f8"><title>OpenLDAP 快速落地实践-基本介绍 - LLIEI0X</title><meta name="description" content="场景需求 需求当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 OPS 运维组的小伙伴们，都要在每个系统上去添加用户，搞得小伙伴们很不爽。  简单说一下 OPENLDAP 对运维管理的价值，支撑企业技术发展比如 GIT、 ZABB"><meta property="og:type" content="article"><meta property="og:title" content="OpenLDAP 快速落地实践-基本介绍"><meta property="og:url" content="https://liei.cc/2020/openldap-getting-started.html"><meta property="og:site_name" content="LLIEI0X"><meta property="og:description" content="场景需求 需求当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 OPS 运维组的小伙伴们，都要在每个系统上去添加用户，搞得小伙伴们很不爽。  简单说一下 OPENLDAP 对运维管理的价值，支撑企业技术发展比如 GIT、 ZABB"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200809201834.png"><meta property="article:published_time" content="2020-07-15T15:15:15.000Z"><meta property="article:modified_time" content="2020-07-15T15:15:15.000Z"><meta property="article:author" content="lliei0x"><meta property="article:tag" content="OpenLDAP"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200809201834.png"><link rel="alternate" href="/atom.xml" title="LLIEI0X" type="application/atom+xml"><link rel="stylesheet" href="/css/main.css"><link rel="shortcut icon" href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20220614145243.ico"><link rel="stylesheet" href="https://github.elemecdn.com/lxgw-wenkai-screen-webfont@1.6.0/lxgwwenkaiscreen.css"><link rel="stylesheet" href="https://github.elemecdn.com/@fontsource/monda@4.5.10/latin.css"><link rel="stylesheet" href="https://github.elemecdn.com/@fontsource/dm-mono@4.5.10/latin-400.css"></head><body><div class="l_body" id="start"><aside class="l_left" layout="post"><header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/avatar/round/rainbow64@3x.webp)"></div><img no-lazy class="avatar" src="https://s2.loli.net/2022/12/01/haMivpAzGlRnYEr.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">LLIEI0X</div><div class="sub normal cap">☔ slow to respond</div><div class="sub hover cap" style="opacity:0">🌵 Live long and prosper</div></a></div><nav class="menu dis-select"><a class="nav-item" href="/">主页</a><a class="nav-item" href="/wiki/">专栏</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/more/">更多</a></nav></header><div class="widgets"><widget class="widget-wrapper search"><div class="widget-body"><div class="search-wrapper" id="search"><form class="search-form"><input type="text" class="search-input" id="search-input" placeholder="Search..."><svg t="1670596976048" class="icon search-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2676" width="200" height="200"><path d="M938.2 832.6L723.8 618.1c-2.5-2.5-5.3-4.4-7.9-6.4 36.2-55.6 57.3-121.8 57.3-193.1C773.3 222.8 614.6 64 418.7 64S64 222.8 64 418.6c0 195.9 158.8 354.6 354.6 354.6 71.3 0 137.5-21.2 193.2-57.4 2 2.7 3.9 5.4 6.3 7.8L832.5 938c14.6 14.6 33.7 21.9 52.8 21.9 19.1 0 38.2-7.3 52.8-21.8 29.2-29.1 29.2-76.4 0.1-105.5M418.7 661.3C284.9 661.3 176 552.4 176 418.6 176 284.9 284.9 176 418.7 176c133.8 0 242.6 108.9 242.6 242.7 0 133.7-108.9 242.6-242.6 242.6" p-id="2677"></path></svg></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div></div></widget><widget class="widget-wrapper toc single" id="data-toc"><div class="widget-header cap dis-select"><span class="name">OpenLDAP 快速落地实践-基本介绍</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E9%9C%80%E6%B1%82"><span class="toc-text">场景需求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LDAP-%E7%AE%80%E4%BB%8B"><span class="toc-text">LDAP 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenLADP-%E7%AE%80%E4%BB%8B"><span class="toc-text">OpenLADP 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LDAP-%E7%AE%80%E7%A7%B0%E7%9B%AE%E5%BD%95"><span class="toc-text">LDAP 简称目录</span></a></li></ol></div></div></widget></div></aside><div class="l_main"><div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/blog/categories/%E6%8A%98%E8%85%BE%E4%B8%8D%E6%AD%A2/">折腾不止</a></div><div id="post-meta">发布于&nbsp;<time datetime="2020-07-15T15:15:15.000Z">2020-07-15</time></div></div><article class="md-text content post"><h1 class="article-title"><span>OpenLDAP 快速落地实践-基本介绍</span></h1><h2 id="场景需求"><a href="#场景需求" class="headerlink" title="场景需求"></a>场景需求</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200809201834.png" alt="openldap-architecture"></p><div class="tag-plugin note" color="orange"><div class="title">需求</div><div class="body"><p>当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 OPS 运维组的小伙伴们，都要在每个系统上去添加用户，搞得小伙伴们很不爽。</p></div></div><p>简单说一下 OPENLDAP 对运维管理的价值，支撑企业技术发展比如 <code>GIT、 ZABBIX、 YAPI、 JUMPSERVER、 OA</code> 等大大小小系统，乃至 Windows，Linux 系统的认证登录。</p><span id="more"></span><p>通过 LDAP 技术我们可以实现多平台账号集中管理，权限灵活控制，密码强度及其有效期的约束，将用户管理与各个平台解耦，最终实现一次修改 N 处生效。</p><h2 id="LDAP-简介"><a href="#LDAP-简介" class="headerlink" title="LDAP 简介"></a>LDAP 简介</h2><p><code>LDAP</code>（轻量级目录访问协议，<code>Lightweight Directory Access Protocol</code>) 是实现提供被称为目录服务的信息服务。目录服务是一种特殊的数据库系统，其专门针对读取，浏览和搜索操作进行了特定的优化。目录一般用来包含描述性的，基于属性的信息并支持精细复杂的过滤能力。目录一般不支持通用数据库针对大量更新操作操作需要的复杂的事务管理或回卷策略。而目录服务的更新则一般都非常简单。这种目录可以存储包括个人信息、web 链结、jpeg 图像等各种信息。为了访问存储在目录中的信息，就需要使用运行在 TCP&#x2F;IP 之上的访问协议 —LDAP。</p><p>LDAP 目录中的信息是是按照树型结构组织，具体信息存储在条目 (entry) 的数据结构中。条目相当于关系数据库中表的记录；条目是具有区别名 <code>DN</code> （Distinguished Name）的属性（Attribute），DN 是用来引用条目的，DN 相当于关系数据库表中的关键字（Primary Key）。属性由类型（Type）和一个或多个值（Values）组成，相当于关系数据库中的字段（Field）由字段名和数据类型组成，只是为了方便检索的需要，LDAP 中的 Type 可以有多个 Value，而不是关系数据库中为降低数据的冗余性要求实现的各个域必须是不相关的。LDAP 中条目的组织一般按照地理位置和组织关系进行组织，非常的直观。LDAP 把数据存放在文件中，为提高效率可以使用基于索引的文件数据库，而不是关系数据库。类型的一个例子就是 mail，其值将是一个电子邮件地址。</p><h2 id="OpenLADP-简介"><a href="#OpenLADP-简介" class="headerlink" title="OpenLADP 简介"></a>OpenLADP 简介</h2><p>LDAP 具有两个标准，分别是 X.500 和 LDAP。OpenLDAP 是基于 X.500 标准的，而且去除了 X.500 复杂的功能并且可以根据自我需求定制额外扩展功能，但与 X.500 也有不同之处，例如 OpenLDAP 支持 TCP&#x2F;IP 协议等。</p><p>OpenLDAP 可以直接运行在更简单和更通用的 TCP&#x2F;IP 或其他可靠的传输协议层上，避免了在 OSI 会话层和表示层的开销，使连接的建立和包的处理更简单、更快，对于互联网和企业网应用更理想。</p><p>OpenLDAP 目录中的信息是以树状的层次结构来存储数据（这很类同于 DNS），最顶层即根部称作 “基准 DN”，形如 “dc&#x3D;mydomain,dc&#x3D;org” 或者 “o&#x3D;mydomain.org”，前一种方式更为灵活也是 Windows AD 中使用的方式。在根目录的下面有很多的文件和目录，为了把这些大量的数据从逻辑上分开，OpenLDAP 像其它的目录服务协议一样使用 <code>OU</code>（<code>Organization Unit</code>，组织单元），可以用来表示公司内部机构，如部门等，也可以用来表示设备、人员等。同时 OU 还可以有子 OU，用来表示更为细致的分类。</p><p>OpenLDAP 中每一条记录都有一个唯一的区别于其它记录的名字 <code>DN</code>（<code>Distinguished Name</code>）, 其处在 “叶子” 位置的部分称作 RDN (用户条目的相对标识名)。如 dn:cn&#x3D;tom,ou&#x3D;animals,dc&#x3D;ilanni,dc&#x3D;com 中 cn 即为 RDN，而 RDN 在一个 OU 中必须是唯一的。</p><p>OpenLDAP 默认以 <code>Berkeley DB</code> 作为后端数据库，BerkeleyDB 数据库主要以散列的数据类型进行数据存储，如以键值对的方式进行存储。</p><p><strong>BerkeleyDB 是一类特殊的面向查询进行优化、面向读取进行优化的数据库，主要用于搜索、浏览、更新查询操作，一般对于一次写入数据、多次查询和搜索有很好的效果</strong>。BerkeleyDB 不支持事务型数据库 (MySQL、MariDB、Oracle 等) 所支持的高并发的吞吐量以及复杂的事务操作。</p><h2 id="LDAP-简称目录"><a href="#LDAP-简称目录" class="headerlink" title="LDAP 简称目录"></a>LDAP 简称目录</h2><table><thead><tr><th>简称</th><th>全称（含义）</th></tr></thead><tbody><tr><td>c</td><td>countryName（国家）</td></tr><tr><td>dc</td><td>domainComponent（域名）</td></tr><tr><td>o</td><td>organization（组织 - 公司）</td></tr><tr><td>ou</td><td>organization unit（组织单元 - 部门）</td></tr><tr><td>sn</td><td>suer name（真实名称）</td></tr><tr><td>cn</td><td>common name（常用名称）</td></tr></tbody></table><div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p></div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly id="copy-link" value="https://liei.cc/2020/openldap-getting-started.html"></div><div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/b32ef3da1162a.svg"></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://liei.cc/2020/openldap-getting-started.html&title=OpenLDAP 快速落地实践-基本介绍 - LLIEI0X&pics=https://lliei0x.oss-cn-shanghai.aliyuncs.com/blog/cover/202212092205454.svg&summary=场景需求
-需求当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 ..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/80c07e4dbb303.svg"></a><a class="social share-item email" href="mailto:?subject=OpenLDAP 快速落地实践-基本介绍 - LLIEI0X&amp;body=https://liei.cc/2020/openldap-getting-started.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/a1b00e20f425d.svg"></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/8411ed322ced6.svg"></a></div><div class="qrcode" id="qrcode-wechat" style="visibility:hidden;height:0"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://liei.cc/2020/openldap-getting-started.html"></div></div></section></div></article><div class="related-wrap reveal" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2020/openldap-install-config.html">OpenLDAP 快速落地实践-部署配置</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2019/module-design-doc.html">模块设计文档编写规范</a></div></section></div><div class="related-wrap reveal" id="related-posts"><section class="header"><div class="title cap theme">您可能感兴趣的文章</div></section><section class="body"><div class="related-posts"><a class="item" href="/2020/openldap-high-ranking.html" title="OpenLDAP 快速落地实践-进阶"><span class="title">OpenLDAP 快速落地实践-进阶</span></a><a class="item" href="/2020/openldap-install-config.html" title="OpenLDAP 快速落地实践-部署配置"><span class="title">OpenLDAP 快速落地实践-部署配置</span></a><a class="item" href="/2018/k8s-cluster-deploy.html" title="暴力学习 k8s - 集群搭建"><span class="title">暴力学习 k8s - 集群搭建</span></a></div></section></div><footer class="page-footer reveal fs12"><hr><div class="sitemap"><div class="sitemap-group"><span class="fs14">博客</span><a href="/posts/">近期</a><a href="/blog/categories/">分类</a><a href="/blog/tags/">标签</a><a href="/blog/archives/">归档</a></div><div class="sitemap-group"><span class="fs14">项目</span><a href="/wiki/">专栏</a><a href="/notes/">笔记</a></div><div class="sitemap-group"><span class="fs14">社交</span><a href="/more/">动态</a><a href="/friends/">友链</a><a href="/more/#comments">留言板</a><a target="_blank" rel="noopener" href="https://twitter.com/lliei0x">Twitter</a><a target="_blank" rel="noopener" href="https://t.me/lliei0x">Telegrem</a></div><div class="sitemap-group"><span class="fs14">更多</span><a href="/more/">关于本站</a><a target="_blank" rel="noopener" href="https://github.com/lliei">GitHub</a></div></div><div class="text"><p>本站由 <a target="_blank" rel="noopener" href="https://github.com/lliei">@lliei0x</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar">Stellar</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p></div></footer><div class="float-panel mobile-only blur" style="display:none"><button type="button" class="sidebar-toggle mobile" onclick="sidebar.toggle()"><svg class="icon" style="width:1em;height:1em;vertical-align:middle;fill:currentColor;overflow:hidden" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg></button></div></div></div><div class="scripts"><script type="text/javascript">const stellar={loadCSS:(e,s,t,n)=>{var i,l=window.document,a=l.createElement("link");if(s)i=s;else{var r=(l.body||l.getElementsByTagName("head")[0]).childNodes;i=r[r.length-1]}var o=l.styleSheets;if(n)for(var c in n)n.hasOwnProperty(c)&&a.setAttribute(c,n[c]);a.rel="stylesheet",a.href=e,a.media="only x",function e(s){if(l.body)return s();setTimeout((function(){e(s)}))}((function(){i.parentNode.insertBefore(a,s?i:i.nextSibling)}));var d=function(e){for(var s=a.href,t=o.length;t--;)if(o[t].href===s)return e();setTimeout((function(){d(e)}))};function u(){a.addEventListener&&a.removeEventListener("load",u),a.media=t||"all"}return a.addEventListener&&a.addEventListener("load",u),a.onloadcssdefined=d,d(u),a},loadScript:(e,s)=>new Promise((t,n)=>{var i=document.createElement("script");if(i.src=e,s)for(let e of Object.keys(s))i[e]=s[e];else i.async=!0;i.onerror=n,i.onload=i.onreadystatechange=function(){const e=this.readyState;e&&"loaded"!==e&&"complete"!==e||(i.onload=i.onreadystatechange=null,t())},document.head.appendChild(i)}),jQuery:e=>{"undefined"==typeof jQuery?stellar.loadScript(stellar.plugins.jQuery).then(e):e()},version:"1.18.5",github:"https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5",config:{date_suffix:{just:"刚刚",min:"分钟前",hour:"小时前",day:"天前",month:"个月前"}},plugins:{jQuery:"https://github.elemecdn.com/jquery@3.5.1/dist/jquery.min.js"},search:{}};if(stellar.search.service="local_search","local_search"==stellar.search.service){let e=Object.assign({},{field:"all",path:"/search.json",content:!0,codeblock:!1,sort:"-date"});stellar.search[stellar.search.service]=e}stellar.plugins.stellar=Object.assign({sites:"/js/plugins/sites.js",friends:"/js/plugins/friends.js",ghinfo:"/js/plugins/ghinfo.js",timeline:"/js/plugins/timeline.js",linkcard:"/js/plugins/linkcard.js",fcircle:"/js/plugins/fcircle.js",weibo:"/js/plugins/weibo.js"}),stellar.plugins.marked=Object.assign("https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js"),stellar.plugins.lazyload=Object.assign({enable:!0,js:"https://github.elemecdn.com/vanilla-lazyload@17.3.1/dist/lazyload.min.js",transition:"blur"}),stellar.plugins.swiper=Object.assign({enable:!0,css:"https://github.elemecdn.com/swiper@8/swiper-bundle.min.css",js:"https://github.elemecdn.com/swiper@8/swiper-bundle.min.js"}),stellar.plugins.preload=Object.assign({enable:!0,service:"flying_pages",instant_page:"https://gcore.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js",flying_pages:"https://gcore.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"}),stellar.plugins.fancybox=Object.assign({enable:!0,js:"https://github.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js",css:"https://github.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css",selector:".swiper-slide img"})</script><script src="/js/main.js" async></script><script>function loadJS(){const e=document.querySelectorAll("#comments #giscus");0!==e.length&&e.forEach((e,t)=>{try{e.innerHTML=""}catch(e){console.log(e)}var n=document.createElement("script");n.src="https://giscus.app/client.js",n.async=!0;for(let t of Object.keys(e.attributes)){let c=e.attributes[t];!1===["class","id"].includes(c.name)&&n.setAttribute(c.name,c.value)}e.appendChild(n)})}window.addEventListener("DOMContentLoaded",e=>{loadJS()})</script></div></body></html>
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head>
+  <meta name="generator" content="Hexo 6.3.0">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://gcore.jsdelivr.net'>
+  <link rel="preconnect" href="https://gcore.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  
+  <title>OpenLDAP 快速落地实践-基本介绍 - LLIEI0X</title>
+
+  
+    <meta name="description" content="场景需求 需求当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 OPS 运维组的小伙伴们，都要在每个系统上去添加用户，搞得小伙伴们很不爽。  简单说一下 OPENLDAP 对运维管理的价值，支撑企业技术发展比如 GIT、 ZABB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenLDAP 快速落地实践-基本介绍">
+<meta property="og:url" content="https://liei.cc/2020/openldap-getting-started.html">
+<meta property="og:site_name" content="LLIEI0X">
+<meta property="og:description" content="场景需求 需求当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 OPS 运维组的小伙伴们，都要在每个系统上去添加用户，搞得小伙伴们很不爽。  简单说一下 OPENLDAP 对运维管理的价值，支撑企业技术发展比如 GIT、 ZABB">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200809201834.png">
+<meta property="article:published_time" content="2020-07-15T15:15:15.000Z">
+<meta property="article:modified_time" content="2020-07-15T15:15:15.000Z">
+<meta property="article:author" content="lliei0x">
+<meta property="article:tag" content="OpenLDAP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200809201834.png">
+  
+  
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="LLIEI0X" type="application/atom+xml">
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+    <link rel="shortcut icon" href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20220614145243.ico">
+  
+
+  
+
+  
+
+
+  
+    
+      <link rel="stylesheet" href="https://github.elemecdn.com/lxgw-wenkai-screen-webfont@1.6.0/lxgwwenkaiscreen.css"/>
+    
+      <link rel="stylesheet" href="https://github.elemecdn.com/@fontsource/monda@4.5.10/latin.css"/>
+    
+      <link rel="stylesheet" href="https://github.elemecdn.com/@fontsource/dm-mono@4.5.10/latin-400.css"/>
+    
+  
+</head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
+    
+
+  
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://s2.loli.net/2022/12/01/haMivpAzGlRnYEr.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">LLIEI0X</div><div class="sub normal cap">☔ slow to respond</div><div class="sub hover cap" style="opacity:0">🌵 Live long and prosper</div></a></div>
+
+<nav class="menu dis-select"><a class="nav-item" href="/">主页</a><a class="nav-item" href="/wiki/">专栏</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/more/">更多</a></nav>
+</header>
+
+
+<div class="widgets">
+<widget class="widget-wrapper search"><div class="widget-body"><div class="search-wrapper" id="search"><form class="search-form"><input type="text" class="search-input" id="search-input" placeholder="Search..."><svg t="1670596976048" class="icon search-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2676" width="200" height="200"><path d="M938.2 832.6L723.8 618.1c-2.5-2.5-5.3-4.4-7.9-6.4 36.2-55.6 57.3-121.8 57.3-193.1C773.3 222.8 614.6 64 418.7 64S64 222.8 64 418.6c0 195.9 158.8 354.6 354.6 354.6 71.3 0 137.5-21.2 193.2-57.4 2 2.7 3.9 5.4 6.3 7.8L832.5 938c14.6 14.6 33.7 21.9 52.8 21.9 19.1 0 38.2-7.3 52.8-21.8 29.2-29.1 29.2-76.4 0.1-105.5M418.7 661.3C284.9 661.3 176 552.4 176 418.6 176 284.9 284.9 176 418.7 176c133.8 0 242.6 108.9 242.6 242.7 0 133.7-108.9 242.6-242.6 242.6" p-id="2677"></path></svg></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div></div></widget>
+
+
+<widget class="widget-wrapper toc single" id="data-toc"><div class="widget-header cap dis-select"><span class="name">OpenLDAP 快速落地实践-基本介绍</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E9%9C%80%E6%B1%82"><span class="toc-text">场景需求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LDAP-%E7%AE%80%E4%BB%8B"><span class="toc-text">LDAP 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OpenLADP-%E7%AE%80%E4%BB%8B"><span class="toc-text">OpenLADP 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LDAP-%E7%AE%80%E7%A7%B0%E7%9B%AE%E5%BD%95"><span class="toc-text">LDAP 简称目录</span></a></li></ol></div></div></widget>
+
+
+
+
+</div>
+
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/blog/categories/%E6%8A%98%E8%85%BE%E4%B8%8D%E6%AD%A2/">折腾不止</a></div><div id="post-meta">发布于&nbsp;<time datetime="2020-07-15T15:15:15.000Z">2020-07-15</time></div></div>
+
+<article class='md-text content post'>
+<h1 class="article-title"><span>OpenLDAP 快速落地实践-基本介绍</span></h1>
+<h2 id="场景需求"><a href="#场景需求" class="headerlink" title="场景需求"></a>场景需求</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2020/20200809201834.png" alt="openldap-architecture"></p>
+<div class="tag-plugin note" color="orange"><div class="title">需求</div><div class="body"><p>当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 OPS 运维组的小伙伴们，都要在每个系统上去添加用户，搞得小伙伴们很不爽。</p></div></div>
+
+<p>简单说一下 OPENLDAP 对运维管理的价值，支撑企业技术发展比如 <code>GIT、 ZABBIX、 YAPI、 JUMPSERVER、 OA</code> 等大大小小系统，乃至 Windows，Linux 系统的认证登录。</p>
+<span id="more"></span>
+
+<p>通过 LDAP 技术我们可以实现多平台账号集中管理，权限灵活控制，密码强度及其有效期的约束，将用户管理与各个平台解耦，最终实现一次修改 N 处生效。</p>
+<h2 id="LDAP-简介"><a href="#LDAP-简介" class="headerlink" title="LDAP 简介"></a>LDAP 简介</h2><p><code>LDAP</code>（轻量级目录访问协议，<code>Lightweight Directory Access Protocol</code>) 是实现提供被称为目录服务的信息服务。目录服务是一种特殊的数据库系统，其专门针对读取，浏览和搜索操作进行了特定的优化。目录一般用来包含描述性的，基于属性的信息并支持精细复杂的过滤能力。目录一般不支持通用数据库针对大量更新操作操作需要的复杂的事务管理或回卷策略。而目录服务的更新则一般都非常简单。这种目录可以存储包括个人信息、web 链结、jpeg 图像等各种信息。为了访问存储在目录中的信息，就需要使用运行在 TCP&#x2F;IP 之上的访问协议 —LDAP。</p>
+<p>LDAP 目录中的信息是是按照树型结构组织，具体信息存储在条目 (entry) 的数据结构中。条目相当于关系数据库中表的记录；条目是具有区别名 <code>DN</code> （Distinguished Name）的属性（Attribute），DN 是用来引用条目的，DN 相当于关系数据库表中的关键字（Primary Key）。属性由类型（Type）和一个或多个值（Values）组成，相当于关系数据库中的字段（Field）由字段名和数据类型组成，只是为了方便检索的需要，LDAP 中的 Type 可以有多个 Value，而不是关系数据库中为降低数据的冗余性要求实现的各个域必须是不相关的。LDAP 中条目的组织一般按照地理位置和组织关系进行组织，非常的直观。LDAP 把数据存放在文件中，为提高效率可以使用基于索引的文件数据库，而不是关系数据库。类型的一个例子就是 mail，其值将是一个电子邮件地址。</p>
+<h2 id="OpenLADP-简介"><a href="#OpenLADP-简介" class="headerlink" title="OpenLADP 简介"></a>OpenLADP 简介</h2><p>LDAP 具有两个标准，分别是 X.500 和 LDAP。OpenLDAP 是基于 X.500 标准的，而且去除了 X.500 复杂的功能并且可以根据自我需求定制额外扩展功能，但与 X.500 也有不同之处，例如 OpenLDAP 支持 TCP&#x2F;IP 协议等。</p>
+<p>OpenLDAP 可以直接运行在更简单和更通用的 TCP&#x2F;IP 或其他可靠的传输协议层上，避免了在 OSI 会话层和表示层的开销，使连接的建立和包的处理更简单、更快，对于互联网和企业网应用更理想。</p>
+<p>OpenLDAP 目录中的信息是以树状的层次结构来存储数据（这很类同于 DNS），最顶层即根部称作 “基准 DN”，形如 “dc&#x3D;mydomain,dc&#x3D;org” 或者 “o&#x3D;mydomain.org”，前一种方式更为灵活也是 Windows AD 中使用的方式。在根目录的下面有很多的文件和目录，为了把这些大量的数据从逻辑上分开，OpenLDAP 像其它的目录服务协议一样使用 <code>OU</code>（<code>Organization Unit</code>，组织单元），可以用来表示公司内部机构，如部门等，也可以用来表示设备、人员等。同时 OU 还可以有子 OU，用来表示更为细致的分类。</p>
+<p>OpenLDAP 中每一条记录都有一个唯一的区别于其它记录的名字 <code>DN</code>（<code>Distinguished Name</code>）, 其处在 “叶子” 位置的部分称作 RDN (用户条目的相对标识名)。如 dn:cn&#x3D;tom,ou&#x3D;animals,dc&#x3D;ilanni,dc&#x3D;com 中 cn 即为 RDN，而 RDN 在一个 OU 中必须是唯一的。</p>
+<p>OpenLDAP 默认以 <code>Berkeley DB</code> 作为后端数据库，BerkeleyDB 数据库主要以散列的数据类型进行数据存储，如以键值对的方式进行存储。</p>
+<p><strong>BerkeleyDB 是一类特殊的面向查询进行优化、面向读取进行优化的数据库，主要用于搜索、浏览、更新查询操作，一般对于一次写入数据、多次查询和搜索有很好的效果</strong>。BerkeleyDB 不支持事务型数据库 (MySQL、MariDB、Oracle 等) 所支持的高并发的吞吐量以及复杂的事务操作。</p>
+<h2 id="LDAP-简称目录"><a href="#LDAP-简称目录" class="headerlink" title="LDAP 简称目录"></a>LDAP 简称目录</h2><table>
+<thead>
+<tr>
+<th>简称</th>
+<th>全称（含义）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>c</td>
+<td>countryName（国家）</td>
+</tr>
+<tr>
+<td>dc</td>
+<td>domainComponent（域名）</td>
+</tr>
+<tr>
+<td>o</td>
+<td>organization（组织 - 公司）</td>
+</tr>
+<tr>
+<td>ou</td>
+<td>organization unit（组织单元 - 部门）</td>
+</tr>
+<tr>
+<td>sn</td>
+<td>suer name（真实名称）</td>
+</tr>
+<tr>
+<td>cn</td>
+<td>common name（常用名称）</td>
+</tr>
+</tbody></table>
+
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://liei.cc/2020/openldap-getting-started.html" /></div><div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/b32ef3da1162a.svg"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://liei.cc/2020/openldap-getting-started.html&title=OpenLDAP 快速落地实践-基本介绍 - LLIEI0X&pics=https://lliei0x.oss-cn-shanghai.aliyuncs.com/blog/cover/202212092205454.svg&summary=场景需求
+需求当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 ..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=OpenLDAP 快速落地实践-基本介绍 - LLIEI0X&amp;body=https://liei.cc/2020/openldap-getting-started.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/8411ed322ced6.svg"/></a></div><div class="qrcode" id="qrcode-wechat" style="visibility:hidden;height:0"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://liei.cc/2020/openldap-getting-started.html"/></div></div></section></div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2020/openldap-install-config.html">OpenLDAP 快速落地实践-部署配置</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2019/module-design-doc.html">模块设计文档编写规范</a></div></section></div>
+
+
+<div class="related-wrap reveal" id="related-posts">
+    <section class='header'>
+      <div class='title cap theme'>您可能感兴趣的文章</div>
+    </section>
+    <section class='body'>
+    <div class="related-posts"><a class="item" href="/2020/openldap-high-ranking.html" title="OpenLDAP 快速落地实践-进阶"><span class="title">OpenLDAP 快速落地实践-进阶</span></a><a class="item" href="/2020/openldap-install-config.html" title="OpenLDAP 快速落地实践-部署配置"><span class="title">OpenLDAP 快速落地实践-部署配置</span></a><a class="item" href="/2018/k8s-cluster-deploy.html" title="暴力学习 k8s - 集群搭建"><span class="title">暴力学习 k8s - 集群搭建</span></a></div></section></div>
+
+
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="sitemap"><div class="sitemap-group"><span class="fs14">博客</span><a href="/posts/">近期</a><a href="/blog/categories/">分类</a><a href="/blog/tags/">标签</a><a href="/blog/archives/">归档</a></div><div class="sitemap-group"><span class="fs14">项目</span><a href="/wiki/">专栏</a><a href="/notes/">笔记</a></div><div class="sitemap-group"><span class="fs14">社交</span><a href="/more/">动态</a><a href="/friends/">友链</a><a href="/more/#comments">留言板</a><a target="_blank" rel="noopener" href="https://twitter.com/lliei0x">Twitter</a><a target="_blank" rel="noopener" href="https://t.me/lliei0x">Telegrem</a></div><div class="sitemap-group"><span class="fs14">更多</span><a href="/more/">关于本站</a><a target="_blank" rel="noopener" href="https://github.com/lliei">GitHub</a></div></div><div class="text"><p>本站由 <a target="_blank" rel="noopener" href="https://github.com/lliei">@lliei0x</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar">Stellar</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  const stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.version = '1.18.5';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5';
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://github.elemecdn.com/jquery@3.5.1/dist/jquery.min.js'
+  };
+
+  if ('local_search') {
+    stellar.search = {};
+    stellar.search.service = 'local_search';
+    if (stellar.search.service == 'local_search') {
+      let service_obj = Object.assign({}, {"field":"all","path":"/search.json","content":true,"codeblock":false,"sort":"-date"});
+      stellar.search[stellar.search.service] = service_obj;
+    }
+  }
+
+  // stellar js
+  stellar.plugins.stellar = Object.assign({"sites":"/js/plugins/sites.js","friends":"/js/plugins/friends.js","ghinfo":"/js/plugins/ghinfo.js","timeline":"/js/plugins/timeline.js","linkcard":"/js/plugins/linkcard.js","fcircle":"/js/plugins/fcircle.js","weibo":"/js/plugins/weibo.js"});
+
+  stellar.plugins.marked = Object.assign("https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js");
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://github.elemecdn.com/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://github.elemecdn.com/swiper@8/swiper-bundle.min.css","js":"https://github.elemecdn.com/swiper@8/swiper-bundle.min.js"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":false,"js":"https://github.elemecdn.com/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://gcore.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://gcore.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://github.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://github.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti@0.9.2/umd/heti.min.css","js":"https://unpkg.com/heti@0.9.2/umd/heti-addon.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+  <script>
+  function loadJS() {
+    const els = document.querySelectorAll("#comments #giscus");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.log(error);
+      }
+      var script = document.createElement('script');
+      script.src = 'https://giscus.app/client.js';
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  }
+  window.addEventListener('DOMContentLoaded', (event) => {
+    loadJS();
+  });
+</script>
+
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>

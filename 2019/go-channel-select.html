@@ -1,1 +1,364 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 6.3.0"><meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5"><meta charset="utf-8"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://gcore.jsdelivr.net"><link rel="preconnect" href="https://gcore.jsdelivr.net" crossorigin><link rel="dns-prefetch" href="//unpkg.com"><meta name="renderer" content="webkit"><meta name="force-rendering" content="webkit"><meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"><meta name="HandheldFriendly" content="True"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#f8f8f8"><title>Select -- 无阻塞读写 channel - LLIEI0X</title><meta name="description" content="通道阻塞在之前的 Go 的并发模型 可以了解到，FAN 流水模型可以多个 Goroutine 读一个 Channel 中的数据(FAN-OUT)，或者多个 Chanel 将数据发送到一个 Goroutine 中接收(FAN-IN)，但是无论是无缓冲通道，还是有缓冲通道，都存在阻塞的情况 无缓冲通道 特点：发送的数据需要被读取后，发送才会完成  阻塞场景：  通道中无数据，但执行都通道 通道中无数据"><meta property="og:type" content="article"><meta property="og:title" content="Select -- 无阻塞读写 channel"><meta property="og:url" content="https://liei.cc/2019/go-channel-select.html"><meta property="og:site_name" content="LLIEI0X"><meta property="og:description" content="通道阻塞在之前的 Go 的并发模型 可以了解到，FAN 流水模型可以多个 Goroutine 读一个 Channel 中的数据(FAN-OUT)，或者多个 Chanel 将数据发送到一个 Goroutine 中接收(FAN-IN)，但是无论是无缓冲通道，还是有缓冲通道，都存在阻塞的情况 无缓冲通道 特点：发送的数据需要被读取后，发送才会完成  阻塞场景：  通道中无数据，但执行都通道 通道中无数据"><meta property="og:locale" content="zh_CN"><meta property="article:published_time" content="2019-02-02T14:15:15.000Z"><meta property="article:modified_time" content="2019-02-02T14:15:15.000Z"><meta property="article:author" content="lliei0x"><meta property="article:tag" content="Go"><meta name="twitter:card" content="summary"><link rel="alternate" href="/atom.xml" title="LLIEI0X" type="application/atom+xml"><link rel="stylesheet" href="/css/main.css"><link rel="shortcut icon" href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20220614145243.ico"><link rel="stylesheet" href="https://github.elemecdn.com/lxgw-wenkai-screen-webfont@1.6.0/lxgwwenkaiscreen.css"><link rel="stylesheet" href="https://github.elemecdn.com/@fontsource/monda@4.5.10/latin.css"><link rel="stylesheet" href="https://github.elemecdn.com/@fontsource/dm-mono@4.5.10/latin-400.css"></head><body><div class="l_body" id="start"><aside class="l_left" layout="post"><header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/avatar/round/rainbow64@3x.webp)"></div><img no-lazy class="avatar" src="https://s2.loli.net/2022/12/01/haMivpAzGlRnYEr.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">LLIEI0X</div><div class="sub normal cap">☔ slow to respond</div><div class="sub hover cap" style="opacity:0">🌵 Live long and prosper</div></a></div><nav class="menu dis-select"><a class="nav-item" href="/">主页</a><a class="nav-item" href="/wiki/">专栏</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/more/">更多</a></nav></header><div class="widgets"><widget class="widget-wrapper search"><div class="widget-body"><div class="search-wrapper" id="search"><form class="search-form"><input type="text" class="search-input" id="search-input" placeholder="Search..."><svg t="1670596976048" class="icon search-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2676" width="200" height="200"><path d="M938.2 832.6L723.8 618.1c-2.5-2.5-5.3-4.4-7.9-6.4 36.2-55.6 57.3-121.8 57.3-193.1C773.3 222.8 614.6 64 418.7 64S64 222.8 64 418.6c0 195.9 158.8 354.6 354.6 354.6 71.3 0 137.5-21.2 193.2-57.4 2 2.7 3.9 5.4 6.3 7.8L832.5 938c14.6 14.6 33.7 21.9 52.8 21.9 19.1 0 38.2-7.3 52.8-21.8 29.2-29.1 29.2-76.4 0.1-105.5M418.7 661.3C284.9 661.3 176 552.4 176 418.6 176 284.9 284.9 176 418.7 176c133.8 0 242.6 108.9 242.6 242.7 0 133.7-108.9 242.6-242.6 242.6" p-id="2677"></path></svg></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div></div></widget><widget class="widget-wrapper toc single" id="data-toc"><div class="widget-header cap dis-select"><span class="name">Select -- 无阻塞读写 channel</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E9%81%93%E9%98%BB%E5%A1%9E"><span class="toc-text">通道阻塞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E7%BC%93%E5%86%B2%E9%80%9A%E9%81%93"><span class="toc-text">无缓冲通道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E7%BC%93%E5%86%B2%E9%80%9A%E9%81%93"><span class="toc-text">有缓冲通道</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Select-%E5%8A%9F%E8%83%BD"><span class="toc-text">Select 功能</span></a></li></ol></div></div></widget></div></aside><div class="l_main"><div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/blog/categories/%E8%AE%BE%E8%AE%A1%E5%BC%80%E5%8F%91/">设计开发</a></div><div id="post-meta">发布于&nbsp;<time datetime="2019-02-02T14:15:15.000Z">2019-02-02</time></div></div><article class="md-text content post"><h1 class="article-title"><span>Select -- 无阻塞读写 channel</span></h1><h2 id="通道阻塞"><a href="#通道阻塞" class="headerlink" title="通道阻塞"></a>通道阻塞</h2><p>在之前的 <a target="_blank" rel="noopener" href="https://leeif.me/2019/01/go-concurrent-model.html"><strong>Go 的并发模型</strong></a> 可以了解到，FAN 流水模型可以多个 Goroutine 读一个 Channel 中的数据(FAN-OUT)，或者多个 Chanel 将数据发送到一个 Goroutine 中接收(FAN-IN)，<strong>但是无论是无缓冲通道，还是有缓冲通道，都存在阻塞的情况</strong></p><h3 id="无缓冲通道"><a href="#无缓冲通道" class="headerlink" title="无缓冲通道"></a>无缓冲通道</h3><blockquote><p>特点：发送的数据需要被读取后，发送才会完成</p></blockquote><p><strong>阻塞场景：</strong></p><ul><li>通道中无数据，但执行都通道</li><li>通道中无数据，向通道中写数据，但无其他协程读取该通道中的数据</li></ul><p><strong>代码示例：</strong></p><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 场景 1</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ReadNoDataFromNoBufCh</span><span class="params">()</span></span>&#123;</span><br><span class="line">    noBufCh := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">    <span class="comment">// 通道中无数据</span></span><br><span class="line">    &lt;- noBufCh</span><br><span class="line">    fmt.Println(<span class="string">&quot;read from no buffer channel success&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Output:</span></span><br><span class="line">    <span class="comment">// fatal error: all goroutines are asleep - deadlock!</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 场景 2</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">WriteNoBufCh</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">    ch &lt;- <span class="number">1</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;write success no block&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Output:</span></span><br><span class="line">    <span class="comment">// fatal error: all goroutines are asleep - deadlock!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="有缓冲通道"><a href="#有缓冲通道" class="headerlink" title="有缓冲通道"></a>有缓冲通道</h3><blockquote><p>特点：有缓存时可以向通道中写入数据后直接返回，缓存中有数据时可以从通道中读到数据直接返回，这时有缓存通道是不会阻塞的</p></blockquote><p><strong>阻塞场景：</strong></p><ul><li>通道的缓存无数据，但执行读通道</li><li>通道的缓存已经占满，向通道写数据，但无协程读</li></ul><p><strong>代码示例：</strong></p><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 场景 1</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ReadNoDataFromBufCh</span><span class="params">()</span></span>&#123;</span><br><span class="line">    bufCh := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="comment">// 通道中无数据</span></span><br><span class="line">    &lt;- bufCh</span><br><span class="line">    fmt.Println(<span class="string">&quot;read from no buffer channel success&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Output:</span></span><br><span class="line">    <span class="comment">// fatal error: all goroutines are asleep - deadlock!</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 场景 2</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">WriteBufChButFull</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="comment">// 写数据，占满缓冲</span></span><br><span class="line">    ch &lt;- <span class="number">1</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 无协程读取缓冲中的数据，继续写，阻塞</span></span><br><span class="line">    ch &lt;- <span class="number">2</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;write success no block&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Output:</span></span><br><span class="line">    <span class="comment">// fatal error: all goroutines are asleep - deadlock!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="Select-功能"><a href="#Select-功能" class="headerlink" title="Select 功能"></a>Select 功能</h2><p><strong>Select</strong> 由关键字 <code>select</code> 和 <code>case</code> 组成，<code>default</code> 不是必须的，如果没其他事可做，可以省略 <code>default</code>，<strong>在多个通道上进行读或写操作，让函数可以处理多个事情，但 1 次只处理 1 个</strong>，有以下特性：</p><ul><li>每次执行 <code>select</code>，都会只执行其中 1 个 <code>case</code> 或者执行 <code>default</code> 语句</li><li>当没有 case 或者 default 可以执行时，select 则阻塞，等待直到有 1 个 case 可以执行</li><li>当有多个 case 可以执行时，则随机选择 1 个 case 执行</li><li>case 后面跟的必须是读或者写通道的操作，否则编译出错</li></ul><div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p></div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly id="copy-link" value="https://liei.cc/2019/go-channel-select.html"></div><div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/b32ef3da1162a.svg"></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://liei.cc/2019/go-channel-select.html&title=Select -- 无阻塞读写 channel - LLIEI0X&summary=通道阻塞在之前的 Go 的并发模型 可以了解到，FAN 流水模型可以多个 Goroutine 读一个 Channel 中的数据(FAN-OUT)，或者多个 Chanel 将数据发送到一个 Goroutine 中接收(FAN-IN)，但..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/80c07e4dbb303.svg"></a><a class="social share-item email" href="mailto:?subject=Select -- 无阻塞读写 channel - LLIEI0X&amp;body=https://liei.cc/2019/go-channel-select.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/a1b00e20f425d.svg"></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/8411ed322ced6.svg"></a></div><div class="qrcode" id="qrcode-wechat" style="visibility:hidden;height:0"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://liei.cc/2019/go-channel-select.html"></div></div></section></div></article><div class="related-wrap reveal" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2019/operator-sdk-use.html">Opeartor-SDK 简单上手</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2019/k8s-deploy-metallb-LoadBalancer.html">Kuberntes 创建 LoadBalancer 类型服务</a></div></section></div><div class="related-wrap reveal" id="related-posts"><section class="header"><div class="title cap theme">您可能感兴趣的文章</div></section><section class="body"><div class="related-posts"><a class="item" href="/2018/gin-go-web-frame.html" title="高性能的 Go Web 框架 - gin"><span class="title">高性能的 Go Web 框架 - gin</span></a><a class="item" href="/2018/gin-swagger-build-document.html" title="gin-swagger 自动化构建 API 文档"><span class="title">gin-swagger 自动化构建 API 文档</span></a><a class="item" href="/2018/redis-for-mysql-cache.html" title="初学 Redis 作缓存层"><span class="title">初学 Redis 作缓存层</span></a><a class="item" href="/2019/go-concurrent-model.html" title="Go 并发模型"><span class="title">Go 并发模型</span></a><a class="item" href="/2018/open-cloud-native-study.html" title="开启云原生之门"><span class="title">开启云原生之门</span></a></div></section></div><footer class="page-footer reveal fs12"><hr><div class="sitemap"><div class="sitemap-group"><span class="fs14">博客</span><a href="/posts/">近期</a><a href="/blog/categories/">分类</a><a href="/blog/tags/">标签</a><a href="/blog/archives/">归档</a></div><div class="sitemap-group"><span class="fs14">项目</span><a href="/wiki/">专栏</a><a href="/notes/">笔记</a></div><div class="sitemap-group"><span class="fs14">社交</span><a href="/more/">动态</a><a href="/friends/">友链</a><a href="/more/#comments">留言板</a><a target="_blank" rel="noopener" href="https://twitter.com/lliei0x">Twitter</a><a target="_blank" rel="noopener" href="https://t.me/lliei0x">Telegrem</a></div><div class="sitemap-group"><span class="fs14">更多</span><a href="/more/">关于本站</a><a target="_blank" rel="noopener" href="https://github.com/lliei">GitHub</a></div></div><div class="text"><p>本站由 <a target="_blank" rel="noopener" href="https://github.com/lliei">@lliei0x</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar">Stellar</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p></div></footer><div class="float-panel mobile-only blur" style="display:none"><button type="button" class="sidebar-toggle mobile" onclick="sidebar.toggle()"><svg class="icon" style="width:1em;height:1em;vertical-align:middle;fill:currentColor;overflow:hidden" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg></button></div></div></div><div class="scripts"><script type="text/javascript">const stellar={loadCSS:(e,s,t,n)=>{var i,l=window.document,a=l.createElement("link");if(s)i=s;else{var r=(l.body||l.getElementsByTagName("head")[0]).childNodes;i=r[r.length-1]}var o=l.styleSheets;if(n)for(var c in n)n.hasOwnProperty(c)&&a.setAttribute(c,n[c]);a.rel="stylesheet",a.href=e,a.media="only x",function e(s){if(l.body)return s();setTimeout((function(){e(s)}))}((function(){i.parentNode.insertBefore(a,s?i:i.nextSibling)}));var d=function(e){for(var s=a.href,t=o.length;t--;)if(o[t].href===s)return e();setTimeout((function(){d(e)}))};function u(){a.addEventListener&&a.removeEventListener("load",u),a.media=t||"all"}return a.addEventListener&&a.addEventListener("load",u),a.onloadcssdefined=d,d(u),a},loadScript:(e,s)=>new Promise((t,n)=>{var i=document.createElement("script");if(i.src=e,s)for(let e of Object.keys(s))i[e]=s[e];else i.async=!0;i.onerror=n,i.onload=i.onreadystatechange=function(){const e=this.readyState;e&&"loaded"!==e&&"complete"!==e||(i.onload=i.onreadystatechange=null,t())},document.head.appendChild(i)}),jQuery:e=>{"undefined"==typeof jQuery?stellar.loadScript(stellar.plugins.jQuery).then(e):e()},version:"1.18.5",github:"https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5",config:{date_suffix:{just:"刚刚",min:"分钟前",hour:"小时前",day:"天前",month:"个月前"}},plugins:{jQuery:"https://github.elemecdn.com/jquery@3.5.1/dist/jquery.min.js"},search:{}};if(stellar.search.service="local_search","local_search"==stellar.search.service){let e=Object.assign({},{field:"all",path:"/search.json",content:!0,codeblock:!1,sort:"-date"});stellar.search[stellar.search.service]=e}stellar.plugins.stellar=Object.assign({sites:"/js/plugins/sites.js",friends:"/js/plugins/friends.js",ghinfo:"/js/plugins/ghinfo.js",timeline:"/js/plugins/timeline.js",linkcard:"/js/plugins/linkcard.js",fcircle:"/js/plugins/fcircle.js",weibo:"/js/plugins/weibo.js"}),stellar.plugins.marked=Object.assign("https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js"),stellar.plugins.lazyload=Object.assign({enable:!0,js:"https://github.elemecdn.com/vanilla-lazyload@17.3.1/dist/lazyload.min.js",transition:"blur"}),stellar.plugins.swiper=Object.assign({enable:!0,css:"https://github.elemecdn.com/swiper@8/swiper-bundle.min.css",js:"https://github.elemecdn.com/swiper@8/swiper-bundle.min.js"}),stellar.plugins.preload=Object.assign({enable:!0,service:"flying_pages",instant_page:"https://gcore.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js",flying_pages:"https://gcore.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"}),stellar.plugins.fancybox=Object.assign({enable:!0,js:"https://github.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js",css:"https://github.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css",selector:".swiper-slide img"})</script><script src="/js/main.js" async></script><script>function loadJS(){const e=document.querySelectorAll("#comments #giscus");0!==e.length&&e.forEach((e,t)=>{try{e.innerHTML=""}catch(e){console.log(e)}var n=document.createElement("script");n.src="https://giscus.app/client.js",n.async=!0;for(let t of Object.keys(e.attributes)){let c=e.attributes[t];!1===["class","id"].includes(c.name)&&n.setAttribute(c.name,c.value)}e.appendChild(n)})}window.addEventListener("DOMContentLoaded",e=>{loadJS()})</script></div></body></html>
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head>
+  <meta name="generator" content="Hexo 6.3.0">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://gcore.jsdelivr.net'>
+  <link rel="preconnect" href="https://gcore.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  
+  <title>Select -- 无阻塞读写 channel - LLIEI0X</title>
+
+  
+    <meta name="description" content="通道阻塞在之前的 Go 的并发模型 可以了解到，FAN 流水模型可以多个 Goroutine 读一个 Channel 中的数据(FAN-OUT)，或者多个 Chanel 将数据发送到一个 Goroutine 中接收(FAN-IN)，但是无论是无缓冲通道，还是有缓冲通道，都存在阻塞的情况 无缓冲通道 特点：发送的数据需要被读取后，发送才会完成  阻塞场景：  通道中无数据，但执行都通道 通道中无数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Select -- 无阻塞读写 channel">
+<meta property="og:url" content="https://liei.cc/2019/go-channel-select.html">
+<meta property="og:site_name" content="LLIEI0X">
+<meta property="og:description" content="通道阻塞在之前的 Go 的并发模型 可以了解到，FAN 流水模型可以多个 Goroutine 读一个 Channel 中的数据(FAN-OUT)，或者多个 Chanel 将数据发送到一个 Goroutine 中接收(FAN-IN)，但是无论是无缓冲通道，还是有缓冲通道，都存在阻塞的情况 无缓冲通道 特点：发送的数据需要被读取后，发送才会完成  阻塞场景：  通道中无数据，但执行都通道 通道中无数据">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-02-02T14:15:15.000Z">
+<meta property="article:modified_time" content="2019-02-02T14:15:15.000Z">
+<meta property="article:author" content="lliei0x">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+  
+  
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="LLIEI0X" type="application/atom+xml">
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+    <link rel="shortcut icon" href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20220614145243.ico">
+  
+
+  
+
+  
+
+
+  
+    
+      <link rel="stylesheet" href="https://github.elemecdn.com/lxgw-wenkai-screen-webfont@1.6.0/lxgwwenkaiscreen.css"/>
+    
+      <link rel="stylesheet" href="https://github.elemecdn.com/@fontsource/monda@4.5.10/latin.css"/>
+    
+      <link rel="stylesheet" href="https://github.elemecdn.com/@fontsource/dm-mono@4.5.10/latin-400.css"/>
+    
+  
+</head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
+    
+
+  
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://s2.loli.net/2022/12/01/haMivpAzGlRnYEr.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">LLIEI0X</div><div class="sub normal cap">☔ slow to respond</div><div class="sub hover cap" style="opacity:0">🌵 Live long and prosper</div></a></div>
+
+<nav class="menu dis-select"><a class="nav-item" href="/">主页</a><a class="nav-item" href="/wiki/">专栏</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/more/">更多</a></nav>
+</header>
+
+
+<div class="widgets">
+<widget class="widget-wrapper search"><div class="widget-body"><div class="search-wrapper" id="search"><form class="search-form"><input type="text" class="search-input" id="search-input" placeholder="Search..."><svg t="1670596976048" class="icon search-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2676" width="200" height="200"><path d="M938.2 832.6L723.8 618.1c-2.5-2.5-5.3-4.4-7.9-6.4 36.2-55.6 57.3-121.8 57.3-193.1C773.3 222.8 614.6 64 418.7 64S64 222.8 64 418.6c0 195.9 158.8 354.6 354.6 354.6 71.3 0 137.5-21.2 193.2-57.4 2 2.7 3.9 5.4 6.3 7.8L832.5 938c14.6 14.6 33.7 21.9 52.8 21.9 19.1 0 38.2-7.3 52.8-21.8 29.2-29.1 29.2-76.4 0.1-105.5M418.7 661.3C284.9 661.3 176 552.4 176 418.6 176 284.9 284.9 176 418.7 176c133.8 0 242.6 108.9 242.6 242.7 0 133.7-108.9 242.6-242.6 242.6" p-id="2677"></path></svg></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div></div></widget>
+
+
+<widget class="widget-wrapper toc single" id="data-toc"><div class="widget-header cap dis-select"><span class="name">Select -- 无阻塞读写 channel</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E9%81%93%E9%98%BB%E5%A1%9E"><span class="toc-text">通道阻塞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E7%BC%93%E5%86%B2%E9%80%9A%E9%81%93"><span class="toc-text">无缓冲通道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E7%BC%93%E5%86%B2%E9%80%9A%E9%81%93"><span class="toc-text">有缓冲通道</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Select-%E5%8A%9F%E8%83%BD"><span class="toc-text">Select 功能</span></a></li></ol></div></div></widget>
+
+
+
+
+</div>
+
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/blog/categories/%E8%AE%BE%E8%AE%A1%E5%BC%80%E5%8F%91/">设计开发</a></div><div id="post-meta">发布于&nbsp;<time datetime="2019-02-02T14:15:15.000Z">2019-02-02</time></div></div>
+
+<article class='md-text content post'>
+<h1 class="article-title"><span>Select -- 无阻塞读写 channel</span></h1>
+<h2 id="通道阻塞"><a href="#通道阻塞" class="headerlink" title="通道阻塞"></a>通道阻塞</h2><p>在之前的 <a target="_blank" rel="noopener" href="https://leeif.me/2019/01/go-concurrent-model.html"><strong>Go 的并发模型</strong></a> 可以了解到，FAN 流水模型可以多个 Goroutine 读一个 Channel 中的数据(FAN-OUT)，或者多个 Chanel 将数据发送到一个 Goroutine 中接收(FAN-IN)，<strong>但是无论是无缓冲通道，还是有缓冲通道，都存在阻塞的情况</strong></p>
+<h3 id="无缓冲通道"><a href="#无缓冲通道" class="headerlink" title="无缓冲通道"></a>无缓冲通道</h3><blockquote>
+<p>特点：发送的数据需要被读取后，发送才会完成</p>
+</blockquote>
+<p><strong>阻塞场景：</strong></p>
+<ul>
+<li>通道中无数据，但执行都通道</li>
+<li>通道中无数据，向通道中写数据，但无其他协程读取该通道中的数据</li>
+</ul>
+<p><strong>代码示例：</strong></p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 场景 1</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ReadNoDataFromNoBufCh</span><span class="params">()</span></span>&#123;</span><br><span class="line">    noBufCh := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">    <span class="comment">// 通道中无数据</span></span><br><span class="line">    &lt;- noBufCh</span><br><span class="line">    fmt.Println(<span class="string">&quot;read from no buffer channel success&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Output:</span></span><br><span class="line">    <span class="comment">// fatal error: all goroutines are asleep - deadlock!</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 场景 2</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">WriteNoBufCh</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">    ch &lt;- <span class="number">1</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;write success no block&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Output:</span></span><br><span class="line">    <span class="comment">// fatal error: all goroutines are asleep - deadlock!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="有缓冲通道"><a href="#有缓冲通道" class="headerlink" title="有缓冲通道"></a>有缓冲通道</h3><blockquote>
+<p>特点：有缓存时可以向通道中写入数据后直接返回，缓存中有数据时可以从通道中读到数据直接返回，这时有缓存通道是不会阻塞的</p>
+</blockquote>
+<p><strong>阻塞场景：</strong></p>
+<ul>
+<li>通道的缓存无数据，但执行读通道</li>
+<li>通道的缓存已经占满，向通道写数据，但无协程读</li>
+</ul>
+<p><strong>代码示例：</strong></p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 场景 1</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ReadNoDataFromBufCh</span><span class="params">()</span></span>&#123;</span><br><span class="line">    bufCh := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="comment">// 通道中无数据</span></span><br><span class="line">    &lt;- bufCh</span><br><span class="line">    fmt.Println(<span class="string">&quot;read from no buffer channel success&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Output:</span></span><br><span class="line">    <span class="comment">// fatal error: all goroutines are asleep - deadlock!</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 场景 2</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">WriteBufChButFull</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="comment">// 写数据，占满缓冲</span></span><br><span class="line">    ch &lt;- <span class="number">1</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 无协程读取缓冲中的数据，继续写，阻塞</span></span><br><span class="line">    ch &lt;- <span class="number">2</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;write success no block&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Output:</span></span><br><span class="line">    <span class="comment">// fatal error: all goroutines are asleep - deadlock!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Select-功能"><a href="#Select-功能" class="headerlink" title="Select 功能"></a>Select 功能</h2><p><strong>Select</strong> 由关键字 <code>select</code> 和 <code>case</code> 组成，<code>default</code> 不是必须的，如果没其他事可做，可以省略 <code>default</code>，<strong>在多个通道上进行读或写操作，让函数可以处理多个事情，但 1 次只处理 1 个</strong>，有以下特性：</p>
+<ul>
+<li>每次执行 <code>select</code>，都会只执行其中 1 个 <code>case</code> 或者执行 <code>default</code> 语句</li>
+<li>当没有 case 或者 default 可以执行时，select 则阻塞，等待直到有 1 个 case 可以执行</li>
+<li>当有多个 case 可以执行时，则随机选择 1 个 case 执行</li>
+<li>case 后面跟的必须是读或者写通道的操作，否则编译出错</li>
+</ul>
+
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://liei.cc/2019/go-channel-select.html" /></div><div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/b32ef3da1162a.svg"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://liei.cc/2019/go-channel-select.html&title=Select -- 无阻塞读写 channel - LLIEI0X&summary=通道阻塞在之前的 Go 的并发模型 可以了解到，FAN 流水模型可以多个 Goroutine 读一个 Channel 中的数据(FAN-OUT)，或者多个 Chanel 将数据发送到一个 Goroutine 中接收(FAN-IN)，但..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=Select -- 无阻塞读写 channel - LLIEI0X&amp;body=https://liei.cc/2019/go-channel-select.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/8411ed322ced6.svg"/></a></div><div class="qrcode" id="qrcode-wechat" style="visibility:hidden;height:0"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://liei.cc/2019/go-channel-select.html"/></div></div></section></div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2019/operator-sdk-use.html">Opeartor-SDK 简单上手</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2019/k8s-deploy-metallb-LoadBalancer.html">Kuberntes 创建 LoadBalancer 类型服务</a></div></section></div>
+
+
+<div class="related-wrap reveal" id="related-posts">
+    <section class='header'>
+      <div class='title cap theme'>您可能感兴趣的文章</div>
+    </section>
+    <section class='body'>
+    <div class="related-posts"><a class="item" href="/2018/gin-go-web-frame.html" title="高性能的 Go Web 框架 - gin"><span class="title">高性能的 Go Web 框架 - gin</span></a><a class="item" href="/2018/gin-swagger-build-document.html" title="gin-swagger 自动化构建 API 文档"><span class="title">gin-swagger 自动化构建 API 文档</span></a><a class="item" href="/2018/redis-for-mysql-cache.html" title="初学 Redis 作缓存层"><span class="title">初学 Redis 作缓存层</span></a><a class="item" href="/2019/go-concurrent-model.html" title="Go 并发模型"><span class="title">Go 并发模型</span></a><a class="item" href="/2018/open-cloud-native-study.html" title="开启云原生之门"><span class="title">开启云原生之门</span></a></div></section></div>
+
+
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="sitemap"><div class="sitemap-group"><span class="fs14">博客</span><a href="/posts/">近期</a><a href="/blog/categories/">分类</a><a href="/blog/tags/">标签</a><a href="/blog/archives/">归档</a></div><div class="sitemap-group"><span class="fs14">项目</span><a href="/wiki/">专栏</a><a href="/notes/">笔记</a></div><div class="sitemap-group"><span class="fs14">社交</span><a href="/more/">动态</a><a href="/friends/">友链</a><a href="/more/#comments">留言板</a><a target="_blank" rel="noopener" href="https://twitter.com/lliei0x">Twitter</a><a target="_blank" rel="noopener" href="https://t.me/lliei0x">Telegrem</a></div><div class="sitemap-group"><span class="fs14">更多</span><a href="/more/">关于本站</a><a target="_blank" rel="noopener" href="https://github.com/lliei">GitHub</a></div></div><div class="text"><p>本站由 <a target="_blank" rel="noopener" href="https://github.com/lliei">@lliei0x</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar">Stellar</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  const stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.version = '1.18.5';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5';
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://github.elemecdn.com/jquery@3.5.1/dist/jquery.min.js'
+  };
+
+  if ('local_search') {
+    stellar.search = {};
+    stellar.search.service = 'local_search';
+    if (stellar.search.service == 'local_search') {
+      let service_obj = Object.assign({}, {"field":"all","path":"/search.json","content":true,"codeblock":false,"sort":"-date"});
+      stellar.search[stellar.search.service] = service_obj;
+    }
+  }
+
+  // stellar js
+  stellar.plugins.stellar = Object.assign({"sites":"/js/plugins/sites.js","friends":"/js/plugins/friends.js","ghinfo":"/js/plugins/ghinfo.js","timeline":"/js/plugins/timeline.js","linkcard":"/js/plugins/linkcard.js","fcircle":"/js/plugins/fcircle.js","weibo":"/js/plugins/weibo.js"});
+
+  stellar.plugins.marked = Object.assign("https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js");
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://github.elemecdn.com/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://github.elemecdn.com/swiper@8/swiper-bundle.min.css","js":"https://github.elemecdn.com/swiper@8/swiper-bundle.min.js"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":false,"js":"https://github.elemecdn.com/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://gcore.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://gcore.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://github.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://github.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti@0.9.2/umd/heti.min.css","js":"https://unpkg.com/heti@0.9.2/umd/heti-addon.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+  <script>
+  function loadJS() {
+    const els = document.querySelectorAll("#comments #giscus");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.log(error);
+      }
+      var script = document.createElement('script');
+      script.src = 'https://giscus.app/client.js';
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  }
+  window.addEventListener('DOMContentLoaded', (event) => {
+    loadJS();
+  });
+</script>
+
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>

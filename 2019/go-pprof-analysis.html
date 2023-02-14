@@ -1,1 +1,392 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 6.3.0"><meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5"><meta charset="utf-8"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://gcore.jsdelivr.net"><link rel="preconnect" href="https://gcore.jsdelivr.net" crossorigin><link rel="dns-prefetch" href="//unpkg.com"><meta name="renderer" content="webkit"><meta name="force-rendering" content="webkit"><meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"><meta name="HandheldFriendly" content="True"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><meta name="theme-color" content="#f8f8f8"><title>go pprof 性能分析 - LLIEI0X</title><meta name="description" content="线上运行的基础平台文件管理服务进程出现内存泄露的现象，下图是 &#96;grafana&#96; 针对该服务的监控指标情况，可以发现服务刚起时，内存使用量为 **20M** 左右，经过操作后，内存会稳定在 **300M** 左右，不会持续上升，也不会下降，一开始找不到原因，所以尝试使用一下 golang pprof 性能分析工具分析一下程序到底哪出问题了"><meta property="og:type" content="article"><meta property="og:title" content="go pprof 性能分析"><meta property="og:url" content="https://liei.cc/2019/go-pprof-analysis.html"><meta property="og:site_name" content="LLIEI0X"><meta property="og:description" content="线上运行的基础平台文件管理服务进程出现内存泄露的现象，下图是 &#96;grafana&#96; 针对该服务的监控指标情况，可以发现服务刚起时，内存使用量为 **20M** 左右，经过操作后，内存会稳定在 **300M** 左右，不会持续上升，也不会下降，一开始找不到原因，所以尝试使用一下 golang pprof 性能分析工具分析一下程序到底哪出问题了"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3jdrwfy0zj31hc0r3tcp.jpg"><meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3jdrwawt6j31hc0r3dhp.jpg"><meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3ic456o71j313m0f70tl.jpg"><meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3je0lzugdj31hc0r3q3u.jpg"><meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3je0m0bjuj31hc0r3aby.jpg"><meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3je0m0mu5j31hc0r341g.jpg"><meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3je0m09v2j31hc0r30uc.jpg"><meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/20190627151301.png"><meta property="article:published_time" content="2019-05-20T14:15:15.000Z"><meta property="article:modified_time" content="2019-05-20T14:15:15.000Z"><meta property="article:author" content="lliei0x"><meta property="article:tag" content="Go"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3jdrwfy0zj31hc0r3tcp.jpg"><link rel="alternate" href="/atom.xml" title="LLIEI0X" type="application/atom+xml"><link rel="stylesheet" href="/css/main.css"><link rel="shortcut icon" href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20220614145243.ico"><link rel="stylesheet" href="https://github.elemecdn.com/lxgw-wenkai-screen-webfont@1.6.0/lxgwwenkaiscreen.css"><link rel="stylesheet" href="https://github.elemecdn.com/@fontsource/monda@4.5.10/latin.css"><link rel="stylesheet" href="https://github.elemecdn.com/@fontsource/dm-mono@4.5.10/latin-400.css"></head><body><div class="l_body" id="start"><aside class="l_left" layout="post"><header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/avatar/round/rainbow64@3x.webp)"></div><img no-lazy class="avatar" src="https://s2.loli.net/2022/12/01/haMivpAzGlRnYEr.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">LLIEI0X</div><div class="sub normal cap">☔ slow to respond</div><div class="sub hover cap" style="opacity:0">🌵 Live long and prosper</div></a></div><nav class="menu dis-select"><a class="nav-item" href="/">主页</a><a class="nav-item" href="/wiki/">专栏</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/more/">更多</a></nav></header><div class="widgets"><widget class="widget-wrapper search"><div class="widget-body"><div class="search-wrapper" id="search"><form class="search-form"><input type="text" class="search-input" id="search-input" placeholder="Search..."><svg t="1670596976048" class="icon search-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2676" width="200" height="200"><path d="M938.2 832.6L723.8 618.1c-2.5-2.5-5.3-4.4-7.9-6.4 36.2-55.6 57.3-121.8 57.3-193.1C773.3 222.8 614.6 64 418.7 64S64 222.8 64 418.6c0 195.9 158.8 354.6 354.6 354.6 71.3 0 137.5-21.2 193.2-57.4 2 2.7 3.9 5.4 6.3 7.8L832.5 938c14.6 14.6 33.7 21.9 52.8 21.9 19.1 0 38.2-7.3 52.8-21.8 29.2-29.1 29.2-76.4 0.1-105.5M418.7 661.3C284.9 661.3 176 552.4 176 418.6 176 284.9 284.9 176 418.7 176c133.8 0 242.6 108.9 242.6 242.7 0 133.7-108.9 242.6-242.6 242.6" p-id="2677"></path></svg></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div></div></widget><widget class="widget-wrapper toc single" id="data-toc"><div class="widget-header cap dis-select"><span class="name">go pprof 性能分析</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%B7%E5%9B%A0"><span class="toc-text">起因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0-pprof-%E6%A8%A1%E5%9D%97"><span class="toc-text">添加 pprof 模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90"><span class="toc-text">分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E5%8C%96"><span class="toc-text">优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol></div></div></widget></div></aside><div class="l_main"><div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/blog/categories/%E8%AE%BE%E8%AE%A1%E5%BC%80%E5%8F%91/">设计开发</a></div><div id="post-meta">发布于&nbsp;<time datetime="2019-05-20T14:15:15.000Z">2019-05-20</time></div></div><article class="md-text content post"><h1 class="article-title"><span>go pprof 性能分析</span></h1><h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><div class="tag-plugin note" color="warning"><div class="title">线上运行的基础平台文件管理服务进程出现内存泄露的现象</div><div class="body"><p>下图是 <code>grafana</code> 针对该服务的监控指标情况，可以发现服务刚起时，内存使用量为 <strong>20M</strong> 左右，经过操作后，内存会稳定在 <strong>300M</strong> 左右，不会持续上升，也不会下降，一开始找不到原因，所以尝试使用一下 golang pprof 性能分析工具分析一下程序到底哪出问题了</p></div></div><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3jdrwfy0zj31hc0r3tcp.jpg"></p><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3jdrwawt6j31hc0r3dhp.jpg"></p><h2 id="添加-pprof-模块"><a href="#添加-pprof-模块" class="headerlink" title="添加 pprof 模块"></a>添加 pprof 模块</h2><p>现在最新版本的 go tool 分析工具已经很人性化了，pprof 采样数据主要有三种获取方式:</p><ul><li><strong>runtime&#x2F;pprof</strong>: 手动调用<code>runtime.StartCPUProfile</code>或者<code>runtime.StopCPUProfile</code>等 API 来生成和写入采样文件，灵活性高，适用于<code>应用程序</code></li><li><strong>net&#x2F;http&#x2F;pprof</strong>: 通过 http 服务获取 Profile 采样文件，简单易用，适用于对应用程序的整体监控，通过 runtime&#x2F;pprof 实现，适用于<code>web服务程序、服务进程</code></li><li><strong>go test</strong>: 通过 <code>go test -bench . -cpuprofile prof.cpu</code>生成采样文件 适用对函数进行针对性测试</li></ul><blockquote class="pullquote right @leeifme , 睡沙发的沙皮狗"><p>其实 net&#x2F;http&#x2F;pprof 中只是使用 runtime&#x2F;pprof 包来进行封装了一下，并在 http 端口上暴露出来，让我们可以在浏览器查看程序的性能分析。可以自行查看 net&#x2F;http&#x2F;pprof 中代码，只有一个文件 pprof.go。</p></blockquote><p>以上获取方式就不详细演示了，毕竟着重于解决当下问题，由于所要分析的服务程序依赖于 <code>gin web 框架</code> ，因此要在 <code>gin</code> 中集成 pprof；</p><p><strong>Example：</strong></p><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;github.com/gin-contrib/pprof&quot;</span>  <span class="comment">// step 1</span></span><br><span class="line">    <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  router := gin.Default()</span><br><span class="line">  pprof.Register(router)   <span class="comment">// step 2</span></span><br><span class="line">  router.Run(<span class="string">&quot;:8080&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>启动程序，通过服务端口即可访问 pprof 的数据</p><p>查看当前总览：访问 <code>http://$HOSTIP:$PORT/debug/pprof</code></p><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3ic456o71j313m0f70tl.jpg"></p><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">cpu（CPU Profiling）: <span class="variable">$HOST</span><span class="regexp">/debug/</span>pprof/profile，默认进行 <span class="number">30</span>s 的 CPU Profiling，得到一个分析用的 profile 文件</span><br><span class="line">block（Block Profiling）：<span class="variable">$HOST</span><span class="regexp">/debug/</span>pprof/block，查看导致阻塞同步的堆栈跟踪</span><br><span class="line">goroutine：<span class="variable">$HOST</span><span class="regexp">/debug/</span>pprof/goroutine，查看当前所有运行的 goroutines 堆栈跟踪</span><br><span class="line">heap（Memory Profiling）: <span class="variable">$HOST</span><span class="regexp">/debug/</span>pprof/heap，查看活动对象的内存分配情况</span><br><span class="line">mutex（Mutex Profiling）：<span class="variable">$HOST</span><span class="regexp">/debug/</span>pprof/mutex，查看导致互斥锁的竞争持有者的堆栈跟踪</span><br><span class="line">threadcreate：<span class="variable">$HOST</span><span class="regexp">/debug/</span>pprof/threadcreate，查看创建新 OS 线程的堆栈跟踪</span><br></pre></td></tr></table></figure><p>这里，我更多的是做程序的内存分析，并通过交互式终端使用；</p><p>在 terminal 中使用 <code>go tool pprof http://$HOSTIP:$PORT/debug/pprof/heap</code> 可以进入 pprof 分析工具，比如输入 <code>top</code> 可以显示靠前的几项，go tool pprof 可以带上参数 <code>-inuse_space</code> (分析应用程序的常驻内存占用情况) 或者 <code>-alloc_space</code> (分析应用程序的内存临时分配情况)</p><p>现在 go tool 可以直接可视化结果，只需要带上 <code>-http=:8081</code> 参数即可，如：</p><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ go tool pprof -http=:8081 http://<span class="variable">$HOSTIP</span>:<span class="variable">$PORT</span>/debug/pprof/heap</span><br></pre></td></tr></table></figure><p>之后就会在浏览器弹出 <code>http://$HOSTIP:8081/ui</code>，里面包含程序内存分析的 dot 格式的图、火焰图、top 列表、source 列表等，如下：</p><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3je0lzugdj31hc0r3q3u.jpg"></p><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3je0m0bjuj31hc0r3aby.jpg"></p><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3je0m0mu5j31hc0r341g.jpg"></p><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3je0m09v2j31hc0r30uc.jpg"></p><h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>内存消耗停滞在一个值时，比如上述问题描述，其实不用称之为内存泄漏，而是不主动 GC，需要主动释放内存；</p><p>导致这个问题的原因是由于上传文件时，采用 <code>multipart/form-data</code> 传输数据，<code>r.FormFile(&quot;file&quot;)</code> 将导致调用Request.ParseMultipartForm()，并将32 MB用作maxMemory参数的值，创建 32M 的缓冲区；由于<code>bytes.Buffer</code> 用于读取内容，因此读取过程将从一个小的或空的缓冲区开始，并在需要更大的时候重新分配；</p><p>有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://golang.org/pkg/mime/multipart/#Reader.ReadForm"><strong>multipart.Reader.ReadFrom()</strong></a> 的实现。</p><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">r.ParseMultipartForm(<span class="number">32</span> &lt;&lt; <span class="number">20</span>) <span class="comment">// 32 MB</span></span><br><span class="line">file, _, err := r.FormFile(<span class="string">&quot;file&quot;</span>)</span><br><span class="line"><span class="comment">// ... rest of your handler</span></span><br></pre></td></tr></table></figure><blockquote class="pullquote @leeifme , 睡沙发的沙皮狗"><p>详细描述可以参考 <strong>stackoverflow</strong> 上的回答，<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/30657454/multipart-form-uploads-memory-leaks-in-golang">Multipart form uploads + memory leaks in golang?</a></p></blockquote><p>这里优化的方案是在 <code>request</code>请求的 <code>body</code> 中只放文件数据，其余信息放到 <code>header</code> 中，这样就不需要使用 MultipartForm 去解析数据；</p><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">file = r.Body</span><br><span class="line"><span class="comment">// ... rest of your handler</span></span><br></pre></td></tr></table></figure><p>可以看到传输完成后，内存占用恢复到了服务初始的状态值</p><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/20190627151301.png"></p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://github.com/EDDYCJY/blog/blob/master/golang/2018-09-15-Golang%20%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90%20PProf.md">Golang 大杀器之性能剖析 PProf</a></p><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/30657454/multipart-form-uploads-memory-leaks-in-golang">Multipart form uploads + memory leaks in golang?</a></p><div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p></div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly id="copy-link" value="https://liei.cc/2019/go-pprof-analysis.html"></div><div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/b32ef3da1162a.svg"></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://liei.cc/2019/go-pprof-analysis.html&title=go pprof 性能分析 - LLIEI0X&summary=线上运行的基础平台文件管理服务进程出现内存泄露的现象，下图是 `grafana` 针对该服务的监控指标情况，可以发现服务刚起时，内存使用量为 **20M** 左右，经过操作后，内存会稳定在 **300M** 左右，不会持续上升，也不会..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/80c07e4dbb303.svg"></a><a class="social share-item email" href="mailto:?subject=go pprof 性能分析 - LLIEI0X&amp;body=https://liei.cc/2019/go-pprof-analysis.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/a1b00e20f425d.svg"></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/8411ed322ced6.svg"></a></div><div class="qrcode" id="qrcode-wechat" style="visibility:hidden;height:0"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://liei.cc/2019/go-pprof-analysis.html"></div></div></section></div></article><div class="related-wrap reveal" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2019/gfs-consistency.html">GFS 一致性模型</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2019/operator-sdk-use.html">Opeartor-SDK 简单上手</a></div></section></div><div class="related-wrap reveal" id="related-posts"><section class="header"><div class="title cap theme">您可能感兴趣的文章</div></section><section class="body"><div class="related-posts"><a class="item" href="/2018/gin-go-web-frame.html" title="高性能的 Go Web 框架 - gin"><span class="title">高性能的 Go Web 框架 - gin</span></a><a class="item" href="/2018/gin-swagger-build-document.html" title="gin-swagger 自动化构建 API 文档"><span class="title">gin-swagger 自动化构建 API 文档</span></a><a class="item" href="/2018/redis-for-mysql-cache.html" title="初学 Redis 作缓存层"><span class="title">初学 Redis 作缓存层</span></a><a class="item" href="/2019/go-channel-select.html" title="Select -- 无阻塞读写 channel"><span class="title">Select -- 无阻塞读写 channel</span></a><a class="item" href="/2018/open-cloud-native-study.html" title="开启云原生之门"><span class="title">开启云原生之门</span></a></div></section></div><footer class="page-footer reveal fs12"><hr><div class="sitemap"><div class="sitemap-group"><span class="fs14">博客</span><a href="/posts/">近期</a><a href="/blog/categories/">分类</a><a href="/blog/tags/">标签</a><a href="/blog/archives/">归档</a></div><div class="sitemap-group"><span class="fs14">项目</span><a href="/wiki/">专栏</a><a href="/notes/">笔记</a></div><div class="sitemap-group"><span class="fs14">社交</span><a href="/more/">动态</a><a href="/friends/">友链</a><a href="/more/#comments">留言板</a><a target="_blank" rel="noopener" href="https://twitter.com/lliei0x">Twitter</a><a target="_blank" rel="noopener" href="https://t.me/lliei0x">Telegrem</a></div><div class="sitemap-group"><span class="fs14">更多</span><a href="/more/">关于本站</a><a target="_blank" rel="noopener" href="https://github.com/lliei">GitHub</a></div></div><div class="text"><p>本站由 <a target="_blank" rel="noopener" href="https://github.com/lliei">@lliei0x</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar">Stellar</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p></div></footer><div class="float-panel mobile-only blur" style="display:none"><button type="button" class="sidebar-toggle mobile" onclick="sidebar.toggle()"><svg class="icon" style="width:1em;height:1em;vertical-align:middle;fill:currentColor;overflow:hidden" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg></button></div></div></div><div class="scripts"><script type="text/javascript">const stellar={loadCSS:(e,s,t,n)=>{var i,l=window.document,a=l.createElement("link");if(s)i=s;else{var r=(l.body||l.getElementsByTagName("head")[0]).childNodes;i=r[r.length-1]}var o=l.styleSheets;if(n)for(var c in n)n.hasOwnProperty(c)&&a.setAttribute(c,n[c]);a.rel="stylesheet",a.href=e,a.media="only x",function e(s){if(l.body)return s();setTimeout((function(){e(s)}))}((function(){i.parentNode.insertBefore(a,s?i:i.nextSibling)}));var d=function(e){for(var s=a.href,t=o.length;t--;)if(o[t].href===s)return e();setTimeout((function(){d(e)}))};function u(){a.addEventListener&&a.removeEventListener("load",u),a.media=t||"all"}return a.addEventListener&&a.addEventListener("load",u),a.onloadcssdefined=d,d(u),a},loadScript:(e,s)=>new Promise((t,n)=>{var i=document.createElement("script");if(i.src=e,s)for(let e of Object.keys(s))i[e]=s[e];else i.async=!0;i.onerror=n,i.onload=i.onreadystatechange=function(){const e=this.readyState;e&&"loaded"!==e&&"complete"!==e||(i.onload=i.onreadystatechange=null,t())},document.head.appendChild(i)}),jQuery:e=>{"undefined"==typeof jQuery?stellar.loadScript(stellar.plugins.jQuery).then(e):e()},version:"1.18.5",github:"https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5",config:{date_suffix:{just:"刚刚",min:"分钟前",hour:"小时前",day:"天前",month:"个月前"}},plugins:{jQuery:"https://github.elemecdn.com/jquery@3.5.1/dist/jquery.min.js"},search:{}};if(stellar.search.service="local_search","local_search"==stellar.search.service){let e=Object.assign({},{field:"all",path:"/search.json",content:!0,codeblock:!1,sort:"-date"});stellar.search[stellar.search.service]=e}stellar.plugins.stellar=Object.assign({sites:"/js/plugins/sites.js",friends:"/js/plugins/friends.js",ghinfo:"/js/plugins/ghinfo.js",timeline:"/js/plugins/timeline.js",linkcard:"/js/plugins/linkcard.js",fcircle:"/js/plugins/fcircle.js",weibo:"/js/plugins/weibo.js"}),stellar.plugins.marked=Object.assign("https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js"),stellar.plugins.lazyload=Object.assign({enable:!0,js:"https://github.elemecdn.com/vanilla-lazyload@17.3.1/dist/lazyload.min.js",transition:"blur"}),stellar.plugins.swiper=Object.assign({enable:!0,css:"https://github.elemecdn.com/swiper@8/swiper-bundle.min.css",js:"https://github.elemecdn.com/swiper@8/swiper-bundle.min.js"}),stellar.plugins.preload=Object.assign({enable:!0,service:"flying_pages",instant_page:"https://gcore.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js",flying_pages:"https://gcore.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"}),stellar.plugins.fancybox=Object.assign({enable:!0,js:"https://github.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js",css:"https://github.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css",selector:".swiper-slide img"})</script><script src="/js/main.js" async></script><script>function loadJS(){const e=document.querySelectorAll("#comments #giscus");0!==e.length&&e.forEach((e,t)=>{try{e.innerHTML=""}catch(e){console.log(e)}var n=document.createElement("script");n.src="https://giscus.app/client.js",n.async=!0;for(let t of Object.keys(e.attributes)){let c=e.attributes[t];!1===["class","id"].includes(c.name)&&n.setAttribute(c.name,c.value)}e.appendChild(n)})}window.addEventListener("DOMContentLoaded",e=>{loadJS()})</script></div></body></html>
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head>
+  <meta name="generator" content="Hexo 6.3.0">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://gcore.jsdelivr.net'>
+  <link rel="preconnect" href="https://gcore.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  
+  <title>go pprof 性能分析 - LLIEI0X</title>
+
+  
+    <meta name="description" content="线上运行的基础平台文件管理服务进程出现内存泄露的现象，下图是 &#96;grafana&#96; 针对该服务的监控指标情况，可以发现服务刚起时，内存使用量为 **20M** 左右，经过操作后，内存会稳定在 **300M** 左右，不会持续上升，也不会下降，一开始找不到原因，所以尝试使用一下 golang pprof 性能分析工具分析一下程序到底哪出问题了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go pprof 性能分析">
+<meta property="og:url" content="https://liei.cc/2019/go-pprof-analysis.html">
+<meta property="og:site_name" content="LLIEI0X">
+<meta property="og:description" content="线上运行的基础平台文件管理服务进程出现内存泄露的现象，下图是 &#96;grafana&#96; 针对该服务的监控指标情况，可以发现服务刚起时，内存使用量为 **20M** 左右，经过操作后，内存会稳定在 **300M** 左右，不会持续上升，也不会下降，一开始找不到原因，所以尝试使用一下 golang pprof 性能分析工具分析一下程序到底哪出问题了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3jdrwfy0zj31hc0r3tcp.jpg">
+<meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3jdrwawt6j31hc0r3dhp.jpg">
+<meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3ic456o71j313m0f70tl.jpg">
+<meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3je0lzugdj31hc0r3q3u.jpg">
+<meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3je0m0bjuj31hc0r3aby.jpg">
+<meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3je0m0mu5j31hc0r341g.jpg">
+<meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3je0m09v2j31hc0r30uc.jpg">
+<meta property="og:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/20190627151301.png">
+<meta property="article:published_time" content="2019-05-20T14:15:15.000Z">
+<meta property="article:modified_time" content="2019-05-20T14:15:15.000Z">
+<meta property="article:author" content="lliei0x">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3jdrwfy0zj31hc0r3tcp.jpg">
+  
+  
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="LLIEI0X" type="application/atom+xml">
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+    <link rel="shortcut icon" href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20220614145243.ico">
+  
+
+  
+
+  
+
+
+  
+    
+      <link rel="stylesheet" href="https://github.elemecdn.com/lxgw-wenkai-screen-webfont@1.6.0/lxgwwenkaiscreen.css"/>
+    
+      <link rel="stylesheet" href="https://github.elemecdn.com/@fontsource/monda@4.5.10/latin.css"/>
+    
+      <link rel="stylesheet" href="https://github.elemecdn.com/@fontsource/dm-mono@4.5.10/latin-400.css"/>
+    
+  
+</head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
+    
+
+  
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://s2.loli.net/2022/12/01/haMivpAzGlRnYEr.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">LLIEI0X</div><div class="sub normal cap">☔ slow to respond</div><div class="sub hover cap" style="opacity:0">🌵 Live long and prosper</div></a></div>
+
+<nav class="menu dis-select"><a class="nav-item" href="/">主页</a><a class="nav-item" href="/wiki/">专栏</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/more/">更多</a></nav>
+</header>
+
+
+<div class="widgets">
+<widget class="widget-wrapper search"><div class="widget-body"><div class="search-wrapper" id="search"><form class="search-form"><input type="text" class="search-input" id="search-input" placeholder="Search..."><svg t="1670596976048" class="icon search-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2676" width="200" height="200"><path d="M938.2 832.6L723.8 618.1c-2.5-2.5-5.3-4.4-7.9-6.4 36.2-55.6 57.3-121.8 57.3-193.1C773.3 222.8 614.6 64 418.7 64S64 222.8 64 418.6c0 195.9 158.8 354.6 354.6 354.6 71.3 0 137.5-21.2 193.2-57.4 2 2.7 3.9 5.4 6.3 7.8L832.5 938c14.6 14.6 33.7 21.9 52.8 21.9 19.1 0 38.2-7.3 52.8-21.8 29.2-29.1 29.2-76.4 0.1-105.5M418.7 661.3C284.9 661.3 176 552.4 176 418.6 176 284.9 284.9 176 418.7 176c133.8 0 242.6 108.9 242.6 242.7 0 133.7-108.9 242.6-242.6 242.6" p-id="2677"></path></svg></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div></div></widget>
+
+
+<widget class="widget-wrapper toc single" id="data-toc"><div class="widget-header cap dis-select"><span class="name">go pprof 性能分析</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%B7%E5%9B%A0"><span class="toc-text">起因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0-pprof-%E6%A8%A1%E5%9D%97"><span class="toc-text">添加 pprof 模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90"><span class="toc-text">分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E5%8C%96"><span class="toc-text">优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol></div></div></widget>
+
+
+
+
+</div>
+
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/blog/categories/%E8%AE%BE%E8%AE%A1%E5%BC%80%E5%8F%91/">设计开发</a></div><div id="post-meta">发布于&nbsp;<time datetime="2019-05-20T14:15:15.000Z">2019-05-20</time></div></div>
+
+<article class='md-text content post'>
+<h1 class="article-title"><span>go pprof 性能分析</span></h1>
+<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><div class="tag-plugin note" color="warning"><div class="title">线上运行的基础平台文件管理服务进程出现内存泄露的现象</div><div class="body"><p>下图是 <code>grafana</code> 针对该服务的监控指标情况，可以发现服务刚起时，内存使用量为 <strong>20M</strong> 左右，经过操作后，内存会稳定在 <strong>300M</strong> 左右，不会持续上升，也不会下降，一开始找不到原因，所以尝试使用一下 golang pprof 性能分析工具分析一下程序到底哪出问题了</p></div></div>
+
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3jdrwfy0zj31hc0r3tcp.jpg"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3jdrwawt6j31hc0r3dhp.jpg"></p>
+<h2 id="添加-pprof-模块"><a href="#添加-pprof-模块" class="headerlink" title="添加 pprof 模块"></a>添加 pprof 模块</h2><p>现在最新版本的 go tool 分析工具已经很人性化了，pprof 采样数据主要有三种获取方式:</p>
+<ul>
+<li><strong>runtime&#x2F;pprof</strong>: 手动调用<code>runtime.StartCPUProfile</code>或者<code>runtime.StopCPUProfile</code>等 API 来生成和写入采样文件，灵活性高，适用于<code>应用程序</code></li>
+<li><strong>net&#x2F;http&#x2F;pprof</strong>: 通过 http 服务获取 Profile 采样文件，简单易用，适用于对应用程序的整体监控，通过 runtime&#x2F;pprof 实现，适用于<code>web服务程序、服务进程</code></li>
+<li><strong>go test</strong>: 通过 <code>go test -bench . -cpuprofile prof.cpu</code>生成采样文件 适用对函数进行针对性测试</li>
+</ul>
+<blockquote class="pullquote right @leeifme , 睡沙发的沙皮狗"><p>其实 net&#x2F;http&#x2F;pprof 中只是使用 runtime&#x2F;pprof 包来进行封装了一下，并在 http 端口上暴露出来，让我们可以在浏览器查看程序的性能分析。可以自行查看 net&#x2F;http&#x2F;pprof 中代码，只有一个文件 pprof.go。</p>
+</blockquote>
+
+<p>以上获取方式就不详细演示了，毕竟着重于解决当下问题，由于所要分析的服务程序依赖于 <code>gin web 框架</code> ，因此要在 <code>gin</code> 中集成 pprof；</p>
+<p><strong>Example：</strong></p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;github.com/gin-contrib/pprof&quot;</span>  <span class="comment">// step 1</span></span><br><span class="line">    <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  router := gin.Default()</span><br><span class="line">  pprof.Register(router)   <span class="comment">// step 2</span></span><br><span class="line">  router.Run(<span class="string">&quot;:8080&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>启动程序，通过服务端口即可访问 pprof 的数据</p>
+<p>查看当前总览：访问 <code>http://$HOSTIP:$PORT/debug/pprof</code></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3ic456o71j313m0f70tl.jpg"></p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">cpu（CPU Profiling）: <span class="variable">$HOST</span><span class="regexp">/debug/</span>pprof/profile，默认进行 <span class="number">30</span>s 的 CPU Profiling，得到一个分析用的 profile 文件</span><br><span class="line">block（Block Profiling）：<span class="variable">$HOST</span><span class="regexp">/debug/</span>pprof/block，查看导致阻塞同步的堆栈跟踪</span><br><span class="line">goroutine：<span class="variable">$HOST</span><span class="regexp">/debug/</span>pprof/goroutine，查看当前所有运行的 goroutines 堆栈跟踪</span><br><span class="line">heap（Memory Profiling）: <span class="variable">$HOST</span><span class="regexp">/debug/</span>pprof/heap，查看活动对象的内存分配情况</span><br><span class="line">mutex（Mutex Profiling）：<span class="variable">$HOST</span><span class="regexp">/debug/</span>pprof/mutex，查看导致互斥锁的竞争持有者的堆栈跟踪</span><br><span class="line">threadcreate：<span class="variable">$HOST</span><span class="regexp">/debug/</span>pprof/threadcreate，查看创建新 OS 线程的堆栈跟踪</span><br></pre></td></tr></table></figure>
+
+<p>这里，我更多的是做程序的内存分析，并通过交互式终端使用；</p>
+<p>在 terminal 中使用 <code>go tool pprof http://$HOSTIP:$PORT/debug/pprof/heap</code> 可以进入 pprof 分析工具，比如输入 <code>top</code> 可以显示靠前的几项，go tool pprof 可以带上参数 <code>-inuse_space</code> (分析应用程序的常驻内存占用情况) 或者 <code>-alloc_space</code> (分析应用程序的内存临时分配情况)</p>
+<p>现在 go tool 可以直接可视化结果，只需要带上 <code>-http=:8081</code> 参数即可，如：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ go tool pprof -http=:8081 http://<span class="variable">$HOSTIP</span>:<span class="variable">$PORT</span>/debug/pprof/heap</span><br></pre></td></tr></table></figure>
+
+<p>之后就会在浏览器弹出 <code>http://$HOSTIP:8081/ui</code>，里面包含程序内存分析的 dot 格式的图、火焰图、top 列表、source 列表等，如下：</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3je0lzugdj31hc0r3q3u.jpg"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3je0m0bjuj31hc0r3aby.jpg"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3je0m0mu5j31hc0r341g.jpg"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/005TUXkXly1g3je0m09v2j31hc0r30uc.jpg"></p>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>内存消耗停滞在一个值时，比如上述问题描述，其实不用称之为内存泄漏，而是不主动 GC，需要主动释放内存；</p>
+<p>导致这个问题的原因是由于上传文件时，采用 <code>multipart/form-data</code> 传输数据，<code>r.FormFile(&quot;file&quot;)</code> 将导致调用Request.ParseMultipartForm()，并将32 MB用作maxMemory参数的值，创建 32M 的缓冲区；由于<code>bytes.Buffer</code> 用于读取内容，因此读取过程将从一个小的或空的缓冲区开始，并在需要更大的时候重新分配；</p>
+<p>有关详细信息，请参阅 <a target="_blank" rel="noopener" href="https://golang.org/pkg/mime/multipart/#Reader.ReadForm"><strong>multipart.Reader.ReadFrom()</strong></a> 的实现。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">r.ParseMultipartForm(<span class="number">32</span> &lt;&lt; <span class="number">20</span>) <span class="comment">// 32 MB</span></span><br><span class="line">file, _, err := r.FormFile(<span class="string">&quot;file&quot;</span>)</span><br><span class="line"><span class="comment">// ... rest of your handler</span></span><br></pre></td></tr></table></figure>
+
+<blockquote class="pullquote @leeifme , 睡沙发的沙皮狗"><p>详细描述可以参考 <strong>stackoverflow</strong> 上的回答，<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/30657454/multipart-form-uploads-memory-leaks-in-golang">Multipart form uploads + memory leaks in golang?</a></p>
+</blockquote>
+
+
+
+<p>这里优化的方案是在 <code>request</code>请求的 <code>body</code> 中只放文件数据，其余信息放到 <code>header</code> 中，这样就不需要使用 MultipartForm 去解析数据；</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">file = r.Body</span><br><span class="line"><span class="comment">// ... rest of your handler</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到传输完成后，内存占用恢复到了服务初始的状态值</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/20190627151301.png"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://github.com/EDDYCJY/blog/blob/master/golang/2018-09-15-Golang%20%E5%A4%A7%E6%9D%80%E5%99%A8%E4%B9%8B%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90%20PProf.md">Golang 大杀器之性能剖析 PProf</a></p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/30657454/multipart-form-uploads-memory-leaks-in-golang">Multipart form uploads + memory leaks in golang?</a></p>
+
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://liei.cc/2019/go-pprof-analysis.html" /></div><div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/b32ef3da1162a.svg"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://liei.cc/2019/go-pprof-analysis.html&title=go pprof 性能分析 - LLIEI0X&summary=线上运行的基础平台文件管理服务进程出现内存泄露的现象，下图是 `grafana` 针对该服务的监控指标情况，可以发现服务刚起时，内存使用量为 **20M** 左右，经过操作后，内存会稳定在 **300M** 左右，不会持续上升，也不会..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=go pprof 性能分析 - LLIEI0X&amp;body=https://liei.cc/2019/go-pprof-analysis.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/8411ed322ced6.svg"/></a></div><div class="qrcode" id="qrcode-wechat" style="visibility:hidden;height:0"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://liei.cc/2019/go-pprof-analysis.html"/></div></div></section></div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2019/gfs-consistency.html">GFS 一致性模型</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2019/operator-sdk-use.html">Opeartor-SDK 简单上手</a></div></section></div>
+
+
+<div class="related-wrap reveal" id="related-posts">
+    <section class='header'>
+      <div class='title cap theme'>您可能感兴趣的文章</div>
+    </section>
+    <section class='body'>
+    <div class="related-posts"><a class="item" href="/2018/gin-go-web-frame.html" title="高性能的 Go Web 框架 - gin"><span class="title">高性能的 Go Web 框架 - gin</span></a><a class="item" href="/2018/gin-swagger-build-document.html" title="gin-swagger 自动化构建 API 文档"><span class="title">gin-swagger 自动化构建 API 文档</span></a><a class="item" href="/2018/redis-for-mysql-cache.html" title="初学 Redis 作缓存层"><span class="title">初学 Redis 作缓存层</span></a><a class="item" href="/2019/go-channel-select.html" title="Select -- 无阻塞读写 channel"><span class="title">Select -- 无阻塞读写 channel</span></a><a class="item" href="/2018/open-cloud-native-study.html" title="开启云原生之门"><span class="title">开启云原生之门</span></a></div></section></div>
+
+
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="sitemap"><div class="sitemap-group"><span class="fs14">博客</span><a href="/posts/">近期</a><a href="/blog/categories/">分类</a><a href="/blog/tags/">标签</a><a href="/blog/archives/">归档</a></div><div class="sitemap-group"><span class="fs14">项目</span><a href="/wiki/">专栏</a><a href="/notes/">笔记</a></div><div class="sitemap-group"><span class="fs14">社交</span><a href="/more/">动态</a><a href="/friends/">友链</a><a href="/more/#comments">留言板</a><a target="_blank" rel="noopener" href="https://twitter.com/lliei0x">Twitter</a><a target="_blank" rel="noopener" href="https://t.me/lliei0x">Telegrem</a></div><div class="sitemap-group"><span class="fs14">更多</span><a href="/more/">关于本站</a><a target="_blank" rel="noopener" href="https://github.com/lliei">GitHub</a></div></div><div class="text"><p>本站由 <a target="_blank" rel="noopener" href="https://github.com/lliei">@lliei0x</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar">Stellar</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  const stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.version = '1.18.5';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5';
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://github.elemecdn.com/jquery@3.5.1/dist/jquery.min.js'
+  };
+
+  if ('local_search') {
+    stellar.search = {};
+    stellar.search.service = 'local_search';
+    if (stellar.search.service == 'local_search') {
+      let service_obj = Object.assign({}, {"field":"all","path":"/search.json","content":true,"codeblock":false,"sort":"-date"});
+      stellar.search[stellar.search.service] = service_obj;
+    }
+  }
+
+  // stellar js
+  stellar.plugins.stellar = Object.assign({"sites":"/js/plugins/sites.js","friends":"/js/plugins/friends.js","ghinfo":"/js/plugins/ghinfo.js","timeline":"/js/plugins/timeline.js","linkcard":"/js/plugins/linkcard.js","fcircle":"/js/plugins/fcircle.js","weibo":"/js/plugins/weibo.js"});
+
+  stellar.plugins.marked = Object.assign("https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js");
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://github.elemecdn.com/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://github.elemecdn.com/swiper@8/swiper-bundle.min.css","js":"https://github.elemecdn.com/swiper@8/swiper-bundle.min.js"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":false,"js":"https://github.elemecdn.com/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://gcore.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://gcore.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://github.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://github.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti@0.9.2/umd/heti.min.css","js":"https://unpkg.com/heti@0.9.2/umd/heti-addon.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+  <script>
+  function loadJS() {
+    const els = document.querySelectorAll("#comments #giscus");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.log(error);
+      }
+      var script = document.createElement('script');
+      script.src = 'https://giscus.app/client.js';
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  }
+  window.addEventListener('DOMContentLoaded', (event) => {
+    loadJS();
+  });
+</script>
+
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>
