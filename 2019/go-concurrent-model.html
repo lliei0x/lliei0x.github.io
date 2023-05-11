@@ -3,7 +3,7 @@
 
 <head>
   <meta name="generator" content="Hexo 6.3.0">
-  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.19.0">
   <meta charset="utf-8">
   
 
@@ -41,6 +41,8 @@
 <meta name="twitter:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/go-cps.png">
   
   
+  
+  <meta name="keywords" content="Go">
 
   <!-- feed -->
   
@@ -110,6 +112,7 @@
       
 
 
+
 <div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/blog/categories/%E8%AE%BE%E8%AE%A1%E5%BC%80%E5%8F%91/">设计开发</a></div><div id="post-meta">发布于&nbsp;<time datetime="2019-01-22T14:15:15.000Z">2019-01-22</time></div></div>
 
 <article class='md-text content post'>
@@ -150,7 +153,8 @@
 <p>Golang 并发核心思路是关注数据流动。数据流动的过程交给 channel，数据处理的每个环节都交给 goroutine，把这些流程画起来，有始有终形成一条线，那就能构成流水线模型</p>
 </blockquote>
 <p>流水线并不是什么新奇的概念，它能极大的提高生产效率，在当代社会流水线非常普遍，我们用的几乎任何产品（手机、电脑、汽车、水杯），都是从流水线上生产出来的；<strong>在 Golang 中，流水线由多个阶段组成，每个阶段之间通过 channel 连接，每个节点可以由多个同时运行的 goroutine 组成</strong></p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/20190124110810.png"></p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/20190124110810.png" fancybox="true"/></div></div>
+
 <p>如上图，从最简单的流水线入手，由 3 个阶段组成，分别是 A、B、C；第一个阶段的协程是<strong>生产者</strong>，它们只生产数据，最后一个阶段的协程是<strong>消费者</strong>，A 是生成者，C 是消费者，而 B 只是中间过程的处理者；A 和 B 之间是通道<code>aCh</code>，B 和 C 之间是通道<code>bCh</code>，A 生成数据传递给 B，B 生成数据传递给 C</p>
 <blockquote>
 <p>举个例子，设计一个程序：计算一个整数切片中元素的平方值并把它打印出来。非并发的方式是使用 for 遍历整个切片，然后计算平方，打印结果</p>
@@ -182,7 +186,8 @@
 <li><strong>FAN-IN 模式：1 个 goroutine 从多个通道读取数据，直到这些通道关闭；</strong>IN 是一种收敛的模式，所以又被称为扇入，用来收集处理的结果</li>
 </ul>
 <p>如下图所示，</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/20190124112954.png"></p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/20190124112954.png" fancybox="true"/></div></div>
+
 <p>依然延用上面的案例需求，计算一个整数切片中元素的平方值并把它打印出来，这次我们修改一下，添加 <code>merge()</code> 方法，具体代码参考 <a target="_blank" rel="noopener" href="https://github.com/leeifme/Go-test/blob/master/go-concurrent/assembly-line/fan.go"><strong>fan.go</strong></a></p>
 <ul>
 <li><code>producer()</code>保持不变，负责生产数据</li>
@@ -190,6 +195,7 @@
 <li>修改<code>main()</code>，启动 3 个 square，这 3 个 squre 从 producer 生成的通道读数据，<strong>这是 FAN-OUT</strong></li>
 <li>增加<code>merge()</code>，入参是 3 个 square 各自写数据的通道，给这 3 个通道分别启动 1 个协程，把数据写入到自己创建的通道，并返回该通道，<strong>这是 FAN-IN</strong></li>
 </ul>
+
 
 
 <div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
@@ -291,6 +297,9 @@ Go 语言是为并发而生的语言，Go 语言是为数不多的在语言层�
     // 从 butterfly 和 volantis 获得灵感
     loadScript: (src, opt) => new Promise((resolve, reject) => {
       var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = stellar.config.root + src.substring(1);
+      }
       script.src = src;
       if (opt) {
         for (let key of Object.keys(opt)) {
@@ -319,8 +328,8 @@ Go 语言是为并发而生的语言，Go 语言是为数不多的在语言层�
       }
     }
   };
-  stellar.version = '1.18.5';
-  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5';
+  stellar.version = '1.19.0';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.19.0';
   stellar.config = {
     date_suffix: {
       just: '刚刚',
@@ -329,6 +338,7 @@ Go 语言是为并发而生的语言，Go 语言是为数不多的在语言层�
       day: '天前',
       month: '个月前',
     },
+    root : '/',
   };
 
   // required plugins (only load if needs)
@@ -367,6 +377,9 @@ Go 语言是为并发而生的语言，Go 语言是为数不多的在语言层�
   }
   if ('false' == 'true') {
     stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti@0.9.2/umd/heti.min.css","js":"https://unpkg.com/heti@0.9.2/umd/heti-addon.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.copycode = Object.assign({"enable":true,"js":"/js/plugins/copycode.js","default_text":"Copy","success_text":"Copied"});
   }
 </script>
 

@@ -3,7 +3,7 @@
 
 <head>
   <meta name="generator" content="Hexo 6.3.0">
-  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.19.0">
   <meta charset="utf-8">
   <meta name="robots" content="noindex,nofollow">
 
@@ -30,13 +30,15 @@
 <meta property="og:site_name" content="LLIEI0X">
 <meta property="og:description" content="每日接触到的知识点，不系统，比较凌乱，只是记录  2020-08-13Uber 的分布式追踪系统 Jaeger2019-09-19nohup。使用 nohup 命令让程序在关闭窗口（切换 SSH 连接）的时候程序还能继续在后台运行。如：nohup .&#x2F;caster &amp; or nohup .&#x2F;caster &gt;&#x2F;dev&#x2F;null 2&gt;&amp;1 &amp;  2019-08-29">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-02-14T11:21:30.008Z">
-<meta property="article:modified_time" content="2023-02-14T11:21:30.008Z">
+<meta property="article:published_time" content="2023-05-11T08:41:52.452Z">
+<meta property="article:modified_time" content="2023-05-11T08:41:52.452Z">
 <meta property="article:author" content="lliei0x">
 <meta property="article:tag" content="liei,blog,lliei0x,liei.cc,golang,kubernetes,k8s,docker,Backend Developer,研发">
 <meta name="twitter:card" content="summary">
   
   
+  
+  <meta name="keywords" content="liei,blog,lliei0x,liei.cc,golang,kubernetes,k8s,docker,Backend Developer,研发">
 
   <!-- feed -->
   
@@ -103,7 +105,7 @@
 
   
   
-<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/notes/">笔记</a></div><div id="post-meta">更新于&nbsp;<time datetime="2023-02-14T11:21:30.008Z">2023-02-14</time></div></div>
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/notes/">笔记</a></div><div id="post-meta">更新于&nbsp;<time datetime="2023-05-11T08:41:52.452Z">2023-05-11</time></div></div>
 
   <article class='md-text content wiki'>
   <h1 class="article-title"><span>临时记录</span></h1>
@@ -111,6 +113,7 @@
 
 <div class="tag-plugin timeline"><div class="timenode" index="0"><div class="header"><p>2020-08-13</p></div><div class="body fs14"><p>Uber 的分布式追踪系统 <a target="_blank" rel="noopener" href="https://github.com/jaegertracing/jaeger">Jaeger</a></p></div></div><div class="timenode" index="1"><div class="header"><p>2019-09-19</p></div><div class="body fs14"><p>nohup。使用 nohup 命令让程序在关闭窗口（切换 SSH 连接）的时候程序还能继续在后台运行。如：<code>nohup ./caster &amp;</code> or <code>nohup ./caster &gt;/dev/null 2&gt;&amp;1 &amp;  </code></p></div></div><div class="timenode" index="2"><div class="header"><p>2019-08-29</p></div><div class="body fs14"><p><a target="_blank" rel="noopener" href="https://draveness.me/dsl">DSL</a>（<code>Domain Specific Language</code> 领域特定语言） &amp; GPL（<code>General Purpose Language</code> 通用编程语言） </p></div></div><div class="timenode" index="3"><div class="header"><p>2019-08-28</p></div><div class="body fs14"><p>缓存优化，常见缓存算法 &amp; <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/20374919">快照与备份的区别</a>，常见快照机制 <code>cow</code> 和 <code>row</code></p></div></div><div class="timenode" index="4"><div class="header"><p>2019-08-27</p></div><div class="body fs14"><p>状态机，有助于编码实现，<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1075931">有限状态机 FSM 的原理与 Go 的实现</a></p></div></div></div>
 
+  
   
 
 
@@ -200,6 +203,9 @@
     // 从 butterfly 和 volantis 获得灵感
     loadScript: (src, opt) => new Promise((resolve, reject) => {
       var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = stellar.config.root + src.substring(1);
+      }
       script.src = src;
       if (opt) {
         for (let key of Object.keys(opt)) {
@@ -228,8 +234,8 @@
       }
     }
   };
-  stellar.version = '1.18.5';
-  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5';
+  stellar.version = '1.19.0';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.19.0';
   stellar.config = {
     date_suffix: {
       just: '刚刚',
@@ -238,6 +244,7 @@
       day: '天前',
       month: '个月前',
     },
+    root : '/',
   };
 
   // required plugins (only load if needs)
@@ -276,6 +283,9 @@
   }
   if ('false' == 'true') {
     stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti@0.9.2/umd/heti.min.css","js":"https://unpkg.com/heti@0.9.2/umd/heti-addon.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.copycode = Object.assign({"enable":true,"js":"/js/plugins/copycode.js","default_text":"Copy","success_text":"Copied"});
   }
 </script>
 

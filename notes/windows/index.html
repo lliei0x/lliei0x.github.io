@@ -3,7 +3,7 @@
 
 <head>
   <meta name="generator" content="Hexo 6.3.0">
-  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.19.0">
   <meta charset="utf-8">
   
 
@@ -30,13 +30,15 @@
 <meta property="og:site_name" content="LLIEI0X">
 <meta property="og:description" content="📢&amp;nbsp;公告通知已整理迁移至 专栏&#x2F;时间胶囊&#x2F;Windows 常见问题">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-02-14T11:21:30.008Z">
-<meta property="article:modified_time" content="2023-02-14T11:21:30.008Z">
+<meta property="article:published_time" content="2023-05-11T08:41:52.452Z">
+<meta property="article:modified_time" content="2023-05-11T08:41:52.452Z">
 <meta property="article:author" content="lliei0x">
 <meta property="article:tag" content="liei,blog,lliei0x,liei.cc,golang,kubernetes,k8s,docker,Backend Developer,研发">
 <meta name="twitter:card" content="summary">
   
   
+  
+  <meta name="keywords" content="liei,blog,lliei0x,liei.cc,golang,kubernetes,k8s,docker,Backend Developer,研发">
 
   <!-- feed -->
   
@@ -103,12 +105,13 @@
 
   
   
-<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/notes/">笔记</a></div><div id="post-meta">更新于&nbsp;<time datetime="2023-02-14T11:21:30.008Z">2023-02-14</time></div></div>
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" id="home" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" id="menu" href="/notes/">笔记</a></div><div id="post-meta">更新于&nbsp;<time datetime="2023-05-11T08:41:52.452Z">2023-05-11</time></div></div>
 
   <article class='md-text content wiki'>
   <h1 class="article-title"><span>Windows</span></h1>
   <div class="tag-plugin note" color="blue"><div class="title">📢&nbsp;公告通知</div><div class="body"><p>已整理迁移至 <a href="/wiki/capsules/list/windows.html">专栏&#x2F;时间胶囊&#x2F;Windows 常见问题</a></p></div></div> 
 
+  
   
 
 
@@ -198,6 +201,9 @@
     // 从 butterfly 和 volantis 获得灵感
     loadScript: (src, opt) => new Promise((resolve, reject) => {
       var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = stellar.config.root + src.substring(1);
+      }
       script.src = src;
       if (opt) {
         for (let key of Object.keys(opt)) {
@@ -226,8 +232,8 @@
       }
     }
   };
-  stellar.version = '1.18.5';
-  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5';
+  stellar.version = '1.19.0';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.19.0';
   stellar.config = {
     date_suffix: {
       just: '刚刚',
@@ -236,6 +242,7 @@
       day: '天前',
       month: '个月前',
     },
+    root : '/',
   };
 
   // required plugins (only load if needs)
@@ -274,6 +281,9 @@
   }
   if ('false' == 'true') {
     stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti@0.9.2/umd/heti.min.css","js":"https://unpkg.com/heti@0.9.2/umd/heti-addon.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.copycode = Object.assign({"enable":true,"js":"/js/plugins/copycode.js","default_text":"Copy","success_text":"Copied"});
   }
 </script>
 

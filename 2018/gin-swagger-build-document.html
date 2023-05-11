@@ -3,7 +3,7 @@
 
 <head>
   <meta name="generator" content="Hexo 6.3.0">
-  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.19.0">
   <meta charset="utf-8">
   
 
@@ -40,6 +40,8 @@
 <meta name="twitter:image" content="http://orj2jcr7i.bkt.clouddn.com/blog/180727/2im5i3b45e.png?imageslim">
   
   
+  
+  <meta name="keywords" content="Go">
 
   <!-- feed -->
   
@@ -109,6 +111,7 @@
       
 
 
+
 <div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/blog/categories/%E6%8A%80%E6%9C%AF%E5%8A%A0%E6%B2%B9%E7%AB%99/">技术加油站</a></div><div id="post-meta">发布于&nbsp;<time datetime="2018-07-27T20:36:25.000Z">2018-07-27</time></div></div>
 
 <article class='md-text content post'>
@@ -133,7 +136,8 @@
 </ol>
 <p>注释语法这个，全靠查文档。对着文档来。</p>
 <p>当然我觉得最好的方法是什么呢，是模仿，找一个别人已经写好的，修修改改，看看能不能编译通过，编译通过后是不是你预期的结果。不是的话，继续修修改改，再编译，再看是不是你希望的结果。如此反复。</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="http://orj2jcr7i.bkt.clouddn.com/blog/180727/2im5i3b45e.png?imageslim" alt="mark"></p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="http://orj2jcr7i.bkt.clouddn.com/blog/180727/2im5i3b45e.png?imageslim" alt="mark" fancybox="true"/></div><div class="image-meta"><span class="image-caption center">mark</span></div></div>
+
 <h4 id="1-编写全局信息注释，在主函数上编写"><a href="#1-编写全局信息注释，在主函数上编写" class="headerlink" title="1. 编写全局信息注释，在主函数上编写"></a>1. 编写全局信息注释，在主函数上编写</h4><p>格式：<code>// @param info</code></p>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// @title Swagger Example API</span></span><br><span class="line"><span class="comment">// @version 1.0</span></span><br><span class="line"><span class="comment">// @description This is a sample server Petstore server.</span></span><br><span class="line"><span class="comment">// @termsOfService http://swagger.io/terms/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @contact.name API Support</span></span><br><span class="line"><span class="comment">// @contact.url http://www.swagger.io/support</span></span><br><span class="line"><span class="comment">// @contact.email support@swagger.io</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @license.name Apache 2.0</span></span><br><span class="line"><span class="comment">// @license.url http://www.apache.org/licenses/LICENSE-2.0.html</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @host 127.0.0.1:8080</span></span><br><span class="line"><span class="comment">// @BasePath /v1</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    r := gin.Default()</span><br><span class="line">    r.GET(<span class="string">&quot;/docs/*any&quot;</span>, ginSwagger.WrapHandler(swaggerFiles.Handler))</span><br><span class="line">    r.GET(<span class="string">&quot;v1/hello/:name&quot;</span>, Name)</span><br><span class="line">    r.Run()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -156,7 +160,11 @@
 <p>即这个  <code>./docs</code></p>
 <h4 id="5-go-run-main-go"><a href="#5-go-run-main-go" class="headerlink" title="5. go run main.go"></a>5. go run main.go</h4><p>访问：<code>http://127.0.0.1:8080/docs/index.html</code></p>
 <p>即可查看 swagger 文档。</p>
-<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="http://orj2jcr7i.bkt.clouddn.com/blog/180727/hidH469gKB.png?imageslim" alt="mark"></p>
+<div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="http://orj2jcr7i.bkt.clouddn.com/blog/180727/hidH469gKB.png?imageslim" alt="mark" fancybox="true"/></div><div class="image-meta"><span class="image-caption center">mark</span></div></div>
+
+
+
+
 
 
 <div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
@@ -275,6 +283,9 @@ API 文档主要要包含:
     // 从 butterfly 和 volantis 获得灵感
     loadScript: (src, opt) => new Promise((resolve, reject) => {
       var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = stellar.config.root + src.substring(1);
+      }
       script.src = src;
       if (opt) {
         for (let key of Object.keys(opt)) {
@@ -303,8 +314,8 @@ API 文档主要要包含:
       }
     }
   };
-  stellar.version = '1.18.5';
-  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5';
+  stellar.version = '1.19.0';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.19.0';
   stellar.config = {
     date_suffix: {
       just: '刚刚',
@@ -313,6 +324,7 @@ API 文档主要要包含:
       day: '天前',
       month: '个月前',
     },
+    root : '/',
   };
 
   // required plugins (only load if needs)
@@ -351,6 +363,9 @@ API 文档主要要包含:
   }
   if ('false' == 'true') {
     stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti@0.9.2/umd/heti.min.css","js":"https://unpkg.com/heti@0.9.2/umd/heti-addon.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.copycode = Object.assign({"enable":true,"js":"/js/plugins/copycode.js","default_text":"Copy","success_text":"Copied"});
   }
 </script>
 

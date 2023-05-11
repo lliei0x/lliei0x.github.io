@@ -3,7 +3,7 @@
 
 <head>
   <meta name="generator" content="Hexo 6.3.0">
-  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.19.0">
   <meta charset="utf-8">
   
 
@@ -39,6 +39,8 @@
 <meta name="twitter:image" content="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/GFS%20%E4%B8%80%E8%87%B4%E6%80%A7%E6%A8%A1%E5%9E%8B%402x.png">
   
   
+  
+  <meta name="keywords" content="分布式">
 
   <!-- feed -->
   
@@ -108,6 +110,7 @@
       
 
 
+
 <div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/blog/categories/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">解决方案</a></div><div id="post-meta">发布于&nbsp;<time datetime="2019-07-15T14:15:15.000Z">2019-07-15</time></div></div>
 
 <article class='md-text content post'>
@@ -115,7 +118,8 @@
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><div class="tag-plugin note" color="blue"><div class="title">quote,</div><div class="body"><p>最近，部门内部组织了学习活动，前两课就是研读著名的可扩展分布式文件系统 GFS 论文，并布置了学习作业，就是整理 GFS 中提出的一致性模型，如下文：</p></div></div>
 
 <h2 id="一致性背景"><a href="#一致性背景" class="headerlink" title="一致性背景"></a>一致性背景</h2><p>分布式存储系统中，不管是文件系统还是数据库，只要数据存在多个副本，都涉及一致性问题。其中一致性包括内部一致性和副本一致性，内部一致性即单机版数据库中的数据满足一定的约束条件。副本一致性表示同一数据的多个副本的值相同。GFS 作为一种分布式文件系统，采用了多副本机制，自然也会有一致性问题</p>
-<h2 id="一致性模型"><a href="#一致性模型" class="headerlink" title="一致性模型"></a>一致性模型</h2><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/GFS%20%E4%B8%80%E8%87%B4%E6%80%A7%E6%A8%A1%E5%9E%8B%402x.png" alt="GFS 一致性模型"></p>
+<h2 id="一致性模型"><a href="#一致性模型" class="headerlink" title="一致性模型"></a>一致性模型</h2><div class="tag-plugin image"><div class="image-bg"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2019/GFS%20%E4%B8%80%E8%87%B4%E6%80%A7%E6%A8%A1%E5%9E%8B%402x.png" alt="GFS 一致性模型" fancybox="true"/></div><div class="image-meta"><span class="image-caption center">GFS 一致性模型</span></div></div>
+
 <h2 id="具体操作"><a href="#具体操作" class="headerlink" title="具体操作"></a>具体操作</h2><p><strong>修改操作：</strong> 包括写操作和追加操作，写操作需要指定文件块 + offset。追加操作成功后系统会将追加成功的偏移量返回给客户端。</p>
 <p><strong>并发写：</strong> 如果两个客户端同时写同一个文件块的同一偏移量，那么就有个先后顺序问题，如果接近同时，系统不保证这个顺序。那么客户端再去读，就不一定能读到自己刚写的数据。</p>
 <p><strong>追加失败：</strong> 追加操作会保证至少成功一次。追加操作时，假设配置三副本，但是只有两个副本写成功，最后一个副本超时了（可能对应块服务器宕机，当然重启后 GFS 会用 chunk version 来标记其过期 stale 了，从而跳过该 offset。），那么追加操作会重试，并且失败数据不会删除，但是 GFS 有对齐操作，即重试成功后，三个副本中该追加数据的起始偏移量是定义的（也就是一致的），那么其中那个上次失败的副本就会有个空洞，系统会用特殊字符填充。</p>
@@ -124,6 +128,7 @@
 <h2 id="概念解析"><a href="#概念解析" class="headerlink" title="概念解析"></a>概念解析</h2><p><strong>已定义（defined）</strong>：客户端写某个偏移量后，再读，读到的一定是自己的。</p>
 <p><strong>未定义的但是一致的（undefined but consistent）</strong>：多个客户端并发写同一个偏移量，不确定谁会覆盖谁（这个顺序由 Primary Replica 所在 Chunkserver 来安排，后面将会讲），即写完后再读，不确定是自己写的还是其他人写的。但是保证最终一致性，即并发写完成后，最后几个副本是一致的。</p>
 <p><strong>不一致的（inconsistent）</strong>：即修改操作后，所有副本同一偏移量的数据并不完全相同。</p>
+
 
 
 <div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
@@ -222,6 +227,9 @@
     // 从 butterfly 和 volantis 获得灵感
     loadScript: (src, opt) => new Promise((resolve, reject) => {
       var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = stellar.config.root + src.substring(1);
+      }
       script.src = src;
       if (opt) {
         for (let key of Object.keys(opt)) {
@@ -250,8 +258,8 @@
       }
     }
   };
-  stellar.version = '1.18.5';
-  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5';
+  stellar.version = '1.19.0';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.19.0';
   stellar.config = {
     date_suffix: {
       just: '刚刚',
@@ -260,6 +268,7 @@
       day: '天前',
       month: '个月前',
     },
+    root : '/',
   };
 
   // required plugins (only load if needs)
@@ -298,6 +307,9 @@
   }
   if ('false' == 'true') {
     stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti@0.9.2/umd/heti.min.css","js":"https://unpkg.com/heti@0.9.2/umd/heti-addon.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.copycode = Object.assign({"enable":true,"js":"/js/plugins/copycode.js","default_text":"Copy","success_text":"Copied"});
   }
 </script>
 

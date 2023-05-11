@@ -3,7 +3,7 @@
 
 <head>
   <meta name="generator" content="Hexo 6.3.0">
-  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.19.0">
   <meta charset="utf-8">
   <meta name="robots" content="noindex,follow">
 
@@ -35,6 +35,8 @@
 <meta name="twitter:card" content="summary">
   
   
+  
+  <meta name="keywords" content="liei,blog,lliei0x,liei.cc,golang,kubernetes,k8s,docker,Backend Developer,研发">
 
   <!-- feed -->
   
@@ -114,10 +116,10 @@
 <article class="md-text"><h2 class="post-title">模块设计文档编写规范</h2><div class="excerpt"><p>模块负责人
 👩‍💻 leeifme &#x2F; XXXX项目
 🚀 XXXX部门  &#x2F;  XXXX事业部  
-📧 Email &#105;&#x40;&#108;&#x65;&#x65;&#x69;&#102;&#46;&#109;&#101;
+📧 Email &#105;&#x40;&#108;&#101;&#x65;&#x69;&#x66;&#x2e;&#109;&#101;
 
 版本历史记录(History) （可选）
-  设计稿版本每发生一次比较大的迭代更新，都要记录在版本历史记录里，相比一个个去翻以前...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2019-11-25T15:15:15.000Z">2019-11-25</time></span><span class="cap breadcrumb" style="color:#3FFFB2">设计开发</span></div></article>
+  设计稿版本每发生一次比较大的迭代更新，都要记录在版本历史记录里，相比一个个去翻以...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2019-11-25T15:15:15.000Z">2019-11-25</time></span><span class="cap breadcrumb" style="color:#3FFFB2">设计开发</span></div></article>
 </a><a class="post-card post " href="/2019/go-pprof-analysis.html">
 <article class="md-text"><h2 class="post-title">go pprof 性能分析</h2><div class="excerpt"><p>线上运行的基础平台文件管理服务进程出现内存泄露的现象，下图是 `grafana` 针对该服务的监控指标情况，可以发现服务刚起时，内存使用量为 **20M** 左右，经过操作后，内存会稳定在 **300M** 左右，不会持续上升，也不会下降，一开始找不到原因，所以尝试使用一下 golang pprof 性能分析工具分析一下程序到底哪出问题了</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2019-05-20T14:15:15.000Z">2019-05-20</time></span><span class="cap breadcrumb" style="color:#3FFFB2">设计开发</span></div></article>
 </a><a class="post-card post " href="/2019/go-channel-select.html">
@@ -228,6 +230,9 @@ Go 语言是为并发而生的语言，Go 语言是为数不多的在语言层�
     // 从 butterfly 和 volantis 获得灵感
     loadScript: (src, opt) => new Promise((resolve, reject) => {
       var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = stellar.config.root + src.substring(1);
+      }
       script.src = src;
       if (opt) {
         for (let key of Object.keys(opt)) {
@@ -256,8 +261,8 @@ Go 语言是为并发而生的语言，Go 语言是为数不多的在语言层�
       }
     }
   };
-  stellar.version = '1.18.5';
-  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5';
+  stellar.version = '1.19.0';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.19.0';
   stellar.config = {
     date_suffix: {
       just: '刚刚',
@@ -266,6 +271,7 @@ Go 语言是为并发而生的语言，Go 语言是为数不多的在语言层�
       day: '天前',
       month: '个月前',
     },
+    root : '/',
   };
 
   // required plugins (only load if needs)
@@ -304,6 +310,9 @@ Go 语言是为并发而生的语言，Go 语言是为数不多的在语言层�
   }
   if ('false' == 'true') {
     stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti@0.9.2/umd/heti.min.css","js":"https://unpkg.com/heti@0.9.2/umd/heti-addon.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.copycode = Object.assign({"enable":true,"js":"/js/plugins/copycode.js","default_text":"Copy","success_text":"Copied"});
   }
 </script>
 

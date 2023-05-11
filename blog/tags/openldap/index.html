@@ -3,7 +3,7 @@
 
 <head>
   <meta name="generator" content="Hexo 6.3.0">
-  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.19.0">
   <meta charset="utf-8">
   <meta name="robots" content="noindex,follow">
 
@@ -35,6 +35,8 @@
 <meta name="twitter:card" content="summary">
   
   
+  
+  <meta name="keywords" content="liei,blog,lliei0x,liei.cc,golang,kubernetes,k8s,docker,Backend Developer,研发">
 
   <!-- feed -->
   
@@ -123,8 +125,7 @@ centos-release-7-4.1708.el7.centos.x86_64
 openldap-clients-2.4.44-5.el7.x86_64：包含客户端程序，用来访问和修改 OpenLDAP 目录
 openldap-servers-2.4.44-5.el7.x86_64：包含主 LDAP 服务器 slapd 和同步服务器 sl...</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2020-07-20T15:15:15.000Z">2020-07-20</time></span><span class="cap breadcrumb" style="color:#1f6feb">折腾不止</span></div></article>
 </a><a class="post-card post " href="/2020/openldap-getting-started.html">
-<article class="md-text"><div class="post-cover"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://lliei0x.oss-cn-shanghai.aliyuncs.com/blog/cover/202212092205454.svg"/></div><h2 class="post-title">OpenLDAP 快速落地实践-基本介绍</h2><div class="excerpt"><p>场景需求
-需求当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 OPS 运维组的小伙伴们，都要在每个系统上去添加用户，搞得小伙伴们很不爽。
+<article class="md-text"><div class="post-cover"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://lliei0x.oss-cn-shanghai.aliyuncs.com/blog/cover/202212092205454.svg"/></div><h2 class="post-title">OpenLDAP 快速落地实践-基本介绍</h2><div class="excerpt"><p>场景需求{% note color:orange 需求 当公司体量较大，内部有多个系统，如果每个平台都需要维护一个用户管理体系，那么如果一个员工拥有 N 个平台权限离职及常规权限变更，对于的管理无疑也是一个挑战，也无法做到精细化权限管理。比如每次新进或离职一位同事，我们这边 OPS 运维组的小伙伴们，都要在每个系统上去添加用户，搞得小伙伴们很不爽。
 
 简单说一下 OPENLDAP 对运维管理的价值，支撑企业技术发展比如 GIT、 ZABBIX、 YAPI、 JUMPSERVER、 OA 等大大小小系统，乃至 Windows，Linux 系统的认证登录。</p></div><div class="meta cap"><span class="cap" id="post-meta">发布于&nbsp;<time datetime="2020-07-15T15:15:15.000Z">2020-07-15</time></span><span class="cap breadcrumb" style="color:#1f6feb">折腾不止</span></div></article>
 </a></div>
@@ -211,6 +212,9 @@ openldap-servers-2.4.44-5.el7.x86_64：包含主 LDAP 服务器 slapd 和同步�
     // 从 butterfly 和 volantis 获得灵感
     loadScript: (src, opt) => new Promise((resolve, reject) => {
       var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = stellar.config.root + src.substring(1);
+      }
       script.src = src;
       if (opt) {
         for (let key of Object.keys(opt)) {
@@ -239,8 +243,8 @@ openldap-servers-2.4.44-5.el7.x86_64：包含主 LDAP 服务器 slapd 和同步�
       }
     }
   };
-  stellar.version = '1.18.5';
-  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.18.5';
+  stellar.version = '1.19.0';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.19.0';
   stellar.config = {
     date_suffix: {
       just: '刚刚',
@@ -249,6 +253,7 @@ openldap-servers-2.4.44-5.el7.x86_64：包含主 LDAP 服务器 slapd 和同步�
       day: '天前',
       month: '个月前',
     },
+    root : '/',
   };
 
   // required plugins (only load if needs)
@@ -287,6 +292,9 @@ openldap-servers-2.4.44-5.el7.x86_64：包含主 LDAP 服务器 slapd 和同步�
   }
   if ('false' == 'true') {
     stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti@0.9.2/umd/heti.min.css","js":"https://unpkg.com/heti@0.9.2/umd/heti-addon.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.copycode = Object.assign({"enable":true,"js":"/js/plugins/copycode.js","default_text":"Copy","success_text":"Copied"});
   }
 </script>
 
