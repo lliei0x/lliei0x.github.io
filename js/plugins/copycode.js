@@ -1,1 +1,51 @@
-window.codeElements.forEach((t=>{const e=document.createElement("div");e.className="copy-btn",e.textContent=ctx.copycode.default_text,t.appendChild(e),e.addEventListener("click",(async()=>{const c=t.querySelector("pre")?.innerText||"";if(navigator.clipboard)try{await navigator.clipboard.writeText(c),e.textContent=ctx.copycode.success_text,e.classList.add("success"),hud.toast(ctx.copycode.toast,2500)}catch(t){e.textContent="未获得用户许可",e.classList.add("warning")}else e.textContent="浏览器不支持/非HTTPS",e.classList.add("warning");setTimeout((()=>{e.textContent=ctx.copycode.default_text,e.classList.remove("success","warning")}),3e3)}))}));
+const codeElementArr = document.querySelectorAll('.code')
+codeElementArr.forEach(code => {
+  const codeBeforeWidth = window.getComputedStyle(code, '::before').width.split('px')[0]
+  const codeBeforePadding = window.getComputedStyle(code, '::before').padding.split(' ').pop().split('px')[0]
+
+  // copy btn 
+  const codeCopyBtn = document.createElement('div')
+  codeCopyBtn.classList.add('copy-btn')
+  codeCopyBtn.style.right = Number(codeBeforeWidth) + Number(codeBeforePadding) * 2 + 'px'
+  codeCopyBtn.innerText = stellar.plugins.copycode.default_text
+
+  code.appendChild(codeCopyBtn)
+
+  codeCopyBtn.addEventListener('click', async () => {
+    const currentCodeElement = code.children[0]?.innerText
+    await copyCode(currentCodeElement)
+
+    codeCopyBtn.innerText = stellar.plugins.copycode.success_text
+    codeCopyBtn.classList.add('success')
+
+    setTimeout(() => {
+      codeCopyBtn.innerText = stellar.plugins.copycode.default_text
+      codeCopyBtn.classList.remove('success')
+    },3000)
+  })
+})
+
+async function copyCode(currentCode) {
+  // console.log(currentCode)
+  // console.log('复制代码')
+  if (navigator.clipboard) {
+    try {
+      await navigator.clipboard.writeText(currentCode)
+      } catch (error) {
+      // 未获得用户许可
+      codeCopyBtn.innerText = '未获得用户许可'
+      codeCopyBtn.classList.add('warning')
+      setTimeout(() => {
+        codeCopyBtn.innerText = stellar.plugins.copycode.default_text
+        codeCopyBtn.classList.remove('warning')
+      },3000)
+    }
+  } else {
+    codeCopyBtn.innerText = '当前浏览器不支持此api'
+    codeCopyBtn.classList.add('warning')
+    setTimeout(() => {
+      codeCopyBtn.innerText = stellar.plugins.copycode.default_text
+      codeCopyBtn.classList.remove('warning')
+    },3000)
+  }
+}

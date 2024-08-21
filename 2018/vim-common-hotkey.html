@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head>
+  <meta name="generator" content="Hexo 6.3.0">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.19.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://gcore.jsdelivr.net'>
+  <link rel="preconnect" href="https://gcore.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  
+  <title>你和大佬之间就差一个 vim - LLIEI0X</title>
+
+  
+    <meta name="description" content="进入 vim   命令 描述    vim filename 打开或新建文件, 并将光标置于第一行首   vim +n filename 打开文件，并将光标置于第 n 行首   vim + filename 打开文件，并将光标置于最后一行首   vim +&#x2F;pattern filename 打开文件，并将光标置于第一个与 pattern 匹配的串处   vim -r filename 在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你和大佬之间就差一个 vim">
+<meta property="og:url" content="https://liei.cc/2018/vim-common-hotkey.html">
+<meta property="og:site_name" content="LLIEI0X">
+<meta property="og:description" content="进入 vim   命令 描述    vim filename 打开或新建文件, 并将光标置于第一行首   vim +n filename 打开文件，并将光标置于第 n 行首   vim + filename 打开文件，并将光标置于最后一行首   vim +&#x2F;pattern filename 打开文件，并将光标置于第一个与 pattern 匹配的串处   vim -r filename 在">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-08-15T14:15:15.000Z">
+<meta property="article:modified_time" content="2018-08-15T14:15:15.000Z">
+<meta property="article:author" content="lliei0x">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Vim">
+<meta name="twitter:card" content="summary">
+  
+  
+  
+  <meta name="keywords" content="Linux,Vim">
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="LLIEI0X" type="application/atom+xml">
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+    <link rel="shortcut icon" href="https://leeifme.oss-cn-shanghai.aliyuncs.com/blog/2021/20220614145243.ico">
+  
+
+  
+
+  
+
+
+  
+    
+      <link rel="stylesheet" href="https://github.elemecdn.com/lxgw-wenkai-screen-webfont@1.6.0/lxgwwenkaiscreen.css"/>
+    
+      <link rel="stylesheet" href="https://github.elemecdn.com/@fontsource/monda@4.5.10/latin.css"/>
+    
+      <link rel="stylesheet" href="https://github.elemecdn.com/@fontsource/dm-mono@4.5.10/latin-400.css"/>
+    
+  
+</head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
+    
+
+  
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://s2.loli.net/2024/08/17/Vz6CFhDTc7wXQ8g.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">LLIEI0X</div><div class="sub normal cap">☔ slow to respond</div><div class="sub hover cap" style="opacity:0">🌵 Live long and prosper</div></a></div>
+
+<nav class="menu dis-select"><a class="nav-item" href="/">主页</a><a class="nav-item" href="/wiki/">专栏</a><a class="nav-item" href="/notes/">笔记</a><a class="nav-item" href="/more/">更多</a></nav>
+</header>
+
+
+<div class="widgets">
+<widget class="widget-wrapper search"><div class="widget-body"><div class="search-wrapper" id="search"><form class="search-form"><input type="text" class="search-input" id="search-input" placeholder="Search..."><svg t="1670596976048" class="icon search-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2676" width="200" height="200"><path d="M938.2 832.6L723.8 618.1c-2.5-2.5-5.3-4.4-7.9-6.4 36.2-55.6 57.3-121.8 57.3-193.1C773.3 222.8 614.6 64 418.7 64S64 222.8 64 418.6c0 195.9 158.8 354.6 354.6 354.6 71.3 0 137.5-21.2 193.2-57.4 2 2.7 3.9 5.4 6.3 7.8L832.5 938c14.6 14.6 33.7 21.9 52.8 21.9 19.1 0 38.2-7.3 52.8-21.8 29.2-29.1 29.2-76.4 0.1-105.5M418.7 661.3C284.9 661.3 176 552.4 176 418.6 176 284.9 284.9 176 418.7 176c133.8 0 242.6 108.9 242.6 242.7 0 133.7-108.9 242.6-242.6 242.6" p-id="2677"></path></svg></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div></div></widget>
+
+
+<widget class="widget-wrapper toc single" id="data-toc"><div class="widget-header cap dis-select"><span class="name">你和大佬之间就差一个 vim</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E5%85%A5-vim"><span class="toc-text">进入 vim</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#vim-%E9%85%8D%E7%BD%AE"><span class="toc-text">vim 配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A7%BB%E5%8A%A8%E5%85%89%E6%A0%87"><span class="toc-text">移动光标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B1%8F%E5%B9%95%E6%BB%9A%E5%8A%A8"><span class="toc-text">屏幕滚动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E6%96%87%E6%9C%AC%E7%B1%BB"><span class="toc-text">插入文本类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%91%BD%E4%BB%A4"><span class="toc-text">删除命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E7%B2%98%E8%B4%B4"><span class="toc-text">复制粘贴</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%92%A4%E9%94%80"><span class="toc-text">撤销</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2%E5%8F%8A%E6%9B%BF%E6%8D%A2"><span class="toc-text">搜索及替换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%A6%E7%AD%BE"><span class="toc-text">书签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#visual-%E6%A8%A1%E5%BC%8F"><span class="toc-text">visual 模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%8C%E6%96%B9%E5%BC%8F%E5%91%BD%E4%BB%A4"><span class="toc-text">行方式命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8F"><span class="toc-text">宏</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AA%97%E5%8F%A3%E6%93%8D%E4%BD%9C"><span class="toc-text">窗口操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8F%8A%E5%85%B6%E4%BB%96"><span class="toc-text">文件及其他</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%AD%A3%E5%88%99"><span class="toc-text">常用正则</span></a></li></ol></div></div></widget>
+
+
+
+
+</div>
+
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+
+
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/blog/categories/%E5%AE%89%E5%88%A9%E7%B3%BB%E5%88%97/">安利系列</a></div><div id="post-meta">发布于&nbsp;<time datetime="2018-08-15T14:15:15.000Z">2018-08-15</time></div></div>
+
+<article class='md-text content post'>
+<h1 class="article-title"><span>你和大佬之间就差一个 vim</span></h1>
+<h2 id="进入-vim"><a href="#进入-vim" class="headerlink" title="进入 vim"></a>进入 vim</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>vim filename</td>
+<td>打开或新建文件, 并将光标置于第一行首</td>
+</tr>
+<tr>
+<td>vim +n filename</td>
+<td>打开文件，并将光标置于第 n 行首</td>
+</tr>
+<tr>
+<td>vim + filename</td>
+<td>打开文件，并将光标置于最后一行首</td>
+</tr>
+<tr>
+<td>vim +&#x2F;pattern filename</td>
+<td>打开文件，并将光标置于第一个与 pattern 匹配的串处</td>
+</tr>
+<tr>
+<td>vim -r filename</td>
+<td>在上次正用 vim 编辑时发生系统崩溃，恢复 filename</td>
+</tr>
+<tr>
+<td>vim filename….filename</td>
+<td>打开多个文件，依次编辑</td>
+</tr>
+</tbody></table>
+<h2 id="vim-配置"><a href="#vim-配置" class="headerlink" title="vim 配置"></a>vim 配置</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>:set number &#x2F; set nonumber</td>
+<td>显示 &#x2F; 不显示行号</td>
+</tr>
+<tr>
+<td>:set ruler &#x2F;set noruler</td>
+<td>显示 &#x2F; 不显示标尺</td>
+</tr>
+<tr>
+<td>:set hlsearch</td>
+<td>高亮显示查找到的单词</td>
+</tr>
+<tr>
+<td>:set nohlsearch</td>
+<td>关闭高亮显示</td>
+</tr>
+<tr>
+<td>:syntax on</td>
+<td>语法高亮</td>
+</tr>
+<tr>
+<td>:set nu</td>
+<td>显示行号</td>
+</tr>
+<tr>
+<td>:set tabstop&#x3D;8</td>
+<td>设置 tab 大小, 8 为最常用最普遍的设置</td>
+</tr>
+<tr>
+<td>:set softtabstop&#x3D;8</td>
+<td>4:4 个空格, 8: 正常的制表符, 12: 一个制表符 4 个空格, 16: 两个制表符</td>
+</tr>
+<tr>
+<td>:set autoindent</td>
+<td>自动缩进</td>
+</tr>
+<tr>
+<td>:set cindent</td>
+<td>C 语言格式里面的自动缩进</td>
+</tr>
+</tbody></table>
+<h2 id="移动光标"><a href="#移动光标" class="headerlink" title="移动光标"></a>移动光标</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>k nk</td>
+<td>上 向上移动 n 行</td>
+</tr>
+<tr>
+<td>j nj</td>
+<td>下 向下移动 n 行</td>
+</tr>
+<tr>
+<td>h nh</td>
+<td>左 向左移动 n 行</td>
+</tr>
+<tr>
+<td>l nl</td>
+<td>右 向右移动 n 行</td>
+</tr>
+<tr>
+<td>Space</td>
+<td>光标右移一个字符</td>
+</tr>
+<tr>
+<td>Backspace</td>
+<td>光标左移一个字符</td>
+</tr>
+<tr>
+<td>Enter</td>
+<td>光标下移一行</td>
+</tr>
+<tr>
+<td>w&#x2F;W</td>
+<td>光标右移一个字至字首</td>
+</tr>
+<tr>
+<td>b&#x2F;B</td>
+<td>光标左移一个字至字首</td>
+</tr>
+<tr>
+<td>e 或 E</td>
+<td>光标右移一个字至字尾</td>
+</tr>
+<tr>
+<td>)</td>
+<td>光标移至句尾</td>
+</tr>
+<tr>
+<td>(</td>
+<td>光标移至句首</td>
+</tr>
+<tr>
+<td>}</td>
+<td>光标移至段落开头</td>
+</tr>
+<tr>
+<td>{</td>
+<td>光标移至段落结尾</td>
+</tr>
+<tr>
+<td>n$</td>
+<td>光标移至第 n 行尾</td>
+</tr>
+<tr>
+<td>H</td>
+<td>光标移至屏幕顶行</td>
+</tr>
+<tr>
+<td>M</td>
+<td>光标移至屏幕中间行</td>
+</tr>
+<tr>
+<td>L</td>
+<td>光标移至屏幕最后行</td>
+</tr>
+<tr>
+<td>0</td>
+<td>（注意是数字零）光标移至当前行首</td>
+</tr>
+<tr>
+<td>^</td>
+<td>移动光标到行首第一个非空字符上去</td>
+</tr>
+<tr>
+<td>$</td>
+<td>光标移至当前行尾</td>
+</tr>
+<tr>
+<td>gg</td>
+<td>移到第一行</td>
+</tr>
+<tr>
+<td>G</td>
+<td>移到最后一行</td>
+</tr>
+<tr>
+<td>f</td>
+<td>移动光标到当前行的字符 a 上</td>
+</tr>
+<tr>
+<td>F</td>
+<td>相反</td>
+</tr>
+<tr>
+<td>%</td>
+<td>移动到与制匹配的括号上去（），{}，[]，&lt;&gt; 等</td>
+</tr>
+<tr>
+<td>nG</td>
+<td>移动到第 n 行上</td>
+</tr>
+<tr>
+<td>G</td>
+<td>到最后一行</td>
+</tr>
+</tbody></table>
+<h2 id="屏幕滚动"><a href="#屏幕滚动" class="headerlink" title="屏幕滚动"></a>屏幕滚动</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ctrl+u</td>
+<td>向文件首翻半屏</td>
+</tr>
+<tr>
+<td>Ctrl+d</td>
+<td>向文件尾翻半屏</td>
+</tr>
+<tr>
+<td>Ctrl+f</td>
+<td>向文件尾翻一屏</td>
+</tr>
+<tr>
+<td>Ctrl＋b</td>
+<td>向文件首翻一屏</td>
+</tr>
+<tr>
+<td>nz</td>
+<td>将第 n 行滚至屏幕顶部，不指定 n 时将当前行滚至屏幕顶部</td>
+</tr>
+</tbody></table>
+<h2 id="插入文本类"><a href="#插入文本类" class="headerlink" title="插入文本类"></a>插入文本类</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>i</td>
+<td>在光标前</td>
+</tr>
+<tr>
+<td>I</td>
+<td>在当前行首</td>
+</tr>
+<tr>
+<td>a</td>
+<td>光标后</td>
+</tr>
+<tr>
+<td>A</td>
+<td>在当前行尾</td>
+</tr>
+<tr>
+<td>o</td>
+<td>在当前行之下新开一行</td>
+</tr>
+<tr>
+<td>O</td>
+<td>在当前行之上新开一行</td>
+</tr>
+<tr>
+<td>r</td>
+<td>替换当前字符</td>
+</tr>
+<tr>
+<td>R</td>
+<td>替换当前字符及其后的字符，直至按 ESC 键</td>
+</tr>
+<tr>
+<td>s</td>
+<td>从当前光标位置处开始，以输入的文本替代指定数目的字符</td>
+</tr>
+<tr>
+<td>S</td>
+<td>删除指定数目的行，并以所输入文本代替之</td>
+</tr>
+<tr>
+<td>ncw&#x2F;nCW</td>
+<td>修改指定数目的字</td>
+</tr>
+<tr>
+<td>nCC</td>
+<td>修改指定数目的行</td>
+</tr>
+</tbody></table>
+<h2 id="删除命令"><a href="#删除命令" class="headerlink" title="删除命令"></a>删除命令</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>x&#x2F;X</td>
+<td>删除一个字符，x 删除光标后的，而 X 删除光标前的</td>
+</tr>
+<tr>
+<td>dw</td>
+<td>删除一个单词 (删除光标位置到下一个单词开始的位置)</td>
+</tr>
+<tr>
+<td>dnw</td>
+<td>删除 n 个单词</td>
+</tr>
+<tr>
+<td>dne</td>
+<td>也可，只是删除到单词尾</td>
+</tr>
+<tr>
+<td>do</td>
+<td>删至行首</td>
+</tr>
+<tr>
+<td>d$</td>
+<td>删至行尾</td>
+</tr>
+<tr>
+<td>dd</td>
+<td>删除一行</td>
+</tr>
+<tr>
+<td>ndd</td>
+<td>删除当前行及其后 n-1 行</td>
+</tr>
+<tr>
+<td>dnl</td>
+<td>向右删除 n 个字母</td>
+</tr>
+<tr>
+<td>dnh</td>
+<td>向左删除 n 个字母</td>
+</tr>
+<tr>
+<td>dnj</td>
+<td>向下删除 n 行, 当前行 + 其上 n 行</td>
+</tr>
+<tr>
+<td>dnk</td>
+<td>向上删除 n 行, 当期行 + 其下 n 行</td>
+</tr>
+<tr>
+<td>cnw[word]</td>
+<td>将 n 个 word 改变为 word</td>
+</tr>
+<tr>
+<td>C$</td>
+<td>改变到行尾</td>
+</tr>
+<tr>
+<td>cc</td>
+<td>改变整行</td>
+</tr>
+<tr>
+<td>shift+j</td>
+<td>删除行尾的换行符，下一行接上来了</td>
+</tr>
+</tbody></table>
+<h2 id="复制粘贴"><a href="#复制粘贴" class="headerlink" title="复制粘贴"></a>复制粘贴</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>p</td>
+<td>粘贴用 x 或 d 删除的文本</td>
+</tr>
+<tr>
+<td>ynw</td>
+<td>复制 n 个单词</td>
+</tr>
+<tr>
+<td>yy</td>
+<td>复制一行</td>
+</tr>
+<tr>
+<td>ynl</td>
+<td>复制 n 个字符</td>
+</tr>
+<tr>
+<td>y$</td>
+<td>复制当前光标至行尾处</td>
+</tr>
+<tr>
+<td>nyy</td>
+<td>拷贝 n 行</td>
+</tr>
+</tbody></table>
+<h2 id="撤销"><a href="#撤销" class="headerlink" title="撤销"></a>撤销</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>u</td>
+<td>撤销前一次的操作</td>
+</tr>
+<tr>
+<td>shif+u(U)</td>
+<td>撤销对该行的所有操作</td>
+</tr>
+</tbody></table>
+<h2 id="搜索及替换"><a href="#搜索及替换" class="headerlink" title="搜索及替换"></a>搜索及替换</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&#x2F;pattern</td>
+<td>从光标开始处向文件尾搜索 pattern</td>
+</tr>
+<tr>
+<td>?pattern</td>
+<td>从光标开始处向文件首搜索 pattern</td>
+</tr>
+<tr>
+<td>n</td>
+<td>在同一方向重复上一次搜索命令</td>
+</tr>
+<tr>
+<td>N</td>
+<td>在反方向上重复上一次搜索命令</td>
+</tr>
+<tr>
+<td>cw newword</td>
+<td>替换为 newword</td>
+</tr>
+<tr>
+<td>n</td>
+<td>继续查找</td>
+</tr>
+<tr>
+<td>.</td>
+<td>执行替换</td>
+</tr>
+<tr>
+<td>:s&#x2F;p1&#x2F;p2&#x2F;g</td>
+<td>将当前行中所有 p1 均用 p2 替代, g 表示执行 用 c 表示需要确认</td>
+</tr>
+<tr>
+<td>:n1,n2 s&#x2F;p1&#x2F;p2&#x2F;g</td>
+<td>将第 n1 至 n2 行中所有 p1 均用 p2 替代</td>
+</tr>
+<tr>
+<td>:g&#x2F;p1&#x2F;s&#x2F;&#x2F;p2&#x2F;g</td>
+<td>将文件中所有 p1 均用 p2 替换</td>
+</tr>
+<tr>
+<td>:1,$ s&#x2F;string1&#x2F;string2&#x2F;g</td>
+<td>在全文中将 string1 替换为 string2</td>
+</tr>
+</tbody></table>
+<h2 id="书签"><a href="#书签" class="headerlink" title="书签"></a>书签</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>m[a-z]</td>
+<td>在文中做标记，标记号可为 a-z 的 26 个字母</td>
+</tr>
+<tr>
+<td>&#96;a</td>
+<td>移动到标记 a 处</td>
+</tr>
+</tbody></table>
+<h2 id="visual-模式"><a href="#visual-模式" class="headerlink" title="visual 模式"></a>visual 模式</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v</td>
+<td>进入 visual 模式</td>
+</tr>
+<tr>
+<td>V</td>
+<td>进入行的 visual 模式</td>
+</tr>
+<tr>
+<td>ctrl+v</td>
+<td>进如块操作模式用 o 和 O 改变选择的边的大小</td>
+</tr>
+<tr>
+<td>在所有行插入相同的内容如 include&lt;</td>
+<td>将光标移到开始插入的位置，按 CTRL+V 进入 VISUAL 模式，选择好模块后按 I（shift+i)，后插入要插入的文本，按 [ESC] 完成</td>
+</tr>
+</tbody></table>
+<h2 id="行方式命令"><a href="#行方式命令" class="headerlink" title="行方式命令"></a>行方式命令</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>:n1,n2 co n3 或者 :n1,n2 copy n3</td>
+<td>将 n1 行到 n2 行之间的内容拷贝到第 n3 行下</td>
+</tr>
+<tr>
+<td>:n1,n2 m n3 或者 :n1,n2 move n3</td>
+<td>将 n1 行到 n2 行之间的内容移至到第 n3 行下</td>
+</tr>
+<tr>
+<td>:n1,n2 d</td>
+<td>将 n1 行到 n2 行之间的内容删除</td>
+</tr>
+<tr>
+<td>:n1,n2 w!command</td>
+<td>将文件中 n1 行至 n2 行的内容作为 command 的输入并执行之</td>
+</tr>
+<tr>
+<td>若不指定 n1，n2，则表示将整个文件内容作为 command 的输入</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="宏"><a href="#宏" class="headerlink" title="宏"></a>宏</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>q[a-z]</td>
+<td>开始记录但前开始的操作为宏，名称可为【a-z】，然后用 q 终止录制宏</td>
+</tr>
+<tr>
+<td>reg</td>
+<td>显示当前定义的所有的宏，用 @[a-z] 来在当前光标处执行宏 [a-z]</td>
+</tr>
+</tbody></table>
+<h2 id="窗口操作"><a href="#窗口操作" class="headerlink" title="窗口操作"></a>窗口操作</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>:split</td>
+<td>分割一个窗口</td>
+</tr>
+<tr>
+<td>:split file.c</td>
+<td>为另一个文件 file.c 分隔窗口</td>
+</tr>
+<tr>
+<td>:nsplit file.c</td>
+<td>为另一个文件 file.c 分隔窗口，并指定其行数</td>
+</tr>
+<tr>
+<td>ctrl＋w</td>
+<td>在窗口中切换</td>
+</tr>
+<tr>
+<td>:close</td>
+<td>关闭当前窗口</td>
+</tr>
+</tbody></table>
+<h2 id="文件及其他"><a href="#文件及其他" class="headerlink" title="文件及其他"></a>文件及其他</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>:q</td>
+<td>退出 vi</td>
+</tr>
+<tr>
+<td>:q!</td>
+<td>不保存文件并退出 vi</td>
+</tr>
+<tr>
+<td>:e filename</td>
+<td>打开文件 filename 进行编辑</td>
+</tr>
+<tr>
+<td>:e!</td>
+<td>放弃修改文件内容，重新载入该文件编辑</td>
+</tr>
+<tr>
+<td>:w</td>
+<td>保存当前文件</td>
+</tr>
+<tr>
+<td>:wq</td>
+<td>存盘退出</td>
+</tr>
+<tr>
+<td>:ZZ</td>
+<td>保存当前文档并退出 VIM</td>
+</tr>
+<tr>
+<td>:!command</td>
+<td>执行 shell 命令 command</td>
+</tr>
+<tr>
+<td>:r!command</td>
+<td>将命令 command 的输出结果放到当前行</td>
+</tr>
+<tr>
+<td>:read file.c</td>
+<td>将文件 file.c 的内容插入到当前光标所在的下面</td>
+</tr>
+</tbody></table>
+<h2 id="常用正则"><a href="#常用正则" class="headerlink" title="常用正则"></a>常用正则</h2><ul>
+<li>删除行尾空格：<code>:%s/\s+$//g</code></li>
+<li>删除行首多余空格：<code>%s/^\s*//</code> 或者 <code>%s/^ *//</code></li>
+<li>删除沒有內容的空行：<code>%s/^$//</code> 或者 <code>g/^$/d</code></li>
+<li>删除包含有空格组成的空行：<code>%s/^\s*$//</code> 或者 <code>g/^\s*$/d</code></li>
+<li>删除以空格或 TAB 开头到结尾的空行：<code>%s/^[ |\t]*$//</code> 或者 <code>g/^[ |\t]*$/d</code></li>
+<li>清空某一行或多行文本：<code>:n1,n2 s/\w//g</code></li>
+<li>给一行或多行首字符添加注释：<code>n1,n2 s/^/#/g</code></li>
+<li>给一行或多行首字符删除注释：<code>n1,n2 s/^#//g</code></li>
+</ul>
+
+
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://liei.cc/2018/vim-common-hotkey.html" /></div><div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/b32ef3da1162a.svg"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://liei.cc/2018/vim-common-hotkey.html&title=你和大佬之间就差一个 vim - LLIEI0X&summary=进入 vim
+
+
+命令
+描述
+
+
+
+vim filename
+打开或新建文件, 并将光标置于第一行首
+
+
+vim +n filename
+打开文件，并将光标置于第 n 行首
+
+
+vim + filename
+打开文件，并将光标置于最后..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=你和大佬之间就差一个 vim - LLIEI0X&amp;body=https://liei.cc/2018/vim-common-hotkey.html"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.4/social/8411ed322ced6.svg"/></a></div><div class="qrcode" id="qrcode-wechat" style="visibility:hidden;height:0"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://liei.cc/2018/vim-common-hotkey.html"/></div></div></section></div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2018/optimization-blog-theme.html">优化睡觉的沙发</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2018/gin-swagger-build-document.html">gin-swagger 自动化构建 API 文档</a></div></section></div>
+
+
+<div class="related-wrap reveal" id="related-posts">
+    <section class='header'>
+      <div class='title cap theme'>您可能感兴趣的文章</div>
+    </section>
+    <section class='body'>
+    <div class="related-posts"><a class="item" href="/2018/sftp-sync-project.html" title="vscode + sftp 开发环境同步差异文件"><span class="title">vscode + sftp 开发环境同步差异文件</span></a><a class="item" href="/2018/babun-windows-tool.html" title="Windows 利器 - babun"><span class="title">Windows 利器 - babun</span></a></div></section></div>
+
+
+
+  <div class='related-wrap md-text reveal' id="comments">
+    <section class='header cmt-title cap theme'>
+      快来参与讨论吧
+    </section>
+    <section class='body cmt-body giscus'>
+      
+
+<svg class="loading" style="vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="giscus" data-repo="lliei/lliei.github.io" data-repo-id="MDEwOlJlcG9zaXRvcnk4OTQ2MTcwNQ==" data-category="Announcements" data-category-id="DIC_kwDOBVUTyc4CS3i-" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="preferred_color_scheme" data-lang="en" data-loading="lazy" crossorigin="anonymous"></div>
+
+    </section>
+  </div>
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="sitemap"><div class="sitemap-group"><span class="fs14">博客</span><a href="/posts/">近期</a><a href="/blog/categories/">分类</a><a href="/blog/tags/">标签</a><a href="/blog/archives/">归档</a></div><div class="sitemap-group"><span class="fs14">项目</span><a href="/wiki/">专栏</a><a href="/notes/">笔记</a></div><div class="sitemap-group"><span class="fs14">社交</span><a href="/more/">动态</a><a href="/friends/">友链</a><a href="/more/#comments">留言板</a><a target="_blank" rel="noopener" href="https://twitter.com/lliei0x">Twitter</a><a target="_blank" rel="noopener" href="https://t.me/lliei0x">Telegrem</a></div><div class="sitemap-group"><span class="fs14">更多</span><a href="/more/">关于本站</a><a target="_blank" rel="noopener" href="https://github.com/lliei">GitHub</a></div></div><div class="text"><p>本站由 <a target="_blank" rel="noopener" href="https://github.com/lliei">@lliei0x</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar">Stellar</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  const stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = stellar.config.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.version = '1.19.0';
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.19.0';
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+    root : '/',
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://github.elemecdn.com/jquery@3.5.1/dist/jquery.min.js'
+  };
+
+  if ('local_search') {
+    stellar.search = {};
+    stellar.search.service = 'local_search';
+    if (stellar.search.service == 'local_search') {
+      let service_obj = Object.assign({}, {"field":"all","path":"/search.json","content":true,"codeblock":false,"sort":"-date"});
+      stellar.search[stellar.search.service] = service_obj;
+    }
+  }
+
+  // stellar js
+  stellar.plugins.stellar = Object.assign({"sites":"/js/plugins/sites.js","friends":"/js/plugins/friends.js","ghinfo":"/js/plugins/ghinfo.js","timeline":"/js/plugins/timeline.js","linkcard":"/js/plugins/linkcard.js","fcircle":"/js/plugins/fcircle.js","weibo":"/js/plugins/weibo.js"});
+
+  stellar.plugins.marked = Object.assign("https://cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js");
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://github.elemecdn.com/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://github.elemecdn.com/swiper@8/swiper-bundle.min.css","js":"https://github.elemecdn.com/swiper@8/swiper-bundle.min.js"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":false,"js":"https://github.elemecdn.com/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://gcore.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://gcore.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://github.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://github.elemecdn.com/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti@0.9.2/umd/heti.min.css","js":"https://unpkg.com/heti@0.9.2/umd/heti-addon.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.copycode = Object.assign({"enable":true,"js":"/js/plugins/copycode.js","default_text":"Copy","success_text":"Copied"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+  <script>
+  function loadJS() {
+    const els = document.querySelectorAll("#comments #giscus");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.log(error);
+      }
+      var script = document.createElement('script');
+      script.src = 'https://giscus.app/client.js';
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  }
+  window.addEventListener('DOMContentLoaded', (event) => {
+    loadJS();
+  });
+</script>
+
+
+
+
+<!-- inject -->
+
+
+  </div>
+</body>
+</html>
